@@ -81,7 +81,7 @@ chown root:root /
 chown root:root /home
 chown root:root /home/$username
 chown 755  /home/$username
-bash jail-user.sh -u $username
+bash jail-user -u $username
 
 ## Creating PHP FPM Pool
 php_versions_array=("7.3" "7.4" "8.0" "8.1")
