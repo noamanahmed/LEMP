@@ -22,8 +22,9 @@ chown root:root $chroot_path
 chmod 755 /var/chroot
 
 chroot_bin_path="$chroot_path/bin"
+mkdir -p $chroot_path
 
-cp /bin/bash $chroot_bin_path
+cp /bin/bash $chroot_bin_path/
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
 cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6} "$chroot_path/lib/x86_64-linux-gnu"
@@ -31,7 +32,7 @@ cp /lib64/ld-linux-x86-64.so.2 "$chroot_path/lib64"
 
 
 mkdir -p "$chroot_path/etc"
-cp /etc/{passwd,group} "$chroot/etc"
+cp /etc/{passwd,group} "$chroot_path/etc/"
 
 
 
