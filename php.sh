@@ -8,8 +8,13 @@ fi
 #Install from PHP 7.0 to 8.1
 
 apt-get install software-properties-common -y
-add-apt-repository ppa:ondrej/php
-apt-get update -y
+
+the_ppa="ondrej/php"
+
+if ! grep -q "^deb .*$the_ppa" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+    add-apt-repository ppa:ondrej/php
+    apt-get update -y
+fi
 
 apt-get install php8.1 -y
 apt-get install php8.1-common php8.1-fpm php8.1-cli php8.1-fileinfo php8.1-mysql php8.1-xml php8.1-curl php8.1-gd php8.1-imagick php8.1-cli php8.1-dev php8.1-imap php8.1-mbstring php8.1-opcache php8.1-soap php8.1-zip php8.1-redis -y
@@ -23,7 +28,8 @@ apt-get install php7.4-common php7.4-fpm php7.4-cli php7.4-fileinfo php7.4-mysql
 apt-get install php7.3 -y
 apt-get install php7.3-common php7.3-fpm php7.3-cli php7.3-fileinfo php7.3-mysql php7.3-xml php7.3-curl php7.3-gd php7.3-imagick php7.3-cli php7.3-dev php7.3-imap php7.3-mbstring php7.3-opcache php7.3-soap php7.3-zip php7.3-redis -y
 
-cp templates/php/7.3/* /etc/php/7.3/
-cp templates/php/7.4/* /etc/php/7.4/
-cp templates/php/8.0/* /etc/php/8.0/
-cp templates/php/8.1/* /etc/php/8.1/
+
+cp -rf $DIR/templates/php/7.3/* /etc/php/7.3/
+cp -rf $DIR/templates/php/7.4/* /etc/php/7.4/
+cp -rf $DIR/templates/php/8.0/* /etc/php/8.0/
+cp -rf $DIR/templates/php/8.1/* /etc/php/8.1/
