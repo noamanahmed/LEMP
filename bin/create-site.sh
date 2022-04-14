@@ -50,21 +50,22 @@ fi
 
 
 ##Create user
-$user_password="$(openssl rand -hex 12)"
+user_password="$(openssl rand -hex 12)"
 
 adduser --gecos "" --disabled-password $username
 echo '$username:$user_password' | sudo chpasswd
 
 
 ## Create www path
-$user_root="/home/$username"
-$www_root="$user_root/www/"
+user_root="/home/$username"
+www_root="$user_root/www/"
+mkdir -p $user_root
 mkdir -p $www_root
 touch $www_root/index.php
 
 
 ## Creating PHP FPM Pool
-php_versions_array=("7.3","7.4","8.0","8.1")
+php_versions_array=("7.3" "7.4" "8.0" "8.1")
 
 for php_v in ${php_versions_array[@]}; do
     sudo cp /etc/php/$php_v/fpm/pool.d/template.conf /etc/php/$php_v/fpm/pool.d/$username.conf
@@ -92,7 +93,7 @@ chmod 640 $(find $user_root -type f)
 echo "Site Created"
 echo "SSH Details"
 echo "Username: $username"
-echo "Password: $user_pasword"
+echo "Password: $user_password"
 
 
 
