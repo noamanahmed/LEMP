@@ -40,9 +40,9 @@ else
 
     ## Creating mysql user and database
 
-    database_name="$(echo $username)"
-    database_user="$(echo $username)"
-    database_password="$(openssl rand -hex 12)"
+    database_name="$(echo $username | head -c 12)"
+    database_user="$(echo $username | head -c 12)"
+    database_password="$(openssl rand -hex 8)"
 
     mysql -ve "CREATE DATABASE IF NOT EXISTS $database_name"
     mysql -ve "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
