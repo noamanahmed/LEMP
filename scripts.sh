@@ -22,3 +22,5 @@ source $HOME/.bashrc
 # Installing WP CLI
 
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/bin/wp
+
+

@@ -33,14 +33,15 @@ else
     exit;
 fi
 
-if [ -d "/var/lib/mysql/$username" ] 
+database_name="$(echo $username | head -c 12)"
+
+if [ -d "/var/lib/mysql/$database_name" ] 
 then 
-    echo "There already exists a database with username $username"    
+    echo "There already exists a database with username $database_name"    
 else
 
     ## Creating mysql user and database
 
-    database_name="$(echo $username | head -c 12)"
     database_user="$(echo $username | head -c 12)"
     database_password="$(openssl rand -hex 8)"
 
