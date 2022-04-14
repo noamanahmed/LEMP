@@ -88,10 +88,10 @@ nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
 cp "$template_path/nginx/vhost.conf" $nginx_vhost_file
 
-sed -i "s/{{www_path}}/$www_path/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/" $nginx_vhost_file
-sed -i "s/{{user_root}}/$user_root/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
