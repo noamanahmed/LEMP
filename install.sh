@@ -19,5 +19,5 @@ bash nvm.sh
 bash redis.sh
 bash docker.sh
 bash composer.sh
-
+bash scripts.sh
 

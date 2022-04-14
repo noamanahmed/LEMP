@@ -30,6 +30,7 @@ then
     echo "Username $username exists!"      
 else
     echo "The $username doesn't exist"    
+    exit;
 fi
 
 ## Create system user if doesnt't exists

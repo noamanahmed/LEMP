@@ -15,11 +15,11 @@ fi
 
 #Remove apache2
 
-apt-get remove apache2
+apt-get remove apache2 -y
 
 #Install nginx 
 apt-get install nginx -y
 cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
-adduser --system --no-create-home --user-group -s /sbin/nologin nginx
+useradd -s /bin/false nginx
 systemctl start nginx
 systemctl enable nginx
