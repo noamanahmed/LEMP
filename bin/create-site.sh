@@ -74,7 +74,7 @@ mkdir -p "$user_root/logs/nginx"
 mkdir -p "$user_root/logs/php"
 mkdir -p "$user_root/logs/mail"
 mkdir -p $www_path
-touch $www_path/index.php
+cp "$template_path/www/*" $www_path
 
 ## Setting up for jailed user
 chown root:root /
@@ -149,6 +149,7 @@ echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
+echo "Complete Path : $www_path"
 echo ""
 echo "Database Credentials"
 echo "Database name: $database_name"
