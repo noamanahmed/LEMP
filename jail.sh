@@ -8,7 +8,7 @@ fi
 
 chroot_path=/var/chroot
 
-if [ -d "/path/to/dir" ]
+if [ -d "$chroot_path" ]
 then
     echo "Chroot exists as $chroot_path. First delete it!"
 fi
