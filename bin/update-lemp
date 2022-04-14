@@ -12,4 +12,5 @@ fi
 
 
 cd $DIR/../
+git reset --hard
 git pull origin
