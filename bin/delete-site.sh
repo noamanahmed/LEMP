@@ -53,6 +53,9 @@ done
 rm "/etc/nginx/sites-enabled/$username.conf"
 rm "/etc/nginx/sites-available/$username.conf"
 
+rm "/etc/nginx/sites-enabled/$username-ssl.conf"
+rm "/etc/nginx/sites-available/$username-ssl.conf"
+
 userdel -r -f $username
 delgroup $username
 

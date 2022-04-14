@@ -119,12 +119,12 @@ sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-certbot certonly --dry-run --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+certbot certonly --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
 
 ## Setting SSL nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username-ssl.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username-ssl.conf"
-cp "$template_path/nginx/vhosts-ssl.conf" $nginx_vhost_file
+cp "$template_path/nginx/vhost-ssl.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file

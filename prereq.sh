@@ -10,4 +10,4 @@ fi
 
 #Install prereq
 
-apt-get install screen htop nload curl wget git unrar unzip zip -y
+apt-get install screen htop nload curl wget git unrar unzip zip net-tools -y
