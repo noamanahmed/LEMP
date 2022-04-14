@@ -48,9 +48,9 @@ ln -s /usr/bin/composer2 $chroot_bin_path/composer2
 
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
-cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6} "$chroot_path/lib/x86_64-linux-gnu"
+cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6,libselinux.so.1} "$chroot_path/lib/x86_64-linux-gnu"
 cp /lib64/ld-linux-x86-64.so.2 "$chroot_path/lib64"
-
+cp /lib/x86_64-linux-gnu/{libselinux.so.1,libcap.so.2,libacl.so.1,libc.so.6,libpcre2-8.so.0,libdl.so.2,ld-linux-x86-64.so.2,libattr.so.1,libpthread.so.0} "$chroot_path/lib/x86_64-linux-gnu"
 
 mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group} "$chroot_path/etc/"
