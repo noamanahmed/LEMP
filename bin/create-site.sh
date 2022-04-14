@@ -64,6 +64,10 @@ echo '$username:$user_password' | sudo chpasswd
 user_root="/home/$username"
 www_root="$user_root/www/"
 mkdir -p $user_root
+mkdir -p "$user_root/logs"
+mkdir -p "$user_root/logs/nginx"
+mkdir -p "$user_root/logs/php"
+mkdir -p "$user_root/logs/mail"
 mkdir -p $www_root
 touch $www_root/index.php
 
@@ -84,7 +88,10 @@ cp "$template_path/nginx/vhost.conf" $nginx_vhost_file
 sed -i "s/{{www_path}}/$www_path/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$user_root/" $nginx_vhost_file
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
+
+nginx -t && systemctl reload nginx
 
 ## Fixing permissions
 usermod -a -G $username nginx
