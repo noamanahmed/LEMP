@@ -81,8 +81,8 @@ cp $template_path/www/* $www_path/
 chown root:root /
 chown root:root /home
 chown root:root /home/$username
-chown 755  /home/$username
-bash jail-user -u $username
+chmod 755  /home/$username
+
 
 ## Creating PHP FPM Pool
 php_versions_array=("7.3" "7.4" "8.0" "8.1")
@@ -138,11 +138,12 @@ nginx -t && systemctl reload nginx
 
 ## Fixing permissions
 
-chown -R $username:$username $user_root/*
-
+chown -R $username:$username $www_path/*
 
 chmod 750 $(find $user_root -type d)
 chmod 640 $(find $user_root -type f)
+
+bash jail-user -u $username
 
 echo "*****************************************"
 echo "*****************************************"
