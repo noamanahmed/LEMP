@@ -10,8 +10,6 @@ while getopts u:d:f:p flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
-        d) domain=${OPTARG};;
-        p) php=${OPTARG};;
     esac
 done
 
@@ -22,24 +20,11 @@ then
 fi
 
 
-if [ -z "$domain" ]
-then
-    echo "Please provide a domain using -d "
-    exit
-fi
-
-
-if [ -z "$php" ]
-then
-php_version="$php"
-else
-php_version="7.4"
-fi
 
 if id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-site -u $username"
-    exit
+else
+    echo "The $username doesn't exist"    
 fi
 
 ## Create system user if doesnt't exists
