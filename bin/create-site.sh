@@ -10,7 +10,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:f:p flag
+while getopts u:d:p: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
@@ -35,13 +35,11 @@ fi
 
 if [ -z "$php" ]
 then
-php_version="$php"
-else
 php_version="7.4"
+else
+php_version=$php
 fi
 
-echo $php_version
-exit
 
 if id "$username" &>/dev/null
 then
