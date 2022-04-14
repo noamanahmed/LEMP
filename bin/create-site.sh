@@ -60,6 +60,9 @@ user_password="$(openssl rand -hex 12)"
 adduser --gecos "" --disabled-password $username
 echo '$username:$user_password' | sudo chpasswd
 
+## Uncomment the following user to allow jailed user access
+usermod -a -G web $username
+usermod -a -G sftp $username
 
 
 ## Create www path
@@ -73,6 +76,12 @@ mkdir -p "$user_root/logs/mail"
 mkdir -p $www_path
 touch $www_path/index.php
 
+## Setting up for jailed user
+chmod root:root /
+chmod root:root /home
+chmod root:root /home/$username
+chmod 755  /home/$username
+./jail-user -u $username
 
 ## Creating PHP FPM Pool
 php_versions_array=("7.3" "7.4" "8.0" "8.1")
@@ -99,7 +108,8 @@ nginx -t && systemctl reload nginx
 
 ## Fixing permissions
 usermod -a -G $username nginx
-chown -R $username:$username $user_root
+chown -R $username:$username/* $user_root
+chown -R $username:$username/.* $user_root
 
 chmod 750 $(find $user_root -type d)
 chmod 640 $(find $user_root -type f)

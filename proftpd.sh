@@ -11,7 +11,7 @@ sudo apt-get install openssl -y
 # Install Proftpd
 sudo apt-get install proftpd -y
 
-
+useradd -s /bin/false sftp
 
 
 sudo systemctl start proftpd
