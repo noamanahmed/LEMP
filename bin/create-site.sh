@@ -92,10 +92,39 @@ for php_v in ${php_versions_array[@]}; do
     systemctl restart php$php_v-fpm
 done
 
+## Creating mysql user and database
+
+database_name="$(echo $username)"
+database_user="$(echo $username)"
+database_password="$(echo $username)_$(openssl rand -hex 12)"
+
+mysql -ve "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -ve "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+mysql -ve "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+mysql -ve "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+mysql -ve "FLUSH PRIVILEGES;"
+
+
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
 cp "$template_path/nginx/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+certbot certonly --dry-run --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+
+## Setting SSL nginx settings
+nginx_vhost_file="/etc/nginx/sites-available/$username-ssl.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username-ssl.conf"
+cp "$template_path/nginx/vhosts-ssl.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
@@ -114,9 +143,19 @@ chown -R $username:$username $user_root/.*
 chmod 750 $(find $user_root -type d)
 chmod 640 $(find $user_root -type f)
 
-
-echo "Site Created"
-echo "SSH Details"
+echo "*****************************************"
+echo "*****************************************"
+echo ""
+echo "Site Setup succssfull"
+echo "URL : http://$domain"
+echo "URL(SSL) : https://$domain"
+echo ""
+echo "Database Credentials"
+echo "Database name: $database_name"
+echo "Database user: $database_user"
+echo "Database password: $database_password"
+echo ""
+echo "SFTP/SSH Details"
 echo "Username: $username"
 echo "Password: $user_password"
 

@@ -1,7 +1,7 @@
 ; Start a new pool named 'www'.
 ; the variable $pool can be used in any directive and will be replaced by the
 ; pool name ('www' here)
-[www]
+[{{$username}}]
 
 ; Per pool prefix
 ; It only applies on the following directives:
