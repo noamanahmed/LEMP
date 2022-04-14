@@ -10,12 +10,14 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:p: flag
+while getopts u:d:p:l:wp flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
         d) domain=${OPTARG};;
         p) php=${OPTARG};;
+        l) laravel=${OPTARG};;
+        wp) wordpress=${OPTARG};;
     esac
 done
 
@@ -67,7 +69,15 @@ usermod -a -G $username nginx
 
 ## Create www path
 user_root="/home/$username"
+
+
+if [ -z "$laravel" ]
+then
 www_path="$user_root/www"
+else
+www_path="$user_root/www/public"
+fi
+
 mkdir -p $user_root
 mkdir -p "$user_root/logs"
 mkdir -p "$user_root/logs/nginx"
@@ -139,10 +149,19 @@ nginx -t && systemctl reload nginx
 systemctl restart nginx
 ## Fixing permissions
 
+if [ -z "$wordpress" ]
+then
+    echo "Not a wordpress site skipping"
+else
+    echo "TODO: Installing wordpress using wp cli "
+fi
+
+
 chown -R $username:$username $www_path
 
 chmod 750 $(find $www_path -type d)
 chmod 640 $(find $www_path -type f)
+
 
 bash jail-user -u $username
 
