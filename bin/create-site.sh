@@ -68,7 +68,7 @@ touch $www_root/index.php
 php_versions_array=("7.3" "7.4" "8.0" "8.1")
 
 for php_v in ${php_versions_array[@]}; do
-    sudo cp /etc/php/$php_v/fpm/pool.d/template.conf /etc/php/$php_v/fpm/pool.d/$username.conf
+    sudo cp /etc/php/$php_v/fpm/pool.d/template.tpl /etc/php/$php_v/fpm/pool.d/$username.conf
     sed -i "s/{{\$username}}/$username/" /etc/php/$php_v/fpm/pool.d/$username.conf
     systemctl restart php$php_v-fpm
 done
