@@ -12,7 +12,7 @@ if [ -d "/path/to/dir" ]
 then
     echo "Chroot exists as $chroot_path. First delete it!"
 fi
-mkdir -P $chroot_path
+mkdir -p $chroot_path
 mknod -m 666 $chroot_path/null c 1 3
 mknod -m 666 $chroot_path/tty c 5 0
 mknod -m 666 $chroot_path/zero c 1 5
@@ -30,7 +30,7 @@ cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6} "$chroot_path/lib/
 cp /lib64/ld-linux-x86-64.so.2 "$chroot_path/lib64"
 
 
-mkdir -p "$chroot/etc"
+mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group} "$chroot/etc"
 
 
