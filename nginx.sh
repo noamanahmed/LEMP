@@ -7,6 +7,10 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
+#Remove apache2
+
+apt-get remove apache2
+
 #Install nginx 
 
 apt-get install nginx -y

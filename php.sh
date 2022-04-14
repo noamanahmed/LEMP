@@ -22,3 +22,8 @@ apt-get install php7.4-common php7.4-cli php7.4-fileinfo php7.4-mysql php7.4-xml
 
 apt-get install php7.3 -y
 apt-get install php7.3-common php7.3-cli php7.3-fileinfo php7.3-mysql php7.3-xml php7.3-curl php7.3-gd php7.3-imagick php7.3-cli php7.3-dev php7.3-imap php7.3-mbstring php7.3-opcache php7.3-soap php7.3-zip php7.3-redis -y
+
+cp templates/php/7.3/* /etc/php/7.3/
+cp templates/php/7.4/* /etc/php/7.4/
+cp templates/php/8.0/* /etc/php/8.0/
+cp templates/php/8.1/* /etc/php/8.1/

@@ -6,10 +6,8 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-
 apt-get update -y
 apt-get upgrade -y
-
 
 bash prereq.sh
 bash nginx.sh

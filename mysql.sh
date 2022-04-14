@@ -21,3 +21,7 @@ mysql -ve "CREATE USER '$masterUser'@'localhost' IDENTIFIED BY '$masterPassword'
 mysql -ve "GRANT ALL PRIVILEGES ON *.* To '$masterUser'@'localhost'"
 mysql -ve "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$masterUser'@'localhost'";
 mysql -ve "FLUSH PRIVILEGES;"
+
+
+echo "Database Username : $masterUser"
+echo "Database Password : $masterPassword"
