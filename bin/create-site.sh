@@ -40,6 +40,9 @@ else
 php_version="7.4"
 fi
 
+echo $php_version
+exit
+
 if id "$username" &>/dev/null
 then
     echo "The $username already exists!. Please run delete-site -u $username"
@@ -84,6 +87,7 @@ done
 
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
 cp "$template_path/nginx/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$www_path/" $nginx_vhost_file
@@ -92,6 +96,7 @@ sed -i "s/{{username}}/$username/" $nginx_vhost_file
 sed -i "s/{{user_root}}/$user_root/" $nginx_vhost_file
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 
+ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
 ## Fixing permissions
