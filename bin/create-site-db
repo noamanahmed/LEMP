@@ -1,0 +1,62 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:d:f:p flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+
+if id "$username" &>/dev/null
+then
+    echo "Username $username exists!"      
+else
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+if [ -d "/var/lib/mysql/$username" ] 
+    echo "There already exists a database with username $username"    
+then 
+else
+
+    ## Creating mysql user and database
+
+    database_name="$(echo $username)"
+    database_user="$(echo $username)"
+    database_password="$(echo $username)_$(openssl rand -hex 12)"
+
+    mysql -ve "CREATE DATABASE IF NOT EXISTS $database_name"
+    mysql -ve "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+    mysql -ve "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+    mysql -ve "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+    mysql -ve "FLUSH PRIVILEGES;"
+
+fi
+
+
+
+echo ""
+echo "Database Credentials"
+echo "Database name: $database_name"
+echo "Database user: $database_user"
+echo "Database password: $database_password"
+echo ""

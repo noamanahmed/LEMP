@@ -35,7 +35,6 @@ fi
 
 
 
-
 user_root="/home/$username"
 www_path="$user_root/www"
 
