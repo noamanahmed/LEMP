@@ -50,6 +50,7 @@ for php_v in ${php_versions_array[@]}; do
 done
 
 ## Deleting nginx settings
+rm "/etc/nginx/sites-enabled/$username.conf"
 rm "/etc/nginx/sites-available/$username.conf"
 
 userdel -r $username
