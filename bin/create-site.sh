@@ -1,5 +1,5 @@
 #!/bin/bash
-
+template_path="$(cd ../ && pwd)/templates"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -30,8 +30,8 @@ fi
 
 
 if [ -z "$php" ]
-php_version="$php"
 then
+php_version="$php"
 else
 php_version="7.4"
 fi
@@ -53,7 +53,8 @@ fi
 $user_password="$(openssl rand -hex 12)"
 
 adduser --gecos "" --disabled-password $username
-chpasswd <<<"$username:$user_password"
+echo '$username:$user_password' | sudo chpasswd
+
 
 ## Create www path
 $user_root="/home/$username"
@@ -72,8 +73,8 @@ for php_v in ${php_versions_array[@]}; do
 done
 
 ## Creating nginx settings
-nginx_vhost_file="/etc/nginx/sites-available/{{$username}}.conf"
-cp templates/nginx/vhost.conf $nginx_vhost_file
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+cp "$template_path/nginx/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$www_path/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
@@ -91,7 +92,7 @@ chmod 640 $(find $user_root -type f)
 echo "Site Created"
 echo "SSH Details"
 echo "Username: $username"
-echo "Password: $pasword"
+echo "Password: $user_pasword"
 
 
 
