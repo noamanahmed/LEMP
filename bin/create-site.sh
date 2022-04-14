@@ -60,6 +60,7 @@ adduser --gecos "" --disabled-password $username
 echo '$username:$user_password' | sudo chpasswd
 
 
+
 ## Create www path
 user_root="/home/$username"
 www_root="$user_root/www/"
