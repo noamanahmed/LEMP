@@ -64,14 +64,14 @@ echo '$username:$user_password' | sudo chpasswd
 
 ## Create www path
 user_root="/home/$username"
-www_root="$user_root/www/"
+www_path="$user_root/www/"
 mkdir -p $user_root
 mkdir -p "$user_root/logs"
 mkdir -p "$user_root/logs/nginx"
 mkdir -p "$user_root/logs/php"
 mkdir -p "$user_root/logs/mail"
-mkdir -p $www_root
-touch $www_root/index.php
+mkdir -p $www_path
+touch $www_path/index.php
 
 
 ## Creating PHP FPM Pool
