@@ -74,7 +74,7 @@ mkdir -p "$user_root/logs/nginx"
 mkdir -p "$user_root/logs/php"
 mkdir -p "$user_root/logs/mail"
 mkdir -p $www_path
-cp "$template_path/www/*" $www_path
+cp $template_path/www/* $www_path/
 
 ## Setting up for jailed user
 chown root:root /
