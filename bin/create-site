@@ -140,8 +140,8 @@ nginx -t && systemctl reload nginx
 
 chown -R $username:$username $www_path/*
 
-chmod 750 $(find $user_root -type d)
-chmod 640 $(find $user_root -type f)
+chmod 750 $(find $www_path -type d)
+chmod 640 $(find $www_path -type f)
 
 bash jail-user -u $username
 
