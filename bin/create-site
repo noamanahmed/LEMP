@@ -57,6 +57,8 @@ fi
 
 
 ##Create user
+pam-auth-update
+chmod 640 /etc/shadow
 user_password="$(openssl rand -hex 12)"
 
 adduser --gecos "" --disabled-password $username
