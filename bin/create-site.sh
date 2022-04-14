@@ -77,11 +77,11 @@ mkdir -p $www_path
 touch $www_path/index.php
 
 ## Setting up for jailed user
-chmod root:root /
-chmod root:root /home
-chmod root:root /home/$username
-chmod 755  /home/$username
-./jail-user -u $username
+chown root:root /
+chown root:root /home
+chown root:root /home/$username
+chown 755  /home/$username
+./jail-user.sh -u $username
 
 ## Creating PHP FPM Pool
 php_versions_array=("7.3" "7.4" "8.0" "8.1")
@@ -108,8 +108,8 @@ nginx -t && systemctl reload nginx
 
 ## Fixing permissions
 usermod -a -G $username nginx
-chown -R $username:$username/* $user_root
-chown -R $username:$username/.* $user_root
+chown -R $username:$username $user_root/*
+chown -R $username:$username $user_root/.*
 
 chmod 750 $(find $user_root -type d)
 chmod 640 $(find $user_root -type f)

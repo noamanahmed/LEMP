@@ -53,7 +53,7 @@ done
 rm "/etc/nginx/sites-enabled/$username.conf"
 rm "/etc/nginx/sites-available/$username.conf"
 
-userdel -r $username
+userdel -r -f $username
 delgroup $username
 
 echo "Username $username deleted successfully!"      
