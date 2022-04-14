@@ -33,4 +33,4 @@ else
 fi
 
 chroot_path=/var/chroot
-cp $chroot_path/* /home/$username/*
+cp -rf $chroot_path/* /home/$username/*
