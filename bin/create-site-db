@@ -42,7 +42,7 @@ else
 
     database_name="$(echo $username)"
     database_user="$(echo $username)"
-    database_password="$(echo $username)_$(openssl rand -hex 12)"
+    database_password="$(openssl rand -hex 12)"
 
     mysql -ve "CREATE DATABASE IF NOT EXISTS $database_name"
     mysql -ve "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
