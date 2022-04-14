@@ -11,6 +11,7 @@ apt-get upgrade -y
 
 bash prereq.sh
 bash nginx.sh
+bash proftpd.sh
 bash php.sh
 bash mysql.sh
 bash ssl.sh
@@ -19,5 +20,8 @@ bash nvm.sh
 bash redis.sh
 bash docker.sh
 bash composer.sh
+
+bash jail.sh
+
 bash scripts.sh
 
