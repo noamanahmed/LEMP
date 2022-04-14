@@ -34,8 +34,8 @@ else
 fi
 
 if [ -d "/var/lib/mysql/$username" ] 
-    echo "There already exists a database with username $username"    
 then 
+    echo "There already exists a database with username $username"    
 else
 
     ## Creating mysql user and database
