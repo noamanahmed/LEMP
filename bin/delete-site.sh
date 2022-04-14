@@ -23,6 +23,7 @@ fi
 
 if id "$username" &>/dev/null
 then
+    echo "Username $username exists!"      
 else
     echo "The $username doesn't exist"    
 fi
@@ -49,5 +50,6 @@ rm "/etc/nginx/sites-available/$username.conf"
 userdel -r $username
 
 
+echo "Username $username deleted successfully!"      
 
 
