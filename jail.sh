@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
 
 if [ "$EUID" -ne 0 ]
 then echo "Please run as root"
@@ -84,14 +86,9 @@ cp -rf /lib/terminfo/* $chroot_path/lib/terminfo/
 mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group} "$chroot_path/etc/"
 
-path_array=("/usr/lib/php" "/etc/php")
+path_array=("/usr/lib/php" "/etc/php",".ssh")
 
 for path in ${path_array[@]}; do
     mkdir -p "$chroot_path/$path"
-    cp -rf /$path/* "$chroot_path/$path"    
-    done
+    cp -rf /$path/* "$chroot_path/$path"        
 done
-
-
-mkdir -p "$chroot_path/usr/lib/php/"
-cp -rf /usr/lib/php/* "$chroot_path/usr/lib/php"
