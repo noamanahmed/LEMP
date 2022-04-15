@@ -43,9 +43,9 @@ cp -v /usr/bin/php $chroot_bin_path/php
 cp -v /usr/bin/wp $chroot_bin_path/wp
 cp -v /usr/bin/git $chroot_bin_path/git
 cp -v /usr/bin/wget $chroot_bin_path/wget
-cp -v /usr/bin/composer $chroot_bin_path/composer
-cp -v /usr/bin/composer1 $chroot_bin_path/composer1
-cp -v /usr/bin/composer2 $chroot_bin_path/composer2
+cp -v /usr/local/bin/composer/composer $chroot_bin_path/composer
+cp -v /usr/local/bin/composer/composer1 $chroot_bin_path/composer1
+cp -v /usr/local/bin/composer/composer2 $chroot_bin_path/composer2
 
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
@@ -56,7 +56,7 @@ cp /lib/x86_64-linux-gnu/{libselinux.so.1,libcap.so.2,libacl.so.1,libc.so.6,libp
 binaries_array=("php" "git" "ls" "wget" "curl")
 
 for binary in ${binaries_array[@]}; do
-    for lib in `ldd "$binary" | cut -d'>' -f2 | awk '{print $1}'` ; do
+    for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
             cp -v --parents "$lib" "$chroot_bin_path"
     fi  
