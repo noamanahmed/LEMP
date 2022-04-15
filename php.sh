@@ -7,6 +7,7 @@ fi
 
 #Install from PHP 7.0 to 8.1
 apt-get install unixodbc -y
+apt-get install libc-client2007e-dev -y
 apt-get install software-properties-common -y
 
 the_ppa="ondrej/php"
