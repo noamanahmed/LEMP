@@ -53,6 +53,10 @@ for binary in ${binaries_array[@]}; do
     done
 done
 
+mkdir -p $chroot_path/usr
+mkdir -p $chroot_path/usr/share
+mkdir -p $chroot_path/usr/terminfo
+cp /usr/share/terminfo/* $chroot_path/usr/terminfo/
 
 mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group} "$chroot_path/etc/"
