@@ -97,18 +97,6 @@ for path in ${path_array[@]}; do
 done
 
 
-php_binaries_array=("/usr/lib/php/20210902/redis.so")
-
-for binary in ${php_binaries_array[@]}; do
-
-    for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
-    if [ -f "$lib" ] ; then
-            cp -v --parents "$lib" "$chroot_path"
-    fi  
-    done
-done
-
-
 chmod 755 -R "$chroot_path/usr/lib"
 chmod 755 -R "$chroot_path/usr/bin"
 
