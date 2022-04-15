@@ -4,7 +4,7 @@
 DIR=$(dirname "${BASH_SOURCE[0]}") 
 DIR=$(realpath "${DIR}") 
 
-template_path="$(cd $DIR/../ && pwd)/templates"
+template_path="$(cd $DIR && pwd)/templates"
 
 
 if [ "$EUID" -ne 0 ]
