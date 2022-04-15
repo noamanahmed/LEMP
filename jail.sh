@@ -84,5 +84,8 @@ cp -rf /lib/terminfo/* $chroot_path/lib/terminfo/
 mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group} "$chroot_path/etc/"
 
+mkdir -p "$chroot_path/etc/php"
+cp -rf /etc/php/* "$chroot_path/etc/php"
 
- ln -s  /etc/php/ "$chroot_path/etc/php"
+mkdir -p "$chroot_path/usr/lib/php/"
+cp /usr/lib/php/* "$chroot_path/usr/lib/php"

@@ -38,7 +38,7 @@ cp -rf $DIR/templates/php/8.0/* /etc/php/8.0/
 cp -rf $DIR/templates/php/8.1/* /etc/php/8.1/
 
 
-ln -s /usr/bin/php73 $(which php7.3)
-ln -s /usr/bin/php74 $(which php7.4)
-ln -s /usr/bin/php80 $(which php8.0)
-ln -s /usr/bin/php81 $(which php8.1)
+ln -s $(which php7.3) /usr/bin/php73
+ln -s $(which php7.4) /usr/bin/php74
+ln -s $(which php8.0) /usr/bin/php80
+ln -s $(which php8.1) /usr/bin/php81
