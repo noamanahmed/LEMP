@@ -79,7 +79,7 @@ for binary in ${user_binaries_array[@]}; do
     done
 done
 
-mkdir -p $chroot_path/git-core/
+mkdir -p $chroot_path/usr/lib/git-core/
 cp -rf /usr/lib/git-core/* $chroot_path/usr/lib/git-core/
 
 mkdir -p $chroot_path/usr/share
