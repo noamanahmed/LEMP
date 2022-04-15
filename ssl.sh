@@ -17,4 +17,4 @@ sudo apt install python3 python3-pip -y
 
 # Install Certbot
 sudo apt install certbot python3-certbot-nginx -y
-cp -rf $template_path/etc/letsencrypt/* /etc/letsencrypt/
+cp -rf $template_path/letsencrypt/* /etc/letsencrypt/
