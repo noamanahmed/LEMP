@@ -21,6 +21,9 @@ source $HOME/.bashrc
 
 # Installing WP CLI
 
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/bin/wp
+curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /usr/bin/wp
+chmod +x /usr/bin/wp
 
+
+composer global require laravel/installer
 

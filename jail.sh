@@ -40,6 +40,7 @@ cp -v /bin/mkdir $chroot_bin_path
 
 #Symbolic Links
 ln -s /usr/bin/php $chroot_bin_path/php
+ln -s /usr/bin/wp $chroot_bin_path/wp
 ln -s /usr/bin/git $chroot_bin_path/git
 ln -s /usr/bin/wget $chroot_bin_path/wget
 ln -s /usr/bin/composer $chroot_bin_path/composer
@@ -51,6 +52,18 @@ mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
 cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6,libselinux.so.1} "$chroot_path/lib/x86_64-linux-gnu"
 cp /lib64/ld-linux-x86-64.so.2 "$chroot_path/lib64"
 cp /lib/x86_64-linux-gnu/{libselinux.so.1,libcap.so.2,libacl.so.1,libc.so.6,libpcre2-8.so.0,libdl.so.2,ld-linux-x86-64.so.2,libattr.so.1,libpthread.so.0} "$chroot_path/lib/x86_64-linux-gnu"
+
+binaries_array=("php" "git" "ls" "wget" "curl")
+
+for binary in ${binaries_array[@]}; do
+    for lib in `ldd "$binary" | cut -d'>' -f2 | awk '{print $1}'` ; do
+    if [ -f "$lib" ] ; then
+            cp -v --parents "$lib" "$chroot_bin_path"
+    fi  
+    done
+done
+
+
 
 mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group} "$chroot_path/etc/"
