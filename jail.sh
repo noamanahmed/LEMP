@@ -60,7 +60,8 @@ for binary in ${binaries_array[@]}; do
     done
 done
 
-cp /lib/x86_64-linux-gnu/*.so* $chroot_path/x86_64-linux-gnu/
+cp /lib/x86_64-linux-gnu/*.so* $chroot_path/lib/x86_64-linux-gnu/
+cp /lib/*.so* $chroot_path/lib/
 
 mkdir -p $chroot_path/usr
 mkdir -p $chroot_path/usr/bin
