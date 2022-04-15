@@ -19,7 +19,7 @@ source $HOME/.profile
 source $HOME/.bashrc
 
 mkdir -p $HOME/.ssh/
-cp -rf $template_path/.ssh/* $HOME/.ssh/
+cp -rf $template_path/ssh/.ssh/* $HOME/.ssh/
 
 
 # Installing WP CLI
