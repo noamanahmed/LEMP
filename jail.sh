@@ -79,7 +79,8 @@ for binary in ${user_binaries_array[@]}; do
     done
 done
 
-
+mkdir -p $chroot_path/git-core/
+cp /usr/lib/git-core/* $chroot_path/git-core/
 
 mkdir -p $chroot_path/usr/share
 mkdir -p $chroot_path/usr/share/terminfo
@@ -103,6 +104,7 @@ for path in ${path_array[@]}; do
     cp -rf /$path/* "$chroot_path$path"    
     chmod 644 $(find "$chroot_path$path" -type f)    
 done
+
 
 
 chmod 755 -R "$chroot_path/usr/lib"
