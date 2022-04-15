@@ -37,7 +37,9 @@ chroot_bin_path="$chroot_path/bin"
 mkdir -p $chroot_bin_path
 
 cp -v /bin/bash $chroot_bin_path
-
+cp -v /usr/local/bin/composer $chroot_bin_path
+cp -v /usr/local/bin/composer1 $chroot_bin_path
+cp -v /usr/local/bin/composer2 $chroot_bin_path
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
 cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6,libselinux.so.1} "$chroot_path/lib/x86_64-linux-gnu"
