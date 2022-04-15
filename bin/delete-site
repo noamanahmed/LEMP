@@ -56,8 +56,8 @@ rm "/etc/nginx/sites-available/$username.conf"
 rm "/etc/nginx/sites-enabled/$username-ssl.conf"
 rm "/etc/nginx/sites-available/$username-ssl.conf"
 
-userdel -r -f $username
-delgroup $username
+userdel -r -f $username > /dev/null 2>&1
+delgroup $username > /dev/null 2>&1
 
 echo "Username $username deleted successfully!"      
 

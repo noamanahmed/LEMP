@@ -28,7 +28,7 @@ mknod -m 666 $chroot_dev_path/null c 1 3
 mknod -m 666 $chroot_dev_path/tty c 5 0
 mknod -m 666 $chroot_dev_path/zero c 1 5
 mknod -m 666 $chroot_dev_path/random c 1 8
-mknod -m 666 $chroot_dev_path/dev/null c 1 3
+
 
 chown root:root $chroot_path
 chmod 755 /var/chroot
