@@ -12,8 +12,8 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-cp -rf $template_path/.profile $HOME/.profile
-cp -rf $template_path/.bashrc $HOME/.bashrc
+cp -rf $template_path/ssh/.profile $HOME/.profile
+cp -rf $template_path/ssh/.bashrc $HOME/.bashrc
 
 source $HOME/.profile
 source $HOME/.bashrc
