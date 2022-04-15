@@ -40,4 +40,4 @@ user_password="$(openssl rand -hex 12)"
 adduser --gecos "" --disabled-password $username
 echo "$username:$user_password" | sudo chpasswd
 
-jail-user $username
+jail-user -u $username
