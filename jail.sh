@@ -64,7 +64,7 @@ mkdir -p $chroot_path/usr/bin
 user_binaries_array=("env")
 
 for binary in ${user_binaries_array[@]}; do
-    cp -v "$(which $binary)" $chroot_bin_path
+    cp -v "$(which $binary)" "$chroot_path/usr/bin"
 
     for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
