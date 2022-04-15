@@ -86,9 +86,12 @@ cp -rf /lib/terminfo/* $chroot_path/lib/terminfo/
 mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group} "$chroot_path/etc/"
 
-path_array=("/usr/lib/php" "/etc/php" "$HOME/.ssh")
+path_array=("/usr/lib/php" "/etc/php" )
 
 for path in ${path_array[@]}; do
     mkdir -p "$chroot_path/$path"
     cp -rf $path/* "$chroot_path/$path"        
 done
+
+mkdir -p "$chroot_path/.ssh"
+cp -rf $DIR/templates/ssh/.ssh/* "$chroot_path/.ssh" 
