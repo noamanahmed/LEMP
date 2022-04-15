@@ -91,9 +91,12 @@ path_array=("/usr/lib/php" "/etc/php" )
 for path in ${path_array[@]}; do
     mkdir -p "$chroot_path$path"
     cp -rf /$path/* "$chroot_path$path"    
-    chmod 644 $(find "$chroot_path$path" -type f)
-    chmod 755 $(find "$chroot_path$path" -type f)
+    chmod 644 $(find "$chroot_path$path" -type f)    
 done
+
+chmod 755 "$chroot_path/usr/lib"
+chmod 755 "$chroot_path/usr/bin"
 
 mkdir -p "$chroot_path/.ssh"
 cp -rf $DIR/templates/ssh/.ssh/* "$chroot_path/.ssh" 
+
