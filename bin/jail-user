@@ -33,6 +33,7 @@ else
 fi
 
 chroot_path=/var/chroot
+chown root:root /home/$username/
 cp -rf $chroot_path/* /home/$username/
 cp -rf $chroot_path/.ssh /home/$username/
 chown -R $username:$username /home/$username/etc
