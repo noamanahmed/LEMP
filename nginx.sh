@@ -18,8 +18,11 @@ fi
 apt-get remove apache2 -y
 
 #Install nginx 
+groupadd web
 apt-get install nginx -y
 cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
 useradd -s /bin/false nginx
 systemctl start nginx
 systemctl enable nginx
+
+

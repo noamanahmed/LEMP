@@ -95,7 +95,9 @@ mkdir -p $chroot_path/lib
 mkdir -p $chroot_path/lib/terminfo
 cp -rf /lib/terminfo/* $chroot_path/lib/terminfo/
 mkdir -p "$chroot_path/etc"
-cp /etc/{passwd,group} "$chroot_path/etc/"
+cp /etc/{passwd,group,resolv.conf} "$chroot_path/etc/"
+cp -rf /etc/ssl $chroot_path/etc/
+
 
 path_array=("/usr/lib/php" "/etc/php" )
 
@@ -113,4 +115,7 @@ chmod 755 -R "$chroot_path/usr/bin"
 
 mkdir -p "$chroot_path/.ssh"
 cp -rf $DIR/templates/ssh/.ssh/* "$chroot_path/.ssh" 
+cp -rf $DIR/templates/ssh/.bashrc "$chroot_path/.bashrc" 
+cp -rf $DIR/templates/ssh/.profile "$chroot_path/.profile" 
+
 
