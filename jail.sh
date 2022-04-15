@@ -57,7 +57,7 @@ done
 
 mkdir -p $chroot_path/usr
 mkdir -p $chroot_path/usr/share
-mkdir -p $chroot_path/usr/terminfo
+mkdir -p $chroot_path/usr/share/terminfo
 cp -rf /usr/share/terminfo/* $chroot_path/usr/share/terminfo/
 
 mkdir -p "$chroot_path/etc"
