@@ -83,8 +83,12 @@ done
 mkdir -p $chroot_path/usr/share
 mkdir -p $chroot_path/usr/share/terminfo
 mkdir -p $chroot_path/usr/share/zoneinfo
+mkdir -p $chroot_path/usr/share/git-core
+
 cp -rf /usr/share/terminfo/* $chroot_path/usr/share/terminfo/
 cp -rf /usr/share/zoneinfo/* $chroot_path/usr/share/zoneinfo/
+cp -rf /usr/share/git-core/* $chroot_path/usr/share/git-core/
+
 mkdir -p $chroot_path/lib
 mkdir -p $chroot_path/lib/terminfo
 cp -rf /lib/terminfo/* $chroot_path/lib/terminfo/
@@ -102,6 +106,7 @@ done
 
 chmod 755 -R "$chroot_path/usr/lib"
 chmod 755 -R "$chroot_path/usr/bin"
+
 
 mkdir -p "$chroot_path/.ssh"
 cp -rf $DIR/templates/ssh/.ssh/* "$chroot_path/.ssh" 
