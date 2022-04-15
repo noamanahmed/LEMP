@@ -89,9 +89,9 @@ cp /etc/{passwd,group} "$chroot_path/etc/"
 path_array=("/usr/lib/php" "/etc/php" )
 
 for path in ${path_array[@]}; do
-    mkdir -p "$chroot_path/$path"
-    cp -rf $path/* "$chroot_path/$path"    
-    chmod 640 $(find "$chroot_path/$path" -type f)
+    mkdir -p "$chroot_path$path"
+    cp -rf /$path/* "$chroot_path$path"    
+    echo "chmod 640 $(find \"$chroot_path/$path\" -type f)"
 done
 
 mkdir -p "$chroot_path/.ssh"
