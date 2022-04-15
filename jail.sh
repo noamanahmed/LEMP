@@ -48,7 +48,7 @@ for binary in ${binaries_array[@]}; do
 
     for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
-            cp -v --parents "$lib" "$chroot_bin_path"
+            cp -v --parents "$lib" "$chroot_path"
     fi  
     done
 done
