@@ -80,7 +80,7 @@ for binary in ${user_binaries_array[@]}; do
 done
 
 mkdir -p $chroot_path/git-core/
-cp /usr/lib/git-core/* $chroot_path/git-core/
+cp -rf /usr/lib/git-core/* $chroot_path/git-core/
 
 mkdir -p $chroot_path/usr/share
 mkdir -p $chroot_path/usr/share/terminfo
