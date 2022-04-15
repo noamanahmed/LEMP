@@ -98,7 +98,6 @@ done
 php_binaries_array=("/usr/lib/php/20210902/redis.so")
 
 for binary in ${php_binaries_array[@]}; do
-    cp -v "$(which $binary)" $chroot_bin_path
 
     for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
