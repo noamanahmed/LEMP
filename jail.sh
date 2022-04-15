@@ -39,13 +39,13 @@ cp -v /bin/date $chroot_bin_path
 cp -v /bin/mkdir $chroot_bin_path
 
 #Symbolic Links
-ln -s /usr/bin/php $chroot_bin_path/php
-ln -s /usr/bin/wp $chroot_bin_path/wp
-ln -s /usr/bin/git $chroot_bin_path/git
-ln -s /usr/bin/wget $chroot_bin_path/wget
-ln -s /usr/bin/composer $chroot_bin_path/composer
-ln -s /usr/bin/composer1 $chroot_bin_path/composer1
-ln -s /usr/bin/composer2 $chroot_bin_path/composer2
+cp -v /usr/bin/php $chroot_bin_path/php
+cp -v /usr/bin/wp $chroot_bin_path/wp
+cp -v /usr/bin/git $chroot_bin_path/git
+cp -v /usr/bin/wget $chroot_bin_path/wget
+cp -v /usr/bin/composer $chroot_bin_path/composer
+cp -v /usr/bin/composer1 $chroot_bin_path/composer1
+cp -v /usr/bin/composer2 $chroot_bin_path/composer2
 
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
@@ -62,7 +62,6 @@ for binary in ${binaries_array[@]}; do
     fi  
     done
 done
-
 
 
 mkdir -p "$chroot_path/etc"
