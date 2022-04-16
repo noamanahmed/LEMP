@@ -39,10 +39,10 @@ chmod 755 /var/chroot
 chroot_bin_path="$chroot_path/bin"
 mkdir -p $chroot_bin_path
 
-cp -v /bin/bash $chroot_bin_path
-cp -v /usr/local/bin/composer $chroot_bin_path
-cp -v /usr/local/bin/composer1 $chroot_bin_path
-cp -v /usr/local/bin/composer2 $chroot_bin_path
+cp /bin/bash $chroot_bin_path
+cp /usr/local/bin/composer $chroot_bin_path
+cp /usr/local/bin/composer1 $chroot_bin_path
+cp /usr/local/bin/composer2 $chroot_bin_path
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
 cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6,libselinux.so.1} "$chroot_path/lib/x86_64-linux-gnu"
@@ -52,17 +52,18 @@ cp /lib/x86_64-linux-gnu/{libselinux.so.1,libcap.so.2,libacl.so.1,libc.so.6,libp
 binaries_array=("xterm" "ls" "date" "rm" "rmdir" "php" "php73" "php74" "php80" "php81" "wp" "git" "wget" "curl" "composer" "composer1" "composer2" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "ping")
 
 for binary in ${binaries_array[@]}; do
-    cp -v "$(which $binary)" $chroot_bin_path
+    cp "$(which $binary)" $chroot_bin_path
 
     for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
-            cp -v --parents "$lib" "$chroot_path"
+            cp --parents "$lib" "$chroot_path"
     fi  
     done
 done
 
-cp /lib/x86_64-linux-gnu/*.so* $chroot_path/lib/x86_64-linux-gnu/
-cp /lib/*.so* $chroot_path/lib/x86_64-linux-gnu/
+
+# cp /lib/x86_64-linux-gnu/*.so* $chroot_path/lib/x86_64-linux-gnu/
+# cp /lib/*.so* $chroot_path/lib/x86_64-linux-gnu/
 
 mkdir -p $chroot_path/usr
 mkdir -p $chroot_path/usr/bin
@@ -70,12 +71,29 @@ mkdir -p $chroot_path/usr/bin
 user_binaries_array=("env")
 
 for binary in ${user_binaries_array[@]}; do
-    cp -v "$(which $binary)" "$chroot_path/usr/bin"
+    cp "$(which $binary)" "$chroot_path/usr/bin"
 
     for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
-            cp -v --parents "$lib" "$chroot_path"
+            cp --parents "$lib" "$chroot_path"
     fi  
+    done
+done
+
+
+php_binaries_array=("php73" "php74" "php80" "php81" )
+
+for binary in ${php_binaries_array[@]}; do    
+    extension_dir=$($binary  -r 'echo ini_get("extension_dir");')
+    extension_files=`ls $extension_dir`
+
+    for so_file in $extension_files
+    do
+        for lib in `ldd "$(which $so_file)" | cut -d'>' -f2 | awk '{print $1}'` ; do
+        if [ -f "$lib" ] ; then
+                cp --parents "$lib" "$chroot_path"
+        fi  
+        done
     done
 done
 
