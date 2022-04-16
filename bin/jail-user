@@ -43,6 +43,7 @@ cp -rf $chroot_path/.config /home/$username/.config
 
 mkdir -p /home/$username/tmp
 chown -R $username:$username /home/$username/.wp-cli
+chown -R $username:$username /home/$username/.config
 chown -R $username:$username /home/$username/tmp
 chown -R $username:$username /home/$username/etc
 chown -R $username:$username /home/$username/usr
