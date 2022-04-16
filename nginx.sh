@@ -12,17 +12,28 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+exists()
+{
+  command -v "$1" >/dev/null 2>&1
+}
 
-#Remove apache2
 
-apt-get remove apache2 -y
+if [ $(exists nginx) ]
+then
+  #Remove apache2
+  apt-get remove apache2 -y
+  #Install nginx 
+  groupadd web
+  apt-get install nginx -y
+  cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
+  useradd -s /bin/false nginx
+  systemctl restart nginx
+  systemctl enable nginx
+else
+  echo "Nginx is already installed!"
+fi
 
-#Install nginx 
-groupadd web
-apt-get install nginx -y
-cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
-useradd -s /bin/false nginx
-systemctl start nginx
-systemctl enable nginx
+
+
 
 

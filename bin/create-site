@@ -182,10 +182,13 @@ echo "Site Setup succssfull"
 echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
 echo "Complete Path : $www_path"
+echo ""
 if [ -n "$wordpress" ]
 then
+echo ""
 echo "WordPress user: $username"
 echo "WordPress password: $wp_password"
+echo ""
 fi
 echo ""
 echo "Database Credentials"
@@ -194,6 +197,8 @@ echo "Database user: $database_user"
 echo "Database password: $database_password"
 echo ""
 echo "SFTP/SSH Details"
+echo "Host: $domain"
+echo "Port: 22"
 echo "Username: $username"
 echo "Password: $user_password"
 
