@@ -34,7 +34,8 @@ fi
 
 
 # set PATH so it includes composer bins if it exists
-if [ -d "$HOME/.config/composer/vendor/bin" ] ; then
-    PATH="$HOME/.config/composer/vendor/bin:$PATH"
+if [ -d "/.config/composer/vendor/bin" ] ; then
+    PATH="/.config/composer/vendor/bin:$PATH"
 fi
 
+alias sail='bash vendor/bin/sail'
