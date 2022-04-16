@@ -151,6 +151,14 @@ nginx -t && systemctl reload nginx
 systemctl restart nginx
 ## Fixing permissions
 
+
+
+chown -R $username:$username $www_path
+
+chmod 750 $(find $www_path -type d)
+chmod 640 $(find $www_path -type f)
+
+
 if [ -z "$wordpress" ]
 then
     echo "Not a wordpress site skipping"
@@ -162,13 +170,6 @@ else
     runuser -l $username -c "cd /home/$username/www && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
 
 fi
-
-
-chown -R $username:$username $www_path
-
-chmod 750 $(find $www_path -type d)
-chmod 640 $(find $www_path -type f)
-
 
 bash jail-user -u $username
 
