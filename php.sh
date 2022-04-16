@@ -9,6 +9,7 @@ fi
 apt-get install unixodbc -y
 apt-get install libc-client2007e-dev -y
 apt-get install software-properties-common -y
+apt-get install sendmail -y
 
 the_ppa="ondrej/php"
 
