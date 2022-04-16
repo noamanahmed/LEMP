@@ -16,6 +16,7 @@ then
     exit
 fi
 
+
 apt install xterm -y
 apt install gdb -y
 
@@ -49,11 +50,10 @@ mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
 # cp /lib64/ld-linux-x86-64.so.2 "$chroot_path/lib64"
 # cp /lib/x86_64-linux-gnu/{libselinux.so.1,libcap.so.2,libacl.so.1,libc.so.6,libpcre2-8.so.0,libdl.so.2,ld-linux-x86-64.so.2,libattr.so.1,libpthread.so.0} "$chroot_path/lib/x86_64-linux-gnu"
 
-binaries_array=("xterm" "ls" "date" "rm" "rmdir" "php" "php73" "php74" "php80" "php81" "wp" "git" "wget" "curl" "composer" "composer1" "composer2" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "ping")
+binaries_array=("xterm" "ls" "date" "rm" "rmdir" "mysql" "php" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "ping")
 
 for binary in ${binaries_array[@]}; do
     cp "$(which $binary)" $chroot_bin_path
-
     for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
             cp --parents "$lib" "$chroot_path"
@@ -85,11 +85,11 @@ php_binaries_array=("php73" "php74" "php80" "php81" )
 
 for binary in ${php_binaries_array[@]}; do    
     extension_dir=$($binary -r 'echo ini_get("extension_dir");' 2>/dev/null)
-    extension_files=`ls $extension_dir`
+    extension_files=`ls $extension_dir | grep .so`
 
     for so_file in $extension_files    
     do    
-        for lib in `ldd "$(which $extension_dir/$so_file)" | cut -d'>' -f2 | awk '{print $1}'` ; do
+        for lib in `ldd $extension_dir/$so_file | cut -d'>' -f2 | awk '{print $1}'` ; do
         if [ -f "$lib" ] ; then
                 cp --parents "$lib" "$chroot_path"
         fi  
