@@ -159,6 +159,8 @@ chmod 750 $(find $www_path -type d)
 chmod 640 $(find $www_path -type f)
 
 
+bash jail-user -u $username
+
 if [ -z "$wordpress" ]
 then
     echo "Not a wordpress site skipping"
@@ -171,7 +173,6 @@ else
 
 fi
 
-bash jail-user -u $username
 
 echo "*****************************************"
 echo "*****************************************"
