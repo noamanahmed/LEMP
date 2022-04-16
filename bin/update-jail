@@ -12,11 +12,11 @@ fi
 
 
 rm -rf /var/chroot/
-bash ../jail.sh
+bash $DIR/../jail.sh
 
 home_users=`ls /home/`
 
-for $user in $home_users    
+for user in $home_users    
 do    
-    echo "cp /var/chroot/* /home/$user/"
+  bash jail-user -u $user
 done
