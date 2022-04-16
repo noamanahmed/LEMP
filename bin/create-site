@@ -111,6 +111,7 @@ database_user="$(echo $username | head -c 12)"
 database_password="$(openssl rand -hex 8)"
 
 mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
 mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
 mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
