@@ -10,14 +10,14 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:p:l:wp: flag
+while getopts u:d:p:l:w: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
         d) domain=${OPTARG};;
         p) php=${OPTARG};;
         l) laravel=${OPTARG};;
-        wp) wordpress=${OPTARG};;
+        w) wordpress=${OPTARG};;
     esac
 done
 
