@@ -49,7 +49,7 @@ cp /usr/local/bin/composer2 $chroot_bin_path
 cp /usr/bin/wp $chroot_bin_path
 mkdir $chroot_path/.config
 
-cp -rf $HOME/.config/composer $chroot_path/
+cp -rf $HOME/.config/composer $chroot_path/.config/
 
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
