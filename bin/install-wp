@@ -45,13 +45,12 @@ database_user="$(openssl rand -hex 6)"
 database_password="$(openssl rand -hex 8)"
 wp_password="$(openssl rand -hex 8)"
 
-mysql -ve "CREATE DATABASE IF NOT EXISTS $database_name"
-mysql -ve "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
-mysql -ve "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
-mysql -ve "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
-mysql -ve "FLUSH PRIVILEGES;"
+mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+mysql -e "FLUSH PRIVILEGES;"
 
-cd $DIR/www/
-sudo -u $username -i -- cd /home/$username/www && wp core install
-sudo -u $username -i -- cd /home/$username/www && wp core install  --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com 
+runuser -l $username -c 'cd /home/$username/www && wp core download'
+runuser -l $username -c 'cd /home/$username/www && wp core install  --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com'
 
