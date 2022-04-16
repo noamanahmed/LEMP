@@ -51,6 +51,7 @@ mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhos
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
 
-runuser -l $username -c 'cd /home/$username/www && wp core download'
-runuser -l $username -c 'cd /home/$username/www && wp core install  --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com'
+runuser -l $username -c "cd /home/$username/www && wp core download"
+runuser -l $username -c "cd /home/$username/www && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
+runuser -l $username -c "cd /home/$username/www && wp core install  --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
 
