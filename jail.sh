@@ -44,6 +44,9 @@ cp /bin/bash $chroot_bin_path
 cp /usr/local/bin/composer $chroot_bin_path
 cp /usr/local/bin/composer1 $chroot_bin_path
 cp /usr/local/bin/composer2 $chroot_bin_path
+cp /usr/bin/wp $chroot_bin_path
+cp $(which laravel) $chroot_bin_path
+
 
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
 # cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6,libselinux.so.1} "$chroot_path/lib/x86_64-linux-gnu"
