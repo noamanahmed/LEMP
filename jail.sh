@@ -114,6 +114,8 @@ chmod 755 -R "$chroot_path/usr/bin"
 
 
 mkdir -p "$chroot_path/.ssh"
+mkdir -p "$chroot_path/.wp-cli"
+
 cp -rf $DIR/templates/ssh/.ssh/* "$chroot_path/.ssh" 
 cp -rf $DIR/templates/ssh/.bashrc "$chroot_path/.bashrc" 
 cp -rf $DIR/templates/ssh/.profile "$chroot_path/.profile" 

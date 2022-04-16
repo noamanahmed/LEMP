@@ -44,8 +44,8 @@ fi
 
 ## Creating mysql user and database
 
-database_name="$username_$(openssl rand -hex 4)"
-database_user="$username_$(openssl rand -hex 4)"
+database_name="$username_$(openssl rand -hex 2)"
+database_user="$username_$(openssl rand -hex 2)"
 database_password="$(openssl rand -hex 8)"
 wp_password="$(openssl rand -hex 8)"
 
