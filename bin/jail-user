@@ -30,6 +30,7 @@ then
     echo "The $username exists! Lets proceed!"    
 else
     echo "The username $username is incorrect!"
+    exit
 fi
 
 chroot_path=/var/chroot
