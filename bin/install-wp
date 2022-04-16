@@ -1,0 +1,57 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while getopts u:d:p:l:wp flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+        d) domain=${OPTARG};;
+        p) php=${OPTARG};;
+        l) laravel=${OPTARG};;
+        wp) wordpress=${OPTARG};;
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if id "$username" &>/dev/null
+then
+    echo "Username $username exists!"          
+else
+    echo "The $username doesn't exist"     
+    exit;   
+fi
+
+
+## Creating mysql user and database
+
+database_name="$(openssl rand -hex 6)"
+database_user="$(openssl rand -hex 6)"
+database_password="$(openssl rand -hex 8)"
+wp_password="$(openssl rand -hex 8)"
+
+mysql -ve "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -ve "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+mysql -ve "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+mysql -ve "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+mysql -ve "FLUSH PRIVILEGES;"
+
+cd $DIR/www/
+sudo -u $username -i -- cd /home/$username/www && wp core install
+sudo -u $username -i -- cd /home/$username/www && wp core install  --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com 
+
