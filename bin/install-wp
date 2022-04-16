@@ -11,20 +11,24 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-while getopts u:d:p:l:wp flag
+while getopts u:d: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
         d) domain=${OPTARG};;
-        p) php=${OPTARG};;
-        l) laravel=${OPTARG};;
-        wp) wordpress=${OPTARG};;
     esac
 done
 
 if [ -z "$username" ]
 then
     echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
     exit
 fi
 
@@ -40,8 +44,8 @@ fi
 
 ## Creating mysql user and database
 
-database_name="$(openssl rand -hex 6)"
-database_user="$(openssl rand -hex 6)"
+database_name="$username_$(openssl rand -hex 4)"
+database_user="$username_$(openssl rand -hex 4)"
 database_password="$(openssl rand -hex 8)"
 wp_password="$(openssl rand -hex 8)"
 
@@ -53,5 +57,5 @@ mysql -e "FLUSH PRIVILEGES;"
 
 runuser -l $username -c "cd /home/$username/www && wp core download"
 runuser -l $username -c "cd /home/$username/www && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
-runuser -l $username -c "cd /home/$username/www && wp core install  --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
+runuser -l $username -c "cd /home/$username/www && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
 
