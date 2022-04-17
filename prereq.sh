@@ -19,7 +19,7 @@ echo "_________________________"
 echo ""
 echo "Installing Pre Req Binaries"
 echo ""
-binaries_array=("screen" "htop" "nload" "curl" "wget" "git" "unrar" "unzip" "zip" )
+binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zip" "speedtest-cli" )
 
 for binary in ${binaries_array[@]}; do      
   if [ $(exists $binary) ]
@@ -31,6 +31,12 @@ done
 if [ $(exists ifconfig) ]
 then
   apt-get install net-tools -y
+fi
+
+
+if [ $(exists iotop) ]
+then
+  apt-get install sysstat -y
 fi
 
 echo ""
