@@ -112,6 +112,11 @@ PrintMotd no
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
+
+TCPKeepAlive no 
+ClientAliveInterval 30
+ClientAliveCountMax 240
+
 # override default of no subsystems
 #Subsystem	sftp	/usr/lib/openssh/sftp-server
 

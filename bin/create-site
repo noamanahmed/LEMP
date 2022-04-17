@@ -106,6 +106,7 @@ for php_v in ${php_versions_array[@]}; do
     systemctl restart php$php_v-fpm
 done
 
+
 ## Creating mysql user and database
 
 database_name="$(echo $username | head -c 12)"
@@ -163,6 +164,7 @@ chmod 640 $(find $www_path -type f)
 
 
 bash jail-user -u $username
+
 
 if [ -z "$wordpress" ]
 then
