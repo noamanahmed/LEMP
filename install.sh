@@ -27,6 +27,9 @@ apt-get upgrade -y
 ## Install prereqs
 bash prereq.sh
 
+## Install Security related packages
+bash fail2ban.sh
+bash ufw.sh
 ## Install LEMP
 bash nginx.sh
 bash php.sh
@@ -40,6 +43,10 @@ bash nvm.sh
 bash redis.sh
 bash docker.sh
 bash composer.sh
+bash docker.sh
+bash java.sh
+bash meilisearch.sh
+bash jenkins.sh
 
 ## Install User jail
 bash jail.sh
