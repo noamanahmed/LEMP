@@ -43,7 +43,7 @@ cp -rf $chroot_path/.wp-cli /home/$username/.wp-cli
 cp -rf $chroot_path/.config /home/$username/.config
 
 
-ln -s $chroot_path/bin/php74 $chroot_path/php 
+ln -s $chroot_path/bin/php74 $chroot_path/bin/php 
 
 mkdir -p /home/$username/tmp
 chown -R $username:$username /home/$username/.wp-cli
