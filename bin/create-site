@@ -165,6 +165,7 @@ chmod 640 $(find $www_path -type f)
 
 bash jail-user -u $username
 
+bash toggle-php -u $username -p $php
 
 if [ -z "$wordpress" ]
 then
