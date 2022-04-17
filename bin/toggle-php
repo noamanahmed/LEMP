@@ -32,6 +32,10 @@ then
     exit
 fi
 
-echo "Switching PHP Versin to $php"
+echo "Switching Web PHP Versin to $php"
+rm /run/php/$username-php-fpm.sock
+ln -s /var/run/php/$username-php$php-fpm.sock /run/php/$username-php-fpm.sock
+
+echo "Switching CLI PHP Versin to $php"
 rm -rf /home/$username/bin/php
 ln -s $(echo "php$php" | sed 's/\.//') php 
