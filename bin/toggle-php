@@ -39,6 +39,6 @@ chown $username:$username /run/php/$username-php-fpm.sock
 
 echo "Switching CLI PHP Versin to $php"
 rm -rf /home/$username/bin/php
-ln -s $(echo "php$php" | sed 's/\.//') php 
+ln -s $(echo "php$php" | sed 's/\.//') /home/$username/bin/php 
 
 
