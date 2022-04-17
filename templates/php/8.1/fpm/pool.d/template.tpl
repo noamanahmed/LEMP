@@ -461,3 +461,5 @@ pm.max_spare_servers = 3
 php_admin_value[error_log] = /home/{{$username}}/logs/php8.1-fpm.www.log
 php_admin_flag[log_errors] = on
 php_admin_value[memory_limit] = 64M
+php_admin_value[upload_max_filesize] = 256M
+php_admin_value[post_max_size] = 258M
