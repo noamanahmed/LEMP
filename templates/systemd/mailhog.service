@@ -1,0 +1,10 @@
+[Unit]
+Description=MailHog for catching emails
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+ExecStart={{mail_hog_path}}
+
+[Install]
+WantedBy=multi-user.target
