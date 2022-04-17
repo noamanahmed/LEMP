@@ -33,5 +33,5 @@ then
 fi
 
 echo "Switching PHP Versin to $php"
-rm -rf $chroot_path/bin/php
-ln -s $(echo $chroot_path/bin/php$php | sed 's/\.//') $chroot_path/bin/php 
+rm -rf /home/$username/bin/php
+ln -s $(echo "php$php" | sed 's/\.//') php 
