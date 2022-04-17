@@ -450,8 +450,8 @@ pm.max_spare_servers = 3
 ;                specified at startup with the -d argument
 ;php_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i -f www@my.domain.com
 ;php_flag[display_errors] = off
-php_admin_value[error_log] = /home/{{$username}}/logs/php8.0-fpm.www.log
+php_admin_value[error_log] = /home/{{$username}}/logs/php/php8.0-fpm.www.log
 php_admin_flag[log_errors] = on
-php_admin_value[memory_limit] = 64M
+php_admin_value[memory_limit] = 128M
 php_admin_value[upload_max_filesize] = 256M
 php_admin_value[post_max_size] = 258M
