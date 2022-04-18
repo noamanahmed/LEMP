@@ -104,6 +104,10 @@ for binary in ${php_binaries_array[@]}; do
     done
 done
 
+
+cp /lib/x86_64-linux-gnu/libnss_files.so.2 $chroot_path/lib/x86_64-linux-gnu/
+cp /lib/x86_64-linux-gnu/libnss_dns.so.2 $chroot_path/lib/x86_64-linux-gnu/
+
 mkdir -p $chroot_path/usr/lib/git-core/
 cp -rf /usr/lib/git-core/* $chroot_path/usr/lib/git-core/
 
