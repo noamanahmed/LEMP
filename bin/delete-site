@@ -57,6 +57,9 @@ rm "/etc/nginx/sites-available/$username.conf"
 rm "/etc/nginx/sites-enabled/$username-ssl.conf"
 rm "/etc/nginx/sites-available/$username-ssl.conf"
 
+mysql -e "DROP DATABASE IF EXISTS $database_name"
+mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+
 systemctl reload nginx
 
 userdel -r -f $username > /dev/null 2>&1
