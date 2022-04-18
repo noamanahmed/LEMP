@@ -39,6 +39,7 @@ cp -rf $chroot_path/* /home/$username/
 cp -rf $chroot_path/.ssh /home/$username/
 cp -rf $chroot_path/.bashrc /home/$username/.bashrc
 cp -rf $chroot_path/.profile /home/$username/.profile
+cp -rf $chroot_path/.profile /home/$username/etc/profile
 cp -rf $chroot_path/.wp-cli /home/$username/.wp-cli
 cp -rf $chroot_path/.config /home/$username/.config
 
