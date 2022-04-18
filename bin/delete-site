@@ -57,6 +57,8 @@ rm "/etc/nginx/sites-available/$username.conf"
 rm "/etc/nginx/sites-enabled/$username-ssl.conf"
 rm "/etc/nginx/sites-available/$username-ssl.conf"
 
+systemctl reload nginx
+
 userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 
