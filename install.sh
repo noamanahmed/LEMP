@@ -7,7 +7,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-while getopts h:d: flag
+while getopts h:u: flag
 do
     case "${flag}" in
         h) hostname=${OPTARG};;        
@@ -15,14 +15,27 @@ do
     esac
 done
 
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u.If you are confused just set it to first name"
+    exit
+fi
+
+
 if [ -z "$hostname" ]
 then
     echo "Please provide a hostname using -h "
     exit
 fi
 
+
+
 apt-get update -y
 apt-get upgrade -y
+
+## Setup hostname
+bash hostname.sh -h $hostname
+hostname $hostname
 
 ## Install prereqs
 bash prereq.sh
@@ -55,7 +68,13 @@ bash jail.sh
 bash scripts.sh
 
 ## Setup hostname site for phpmyadmin and other stuff
-bash create-site -u noaman -d $hostname -p 8.1
+bash create-site -u $username -d $hostname -p 8.1
 
 bash phpmyadmin.sh
+
+## Optional ELK Stack
+##bash elk.sh -u $username -h $hostname
+
+apt autoremove
+
 

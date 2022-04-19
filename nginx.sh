@@ -26,6 +26,7 @@ then
   groupadd web
   apt-get install nginx -y
   cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
+  cp $template_path/nginx/htpasswd /etc/nginx/htpasswd
   cp $template_path/nginx/performance.conf /etc/nginx/performance.conf
   
   useradd -s /bin/false nginx
