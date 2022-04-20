@@ -13,9 +13,10 @@ binlog_stmt_cache_size=8M
 key_buffer_size=1M
 table_open_cache=64
 read_buffer_size=1M
-query_cache_limit=1M
-query_cache_type=OFF
-query_cache_size=0
+# Removed in MySQL 8
+#query_cache_limit=1M
+#query_cache_type=OFF
+#query_cache_size=0
 innodb_buffer_pool_size=8M
 innodb_open_files=1024
 innodb_io_capacity=1024

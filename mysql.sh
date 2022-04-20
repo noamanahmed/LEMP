@@ -16,7 +16,7 @@ fi
 # Install mysql-server
 apt install mysql-server -y
 systemctl stop mysql
-cp $template_path/mysql/10-lemp.conf /etc/mysql/conf.d/
+cp $template_path/mysql/10-lemp.cnf /etc/mysql/conf.d/
 systemctl start mysql
 systemctl enable mysql
 

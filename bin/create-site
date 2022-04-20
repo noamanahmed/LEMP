@@ -136,9 +136,8 @@ sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_fi
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 
 
-ln -s /var/run/php/$username-php$php-fpm.sock /run/php/$username-php-fpm.sock
-chown $username:$username /run/php/$username-php-fpm.sock
-
+ln -s /var/run/php/$username-$(echo "php$php" | sed 's/\.//')-fpm.sock /opt/php-fpm/$username/php-fpm.sock
+chown $username:$username /opt/php-fpm/$username/php-fpm.sock
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
