@@ -21,7 +21,7 @@ exists()
 if [ $(exists nginx) ]
 then
   #Remove apache2
-  apt-get remove apache2 -y
+  apt-get remove --purge apache2 -y
   #Install nginx
   adduser --gecos "" --disabled-password --no-create-home  nginx 
   groupadd web
