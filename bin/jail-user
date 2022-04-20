@@ -58,6 +58,7 @@ chown -R $username:$username /home/$username/.ssh
 chown -R $username:$username /home/$username/tmp
 chown -R $username:$username /home/$username/etc
 chown -R $username:$username /home/$username/usr
+chown -R $username:$username /home/$username/dev
 chown -R $username:$username /home/$username/lib
 chown -R $username:$username /home/$username/lib64
 chown -R $username:$username /home/$username/dev/null

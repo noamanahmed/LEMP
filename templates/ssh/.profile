@@ -9,6 +9,11 @@
 #umask 022
 
 # if running bash
+
+##For Chroot
+export HOME=/
+
+
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
@@ -34,8 +39,8 @@ fi
 
 
 # set PATH so it includes composer bins if it exists
-if [ -d "/.config/composer/vendor/bin" ] ; then
-    PATH="/.config/composer/vendor/bin:$PATH"
+if [ -d "$HOME/.config/composer/vendor/bin" ] ; then
+    PATH="$HOME/.config/composer/vendor/bin:$PATH"
 fi
 
 alias sail='bash vendor/bin/sail'

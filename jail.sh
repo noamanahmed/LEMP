@@ -32,6 +32,7 @@ mknod -m 666 $chroot_dev_path/null c 1 3
 mknod -m 666 $chroot_dev_path/tty c 5 0
 mknod -m 666 $chroot_dev_path/zero c 1 5
 mknod -m 666 $chroot_dev_path/random c 1 8
+mknod -m 666 $chroot_dev_path/urandom c 1 9
 
 
 chown root:root $chroot_path
@@ -125,7 +126,7 @@ mkdir -p $chroot_path/lib
 mkdir -p $chroot_path/lib/terminfo
 cp -rf /lib/terminfo/* $chroot_path/lib/terminfo/
 mkdir -p "$chroot_path/etc"
-cp /etc/{passwd,group,resolv.conf} "$chroot_path/etc/"
+cp /etc/{passwd,group,resolv.conf,shadow,hosts} "$chroot_path/etc/"
 cp -rf /etc/ssl $chroot_path/etc/
 
 
