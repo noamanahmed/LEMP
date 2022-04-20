@@ -40,6 +40,9 @@ hostname $hostname
 ## Install prereqs
 bash prereq.sh
 
+## Install python
+bash python.sh
+
 ## Install Security related packages
 bash fail2ban.sh
 bash ufw.sh
@@ -74,6 +77,12 @@ bash phpmyadmin.sh
 
 ## Optional ELK Stack
 ##bash elk.sh -u $username -h $hostname
+
+## Optional Kafka
+##bash kafka.sh
+
+## Optional RabbitMQ
+##bash rabbitmq.sh
 
 apt autoremove
 
