@@ -12,7 +12,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-adduser --gecos "" --disabled-password kafka
+adduser --gecos "" --disabled-password --no-create-home kafka
 
 
 mkdir -p /opt/kafka

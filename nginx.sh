@@ -22,13 +22,17 @@ if [ $(exists nginx) ]
 then
   #Remove apache2
   apt-get remove apache2 -y
-  #Install nginx 
+  #Install nginx
+  adduser --gecos "" --disabled-password --no-create-home  nginx 
   groupadd web
   apt-get install nginx -y
   cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
+  cp $template_path/nginx/htpasswd.users /etc/nginx/htpasswd.users
   cp $template_path/nginx/htpasswd /etc/nginx/htpasswd
   cp $template_path/nginx/performance.conf /etc/nginx/performance.conf
   
+  chown -R nginx:nginx /etc/nginx/*
+
   useradd -s /bin/false nginx
   systemctl restart nginx
   systemctl enable nginx

@@ -1,0 +1,10 @@
+[Unit]
+Description=Meilisearch
+After=systemd-user-sessions.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/meilisearch --http-addr 127.0.0.1:7700 --env production --master-key {{security_key}}
+
+[Install]
+WantedBy=default.target

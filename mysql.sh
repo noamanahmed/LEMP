@@ -1,6 +1,12 @@
 #!/bin/bash
 
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR && pwd)/templates"
+
+
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
@@ -8,9 +14,11 @@ fi
 
 
 # Install mysql-server
-
-sudo apt install mysql-server -y
-sudo systemctl start mysql.service
+apt install mysql-server -y
+systemctl stop mysql
+cp $template_path/mysql/10-lemp.conf /etc/mysql/conf.d/
+systemctl start mysql
+systemctl enable mysql
 
 # Create MYSQL Admin User
 

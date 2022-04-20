@@ -28,28 +28,13 @@ then
 fi
 
 
+apt install netdata -y
 
+systemctl stop netdata
+cp $template_path/netdata/netdata.conf /etc/netdata/
 
-apt  install golang-go -y
-mkdir -p $HOME/gocode
-echo "export GOPATH=$HOME/gocode" >> ~/.profile
-source ~/.profile
-
-go get github.com/mailhog/MailHog
-go get github.com/mailhog/mhsendmail
-
-
-cp $HOME/gocode/bin/MailHog /usr/local/bin/mailhog
-cp $HOME/gocode/bin/mhsendmail /usr/local/bin/mhsendmail
-
-
-cp $template_path/systemd/mailhog.service /etc/systemd/system/
-
-sed -i "s/{{mail_hog_path}}/$(echo $(which mailhog) | sed 's/\//\\\//g')/" /etc/systemd/system/mailhog.service
-
-systemctl daemon-reload
-systemctl restart mailhog
-systemctl enable mailhog
+systemctl start netdata
+systemctl enable netdata
 
 
 

@@ -16,10 +16,9 @@ fi
 while getopts h: flag
 do
     case "${flag}" in        
-        u) username=${OPTARG};;
+        h) hostname=${OPTARG};;
     esac
 done
-
 
 
 if [ -z "$hostname" ]
