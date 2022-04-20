@@ -28,5 +28,5 @@ curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -
 chmod +x /usr/bin/wp
 
 
-composer global require laravel/installer
+COMPOSER_ALLOW_SUPERUSER=1 composer global require laravel/installer
 

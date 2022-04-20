@@ -22,19 +22,19 @@ echo ""
 binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zip" "speedtest-cli" )
 
 for binary in ${binaries_array[@]}; do      
-  if [ $(exists $binary) ]
+  if ! command -v $binary &> /dev/null
   then    
     apt-get install $binary -qqy
   fi
 done
 
-if [ $(exists ifconfig) ]
+if ! command -v ifconfig &> /dev/null
 then
   apt-get install net-tools -qqy
 fi
 
 
-if [ $(exists iotop) ]
+if ! command -v iotop &> /dev/null
 then
   apt-get install sysstat -qqy
 fi

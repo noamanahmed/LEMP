@@ -11,7 +11,7 @@
 # if running bash
 
 ##For Chroot
-export HOME=/
+##export HOME=/
 
 
 if [ -n "$BASH_VERSION" ]; then
