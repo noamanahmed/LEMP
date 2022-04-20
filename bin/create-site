@@ -98,6 +98,9 @@ chmod 755  /home/$username
 
 
 ## Creating PHP FPM Pool
+mkdir -p /opt/php-fpm/$username
+chown $username:$username /opt/php-fpm/$username
+
 php_versions_array=("7.3" "7.4" "8.0" "8.1")
 
 for php_v in ${php_versions_array[@]}; do
