@@ -32,6 +32,13 @@ then
     exit
 fi
 
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
 echo "Switching Web PHP Versin to $php"
 rm /opt/php-fpm/$username/php-fpm.sock
 ln -s /var/run/php/$username-$(echo "php$php" | sed 's/\.//')-fpm.sock /opt/php-fpm/$username/php-fpm.sock
