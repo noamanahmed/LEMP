@@ -5,9 +5,9 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-apt install python3 python3-pip -y
-apt install build-essential libssl-dev libffi-dev python3-dev -y
-apt install -y python3-venv
+apt install python3 python3-pip -qqy
+apt install build-essential libssl-dev libffi-dev python3-dev -qqy
+apt install -qqy python3-venv
 
 mkdir -p /opt/python3
 mkdir -p /opt/python3/environments

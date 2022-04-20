@@ -24,19 +24,19 @@ binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zi
 for binary in ${binaries_array[@]}; do      
   if [ $(exists $binary) ]
   then    
-    apt-get install $binary -y
+    apt-get install $binary -qqy
   fi
 done
 
 if [ $(exists ifconfig) ]
 then
-  apt-get install net-tools -y
+  apt-get install net-tools -qqy
 fi
 
 
 if [ $(exists iotop) ]
 then
-  apt-get install sysstat -y
+  apt-get install sysstat -qqy
 fi
 
 echo ""
