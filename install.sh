@@ -111,19 +111,19 @@ bash phpmyadmin.sh -u $username > $INSTALL_DIR/$username.sh.log 2>&1
 
 ## Optional Kafka
 ##echo "Installing Kafka at $hostname"
-##bash kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
+bash kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
 
 ## Optional RabbitMQ
 ##echo "Installing RabbitMQ at $hostname"
-##bash rabbitmq.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+bash rabbitmq.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Mailhog
 ##echo "Installing Mailhog at $hostname"
-##bash mailhog.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+bash mailhog.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Netdata
 ##echo "Installing NetData at $hostname"
-##bash netdata.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+bash netdata.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional glitchtip (requires docker) and there alot of bugs
 ##echo "Installing Glitchtip at $hostname"
