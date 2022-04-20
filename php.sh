@@ -14,7 +14,7 @@ apt install sendmail -y
 the_ppa="ondrej/php"
 
 if ! grep -q "^deb .*$the_ppa" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-    add-apt-repository ppa:ondrej/php
+    add-apt-repository ppa:ondrej/php -y
     apt update -y
 fi
 
