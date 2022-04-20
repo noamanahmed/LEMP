@@ -18,7 +18,7 @@ exists()
 }
 
 
-if [ $(exists nginx) ]
+if ! command -v nginx &> /dev/null
 then
   #Remove apache2
   apt-get remove --purge apache2 -y
