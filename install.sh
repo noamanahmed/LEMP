@@ -94,6 +94,9 @@ bash jail.sh > $INSTALL_DIR/jail.sh.log 2>&1
 echo "Installing wpcli,laravel installer and other misc tasks"
 bash scripts.sh > $INSTALL_DIR/scripts.sh.log 2>&1
 
+## Load new .profile
+source ~/.profile
+
 ## Setup hostname site for phpmyadmin and other stuff
 echo "Creating $hostname site with username $username"
 bash create-site -u $username -d $hostname -p 8.1 > $INSTALL_DIR/hostname_site.sh.log 2>&1

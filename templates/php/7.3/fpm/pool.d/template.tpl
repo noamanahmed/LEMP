@@ -3,7 +3,7 @@
 
 
 user = {{$username}}
-group = {{$username}
+group = {{$username}}
 listen = /run/php/{{$username}}-php73-fpm.sock
 listen.owner = {{$username}}
 listen.group = {{$username}}
@@ -24,6 +24,7 @@ php_admin_value[upload_max_filesize] = 256M
 php_admin_value[post_max_size] = 258M
 
 
-emergency_restart_threshold 10
-emergency_restart_interval 1m
-process_control_timeout 10s
+[global]
+emergency_restart_threshold = 10
+emergency_restart_interval = 1m
+process_control_timeout = 10s
