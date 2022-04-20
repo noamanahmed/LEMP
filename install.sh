@@ -34,8 +34,8 @@ echo ""
 echo "Installing Directory in $INSTALL_DIR"
 
 echo "Updating Packages"
-apt-get update -y 2>&1 | tee $INSTALL_DIR/apt_update.log
-apt-get upgrade -y 2>&1 | tee $INSTALL_DIR/apt_upgrade.log
+apt-get update -qqy 2>&1 | tee $INSTALL_DIR/apt_update.log
+apt-get upgrade -qqy 2>&1 | tee $INSTALL_DIR/apt_upgrade.log
 echo "Packages Updated"
 
 echo "Changing Hostname to $hostname"
