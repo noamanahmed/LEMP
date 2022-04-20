@@ -34,98 +34,98 @@ echo ""
 echo "Installing Directory in $INSTALL_DIR"
 
 echo "Updating Packages"
-apt-get update -qqy 2>&1 | tee $INSTALL_DIR/apt_update.log
-apt-get upgrade -qqy 2>&1 | tee $INSTALL_DIR/apt_upgrade.log
+apt-get update -qqy > tee $INSTALL_DIR/apt_update.log 2>&1
+apt-get upgrade -qqy > tee $INSTALL_DIR/apt_upgrade.log 2>&1
 echo "Packages Updated"
 
 echo "Changing Hostname to $hostname"
 ## Setup hostname
-bash hostname.sh -h $hostname 2>&1 | tee $INSTALL_DIR/hostname1.sh.log
+bash hostname.sh -h $hostname > tee $INSTALL_DIR/hostname1.sh.log 2>&1
 hostname $hostname
 
 echo "Installing PreReqs"
 ## Install prereqs
-bash prereq.sh 2>&1 | tee $INSTALL_DIR/prereq.sh.log
+bash prereq.sh > tee $INSTALL_DIR/prereq.sh.log 2>&1
 
 echo "Installing Python"
 ## Install python
-bash python.sh 2>&1 | tee $INSTALL_DIR/python.sh.log
+bash python.sh > tee $INSTALL_DIR/python.sh.log 2>&1
 
 echo "Installing Fail2Ban,UFW and etc"
 ## Install Security related packages
-bash fail2ban.sh 2>&1 | tee $INSTALL_DIR/fail2ban.sh.log
-bash ufw.sh 2>&1 | tee $INSTALL_DIR/ufw.sh.log
+bash fail2ban.sh > tee $INSTALL_DIR/fail2ban.sh.log 2>&1
+bash ufw.sh > tee $INSTALL_DIR/ufw.sh.log 2>&1
 
 echo "Installing LEMP nginx,php and mysql"
 ## Install LEMP
-bash nginx.sh 2>&1 | tee $INSTALL_DIR/nginx.sh.log
-bash mysql.sh -u $username 2>&1 | tee $INSTALL_DIR/$username.sh.log
-bash php.sh 2>&1 | tee $INSTALL_DIR/php.sh.log
+bash nginx.sh > tee $INSTALL_DIR/nginx.sh.log 2>&1
+bash mysql.sh -u $username > tee $INSTALL_DIR/$username.sh.log 2>&1
+bash php.sh > tee $INSTALL_DIR/php.sh.log 2>&1
 
 
 ## Install Misc
 echo "Installing Proftpd"
-bash proftpd.sh 2>&1 | tee $INSTALL_DIR/proftpd.sh.log
+bash proftpd.sh > tee $INSTALL_DIR/proftpd.sh.log 2>&1
 echo "Installing LetsEncrypt SSL"
-bash ssl.sh 2>&1 | tee $INSTALL_DIR/ssl.sh.log
+bash ssl.sh > tee $INSTALL_DIR/ssl.sh.log 2>&1
 echo "Installing Redis User"
-bash redis.sh 2>&1 | tee $INSTALL_DIR/redis.sh.log
+bash redis.sh > tee $INSTALL_DIR/redis.sh.log 2>&1
 echo "Installing Node Version Manager and setting up latest node"
-bash nvm.sh 2>&1 | tee $INSTALL_DIR/nvm.sh.log
+bash nvm.sh > tee $INSTALL_DIR/nvm.sh.log 2>&1
 echo "Installing Redis"
-bash redis.sh 2>&1 | tee $INSTALL_DIR/redis.sh.log
+bash redis.sh > tee $INSTALL_DIR/redis.sh.log 2>&1
 echo "Installing Docker"
-bash docker.sh 2>&1 | tee $INSTALL_DIR/docker.sh.log
+bash docker.sh > tee $INSTALL_DIR/docker.sh.log 2>&1
 echo "Installing Composer"
-bash composer.sh 2>&1 | tee $INSTALL_DIR/composer.sh.log
+bash composer.sh > tee $INSTALL_DIR/composer.sh.log 2>&1
 echo "Installing Java"
-bash java.sh 2>&1 | tee $INSTALL_DIR/java.sh.log
+bash java.sh > tee $INSTALL_DIR/java.sh.log 2>&1
 echo "Installing MeiliSearch"
-bash meilisearch.sh 2>&1 | tee $INSTALL_DIR/meilisearch.sh.log
+bash meilisearch.sh > tee $INSTALL_DIR/meilisearch.sh.log 2>&1
 
 #echo "Installing Jenkins(Work In Progress)"
-#bash jenkins.sh 2>&1 | tee $INSTALL_DIR/jenkins.sh.log
+#bash jenkins.sh > tee $INSTALL_DIR/jenkins.sh.log 2>&1
 
 ## Install User jail
 echo "Installing UserJail"
-bash jail.sh 2>&1 | tee $INSTALL_DIR/jail.sh.log
+bash jail.sh > tee $INSTALL_DIR/jail.sh.log 2>&1
 
 ## Install misc scripts
 echo "Installing wpcli,laravel installer and other misc tasks"
-bash scripts.sh 2>&1 | tee $INSTALL_DIR/scripts.sh.log
+bash scripts.sh > tee $INSTALL_DIR/scripts.sh.log 2>&1
 
 ## Setup hostname site for phpmyadmin and other stuff
 echo "Creating $hostname site with username $username"
-bash create-site -u $username -d $hostname -p 8.1 2>&1 | tee $INSTALL_DIR/hostname_site.sh.log
+bash create-site -u $username -d $hostname -p 8.1 > tee $INSTALL_DIR/hostname_site.sh.log 2>&1
 
 ## Install phpmyadmin
 echo "Installing phpmyadmin at $hostname"
-bash phpmyadmin.sh -u $username 2>&1 | tee $INSTALL_DIR/$username.sh.log
+bash phpmyadmin.sh -u $username > tee $INSTALL_DIR/$username.sh.log 2>&1
 
 ## Optional ELK Stack
 ##echo "Installing ELK Stack at $hostname"
-##bash elk.sh -h $hostname 2>&1 | tee $INSTALL_DIR/$hostname.sh.log
+##bash elk.sh -h $hostname > tee $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Kafka
 ##echo "Installing Kafka at $hostname"
-##bash kafka.sh 2>&1 | tee $INSTALL_DIR/kafka.sh.log
+##bash kafka.sh > tee $INSTALL_DIR/kafka.sh.log 2>&1
 
 ## Optional RabbitMQ
 ##echo "Installing RabbitMQ at $hostname"
-##bash rabbitmq.sh -h $hostname 2>&1 | tee $INSTALL_DIR/$hostname.sh.log
+##bash rabbitmq.sh -h $hostname > tee $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Mailhog
 ##echo "Installing Mailhog at $hostname"
-##bash mailhog.sh -h $hostname 2>&1 | tee $INSTALL_DIR/$hostname.sh.log
+##bash mailhog.sh -h $hostname > tee $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Netdata
 ##echo "Installing NetData at $hostname"
-##bash netdata.sh -h $hostname 2>&1 | tee $INSTALL_DIR/$hostname.sh.log
+##bash netdata.sh -h $hostname > tee $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional glitchtip (requires docker) and there alot of bugs
 ##echo "Installing Glitchtip at $hostname"
-##bash glitchtip.sh -h $hostname 2>&1 | tee $INSTALL_DIR/$hostname.sh.log
+##bash glitchtip.sh -h $hostname > tee $INSTALL_DIR/$hostname.sh.log 2>&1
 
-apt autoremove 2>&1 | tee $INSTALL_DIR/apt_autoremove.log
+apt autoremove > tee $INSTALL_DIR/apt_autoremove.log 2>&1
 
 
