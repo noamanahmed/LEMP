@@ -56,12 +56,15 @@ echo "Installing Fail2Ban,UFW and etc"
 bash fail2ban.sh > $INSTALL_DIR/fail2ban.sh.log 2>&1
 bash ufw.sh > $INSTALL_DIR/ufw.sh.log 2>&1
 
-echo "Installing LEMP nginx,php and mysql"
+echo "Installing LEMP Stack"
 ## Install LEMP
+echo "Installing nginx"
 bash nginx.sh > $INSTALL_DIR/nginx.sh.log 2>&1
+echo "Installing mysql"
 bash mysql.sh -u $username > $INSTALL_DIR/$username.sh.log 2>&1
+echo "Installing php"
 bash php.sh > $INSTALL_DIR/php.sh.log 2>&1
-
+echo "LEMP Stack Installation completed!"
 
 ## Install Misc
 echo "Installing Proftpd"
