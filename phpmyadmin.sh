@@ -25,6 +25,6 @@ fi
 
 
 wget https://files.phpmyadmin.net/phpMyAdmin/5.1.1/phpMyAdmin-5.1.1-all-languages.zip -O /tmp/phpmyadmin.zip
-unzip -f /tmp/phpmyadmin.zip -d /tmp/
+unzip /tmp/phpmyadmin.zip -d /tmp/ -f
 mv /tmp/phpMyAdmin-5.1.1-all-languages /home/$username/www/phpmyadmin
 cp -rf $template_path/phpmyadmin/* /home/$username/www/phpmyadmin/
