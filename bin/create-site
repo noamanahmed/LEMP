@@ -165,6 +165,7 @@ nginx -t && systemctl reload nginx
 
 ## Setup Log rotation
 cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
+sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
 
 ## Restart nginx as we added our user to nginx group
 systemctl restart nginx
