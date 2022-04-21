@@ -32,7 +32,7 @@ fi
 
 
 
-if [ ! -d "/home/$username/www/wp-config.php" ] 
+if [ ! -f "/home/$username/www/wp-config.php" ] 
 then
     echo "There is not a wordpress site"    
     exit;
