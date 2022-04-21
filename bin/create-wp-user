@@ -24,13 +24,20 @@ then
 fi
 
 
-
-
 if ! id "$username" &>/dev/null
 then
     echo "The $username doesn't exist"    
     exit;
 fi
 
-wp --path=/home/$username/www user delete noaman --reassign=1
-wp --path=/home/$username/www user create noaman noaman@mailinator.com --role=administrator
+
+
+if [ ! -d "/home/$username/www/wp-config.php" ] 
+then
+    echo "There is not a wordpress site"    
+    exit;
+fi
+
+
+runuser -l $username -c "wp --path=/home/$username/www user delete noaman --reassign=1"
+runuser -l $username -c "wp --path=/home/$username/www user create noaman noaman@mailinator.com --role=administrator"
