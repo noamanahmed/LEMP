@@ -47,14 +47,14 @@ then
 fi
 
 
-if [ ! -d "/backups/$username/$backup_name/www.sql.gz" ] 
+if [ ! -f "/backups/$username/$backup_name/www.sql.gz" ] 
 then
     echo "There are no files to replace as /backups/$username/$backup_name/www.sql.gz doesn't exist"    
     exit;
 fi
 
 
-if [ ! -d "/backups/$username/$backup_name/db.sql.gz" ] 
+if [ ! -f "/backups/$username/$backup_name/db.sql.gz" ] 
 then
     echo "There is no database backup to replace as /backups/$username/$backup_name/db.sql.gz doesn't exist"    
     exit;
