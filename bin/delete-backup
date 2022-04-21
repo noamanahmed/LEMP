@@ -10,10 +10,11 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:f:p flag
+while getopts u:n: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
+        n) backup_name=${OPTARG};;        
     esac
 done
 
@@ -31,10 +32,23 @@ then
     exit;
 fi
 
-backup_name=$(date +%s)_$(openssl rand -hex 4)
-mkdir -p /backups/$username/$backup_name
-echo "Backup Site Location /backups/$username/$backup_name"
-echo "Backing up MySQL DB"
-mysqldump $username | gzip > /backups/$username/$backup_name/db.sql.gz
-echo "Backing up Files in www"
-tar -czf /backups/$username/$backup_name/ww.sql.gz /home/$username/www/
+
+
+if [ -z "$backup_name" ]
+then
+    echo "Please provide a backup_name using -n "
+    exit
+fi
+
+
+if [ ! -d "/backups/$username/$backup_name" ] 
+then
+    echo "There is no backup found at this location /backups/$username/$backup_name"    
+    exit;
+fi
+
+
+
+echo "Deleting backup files"
+rm -rf /backups/$username/$backup_name
+echo "Backup Deleted"
