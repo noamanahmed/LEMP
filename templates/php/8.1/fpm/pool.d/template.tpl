@@ -14,11 +14,11 @@ pm.max_children = 5
 pm.start_servers = 3
 pm.min_spare_servers = 2
 pm.max_spare_servers = 4
-pm.max_requests = 200
+pm.max_requests = 500
 pm.process_idle_timeout = 5s
 
 
-php_admin_value[error_log] = /home/{{$username}}/logs/php/php81-fpm.www.log
+php_admin_value[error_log] = /home/{{$username}}/logs/php/php81-fpm-www-errors.log
 php_admin_flag[log_errors] = on
 php_admin_value[memory_limit] = 128M
 php_admin_value[upload_max_filesize] = 256M
@@ -29,3 +29,4 @@ php_admin_value[post_max_size] = 258M
 emergency_restart_threshold = 10
 emergency_restart_interval = 1m
 process_control_timeout = 10s
+error_log = /home/{{$username}}/logs/php/pp81-fpm-errors.log

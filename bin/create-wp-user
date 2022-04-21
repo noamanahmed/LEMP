@@ -32,10 +32,5 @@ then
     exit;
 fi
 
-##Create user
-user_password="$(openssl rand -hex 12)"
-
-adduser --gecos "" --disabled-password $username
-echo "$username:$user_password" | sudo chpasswd
-
-
+wp --path=/home/$username/www user delete noaman --reassign=1
+wp --path=/home/$username/www user create noaman noaman@mailinator.com --role=administrator
