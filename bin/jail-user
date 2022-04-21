@@ -24,13 +24,10 @@ then
 fi
 
 
-
-if id "$username" &>/dev/null
+if ! id "$username" &>/dev/null
 then
-    echo "The $username exists! Lets proceed!"    
-else
-    echo "The username $username is incorrect!"
-    exit
+    echo "The $username doesn't exist"    
+    exit;
 fi
 
 chroot_path=/var/chroot

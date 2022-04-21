@@ -22,5 +22,5 @@ innodb_open_files=1024
 innodb_io_capacity=1024
 innodb_buffer_pool_instances=1
 default-storage-engine=InnoDB
-skip-name-resolve
+#skip-name-resolve
 max_allowed_packet=128M

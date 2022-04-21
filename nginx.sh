@@ -23,7 +23,7 @@ then
   apt install nginx -y
   systemctl stop nginx
   cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
-  sed -i "s/{{{{cpu_cores}}}}/$(grep -c ^processor /proc/cpuinfo)/" /etc/nginx/nginx.conf
+  sed -i "s/{{cpu_cores}}/$(grep -c ^processor /proc/cpuinfo)/" /etc/nginx/nginx.conf
   cp $template_path/nginx/htpasswd.users /etc/nginx/htpasswd.users
   cp $template_path/nginx/htpasswd /etc/nginx/htpasswd
   cp $template_path/nginx/performance.conf /etc/nginx/performance.conf

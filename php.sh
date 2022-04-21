@@ -41,9 +41,25 @@ cp -rf $DIR/templates/php/8.0/* /etc/php/8.0/
 cp -rf $DIR/templates/php/8.1/* /etc/php/8.1/
 
 
-ln -s $(which php7.3) /usr/bin/php73
-ln -s $(which php7.4) /usr/bin/php74
-ln -s $(which php8.0) /usr/bin/php80
-ln -s $(which php8.1) /usr/bin/php81
+if [ -z "/usr/bin/php73" ] 
+then
+  ln -s $(which php7.3) /usr/bin/php73
+fi
+
+if [ -z "/usr/bin/php74" ] 
+then
+  ln -s $(which php7.4) /usr/bin/php74
+fi
+
+if [ -z "/usr/bin/php80" ] 
+then
+  ln -s $(which php8.0) /usr/bin/php80
+fi
+
+if [ -z "/usr/bin/php81" ] 
+then
+  ln -s $(which php8.1) /usr/bin/php81
+fi
+
 
 mkdir -p /opt/php-fpm

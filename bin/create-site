@@ -85,7 +85,12 @@ mkdir -p "$user_root/logs"
 mkdir -p "$user_root/logs/nginx"
 mkdir -p "$user_root/logs/php"
 mkdir -p "$user_root/logs/mail"
-chown -R $username:$username "$user_root/logs/php"
+mkdir -p "$user_root/cache"
+mkdir -p "$user_root/cache/nginx"
+#mkdir -p "$user_root/cache/php"
+
+chown -R $username:$username $user_root/logs/php
+chown -R nginx:nginx $user_root/cache/nginx
 
 mkdir -p $www_path
 cp $template_path/www/* $www_path/
