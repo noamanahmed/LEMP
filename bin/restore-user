@@ -47,9 +47,9 @@ then
 fi
 
 
-if [ ! -f "/backups/$username/$backup_name/www.sql.gz" ] 
+if [ ! -f "/backups/$username/$backup_name/www.gz" ] 
 then
-    echo "There are no files to replace as /backups/$username/$backup_name/www.sql.gz doesn't exist"    
+    echo "There are no files to replace as /backups/$username/$backup_name/www.gz doesn't exist"    
     exit;
 fi
 
@@ -61,8 +61,8 @@ then
 fi
 
 echo "Restoring MySQL DB"
-pv /backups/$username/$backup_name/db.sql.gz | gunzip | mysql -u root -p $username
+pv /backups/$username/$backup_name/db.sql.gz | gunzip | mysql -u root $username
 echo "Restoring Files in www"
 #mv -f /home/$username/www/ /home/$username/www_backup
-pv /backups/$username/$backup_name/db.sql.gz | gunzip > /home/$username/www/
+pv /backups/$username/$backup_name/www.gz | tar -xz -C /home/$username/www/
 
