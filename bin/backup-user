@@ -32,6 +32,7 @@ then
 fi
 
 backup_name=$(date +%s)_$(openssl rand -hex 4)
+mkdir -p /backups/$username
 mkdir -p /backups/$username/$backup_name
 echo "Backup Site Location /backups/$username/$backup_name"
 echo "Backing up MySQL DB"
