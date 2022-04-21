@@ -163,6 +163,9 @@ sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
+## Setup Log rotation
+cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
+
 ## Restart nginx as we added our user to nginx group
 systemctl restart nginx
 

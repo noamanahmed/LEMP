@@ -49,21 +49,27 @@ for php_v in ${php_versions_array[@]}; do
     systemctl restart php$php_v-fpm
 done
 
+## Delete PHP FPM .sock file
 rm /opt/php-fpm/$username/php-fpm.sock
+
 ## Deleting nginx settings
 rm "/etc/nginx/sites-enabled/$username.conf"
 rm "/etc/nginx/sites-available/$username.conf"
-
 rm "/etc/nginx/sites-enabled/$username-ssl.conf"
 rm "/etc/nginx/sites-available/$username-ssl.conf"
+systemctl reload nginx
 
+## Delete Database
 mysql -e "DROP DATABASE IF EXISTS $username"
 mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 
-systemctl reload nginx
-
+## Delete linux user
 userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
+
+## Delete Logrotation
+rm /etc/logrotate.d/site-$username.conf
+
 
 echo "Username $username deleted successfully!"      
 
