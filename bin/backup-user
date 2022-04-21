@@ -35,6 +35,6 @@ backup_name=$(date +%s)_$(openssl rand -hex 4)
 mkdir -p /backups/$username/$backup_name
 echo "Backup Site Location /backups/$username/$backup_name"
 echo "Backing up MySQL DB"
-mysqldump $username | gzip > /backups/$username/$backup_name/db.sql.gz
+mysqldump $username | pv | gzip > /backups/$username/$backup_name/db.sql.gz | pv
 echo "Backing up Files in www"
-tar -czf /backups/$username/$backup_name/www.gz -C /home/$username/www/
+tar -czf /backups/$username/$backup_name/www.gz -C /home/$username/www/ . | pv

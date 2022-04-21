@@ -63,6 +63,9 @@ fi
 echo "Restoring MySQL DB"
 pv /backups/$username/$backup_name/db.sql.gz | gunzip | mysql -u root $username
 echo "Restoring Files in www"
-#mv -f /home/$username/www/ /home/$username/www_backup
+mv -f /home/$username/www/ /home/$username/www_backup
+mkdir -p /home/$username/www/
 pv /backups/$username/$backup_name/www.gz | tar -xz -C /home/$username/www/
-
+rm -rf /home/$username/www_backup
+echo "Fixing permissions"
+fix-permissions -u $username
