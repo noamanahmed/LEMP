@@ -49,7 +49,7 @@ for php_v in ${php_versions_array[@]}; do
     systemctl restart php$php_v-fpm
 done
 
-rm /run/php/$username-php-fpm.sock
+rm /opt/php-fpm/$username/php-fpm.sock
 ## Deleting nginx settings
 rm "/etc/nginx/sites-enabled/$username.conf"
 rm "/etc/nginx/sites-available/$username.conf"
