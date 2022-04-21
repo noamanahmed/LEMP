@@ -15,7 +15,7 @@ pm.start_servers = 3
 pm.min_spare_servers = 2
 pm.max_spare_servers = 4
 pm.max_requests = 200
-
+pm.process_idle_timeout = 5s
 
 php_admin_value[error_log] = /home/{{$username}}/logs/php/php80-fpm.www.log
 php_admin_flag[log_errors] = on

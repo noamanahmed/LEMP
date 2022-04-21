@@ -19,7 +19,7 @@ echo "_________________________"
 echo ""
 echo "Installing Pre Req Binaries"
 echo ""
-binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zip" "speedtest-cli" )
+binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zip" "speedtest-cli gzip" )
 
 for binary in ${binaries_array[@]}; do      
   if ! command -v $binary &> /dev/null

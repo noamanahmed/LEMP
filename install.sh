@@ -67,16 +67,14 @@ bash php.sh > $INSTALL_DIR/php.sh.log 2>&1
 echo "LEMP Stack Installation completed!"
 
 ## Install Misc
-echo "Installing Proftpd"
-bash proftpd.sh > $INSTALL_DIR/proftpd.sh.log 2>&1
+# echo "Installing Proftpd" (SFTP Preferred)
+# bash proftpd.sh > $INSTALL_DIR/proftpd.sh.log 2>&1
 echo "Installing LetsEncrypt SSL"
 bash ssl.sh > $INSTALL_DIR/ssl.sh.log 2>&1
-echo "Installing Redis User"
+echo "Installing Redis"
 bash redis.sh > $INSTALL_DIR/redis.sh.log 2>&1
 echo "Installing Node Version Manager and setting up latest node"
 bash nvm.sh > $INSTALL_DIR/nvm.sh.log 2>&1
-echo "Installing Redis"
-bash redis.sh > $INSTALL_DIR/redis.sh.log 2>&1
 echo "Installing Docker"
 bash docker.sh > $INSTALL_DIR/docker.sh.log 2>&1
 echo "Installing Composer"
@@ -114,15 +112,15 @@ bash phpmyadmin.sh -u $username > $INSTALL_DIR/$username.sh.log 2>&1
 
 ## Optional Kafka
 ##echo "Installing Kafka at $hostname"
-bash kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
+#bash kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
 
 ## Optional RabbitMQ
 ##echo "Installing RabbitMQ at $hostname"
-bash rabbitmq.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+#bash rabbitmq.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Mailhog
 ##echo "Installing Mailhog at $hostname"
-bash mailhog.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+#bash mailhog.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Netdata
 ##echo "Installing NetData at $hostname"

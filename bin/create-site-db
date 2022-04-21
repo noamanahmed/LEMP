@@ -25,10 +25,8 @@ fi
 
 
 
-if id "$username" &>/dev/null
+if ! id "$username" &>/dev/null
 then
-    echo "Username $username exists!"      
-else
     echo "The $username doesn't exist"    
     exit;
 fi

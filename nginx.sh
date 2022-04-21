@@ -21,12 +21,17 @@ then
   adduser --gecos "" --disabled-password --no-create-home  nginx 
   groupadd web
   apt install nginx -y
+  systemctl stop nginx
   cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
+  sed -i "s/{{{{cpu_cores}}}}/$(grep -c ^processor /proc/cpuinfo)/" /etc/nginx/nginx.conf
   cp $template_path/nginx/htpasswd.users /etc/nginx/htpasswd.users
   cp $template_path/nginx/htpasswd /etc/nginx/htpasswd
   cp $template_path/nginx/performance.conf /etc/nginx/performance.conf
   
+  mkdir -p /var/cache/nginx
+
   chown -R nginx:nginx /etc/nginx/*
+  chown -R nginx:nginx /var/cache/nginx*
 
   useradd -s /bin/false nginx
   systemctl restart nginx
