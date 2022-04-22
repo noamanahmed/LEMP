@@ -23,6 +23,7 @@ apt install openresty -qqy
 systemctl stop nginx
 cp $template_path/openresty/nginx-openresty.service /lib/systemd/system/nginx-openresty.service
 cp $template_path/openresty/nginx.conf /usr/local/openresty/nginx/conf/
+cp -rf /etc/nginx/snippets /usr/local/openresty/nginx/conf/
 sed -i "s/{{cpu_cores}}/$(grep -c ^processor /proc/cpuinfo)/" /usr/local/openresty/nginx/conf/nginx.conf
 systemctl daemon-reload
 systemctl restart nginx-openresty
