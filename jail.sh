@@ -16,7 +16,7 @@ then
     exit
 fi
 
-
+echo "Installing Dependencies"
 apt install xterm -y
 apt install gdb -y
 
@@ -25,6 +25,7 @@ chown root:root /home
 
 mkdir -p $chroot_path
 
+echo "Creating /dev"
 chroot_dev_path="$chroot_path/dev"
 mkdir -p $chroot_dev_path
 
@@ -38,27 +39,28 @@ mknod -m 666 $chroot_dev_path/urandom c 1 9
 chown root:root $chroot_path
 chmod 755 /var/chroot
 
+echo "Creating /bin"
 chroot_bin_path="$chroot_path/bin"
 mkdir -p $chroot_bin_path
-
 cp /bin/bash $chroot_bin_path
+
+echo "Setting up composer"
 cp /usr/local/bin/composer $chroot_bin_path
 cp /usr/local/bin/composer1 $chroot_bin_path
 cp /usr/local/bin/composer2 $chroot_bin_path
-
-## Install PHP Specific binaries
-cp /usr/bin/wp $chroot_bin_path
-cp /usr/bin/npm $chroot_bin_path
 mkdir $chroot_path/.config
-
 cp -rf $HOME/.config/composer $chroot_path/.config/
 
+echo "Setting WP-CLI"
+## Install PHP Specific binaries
+cp /usr/bin/wp $chroot_bin_path
 
+echo "Setting NPM"
+## Install Node Specific binaries
+cp /usr/bin/npm $chroot_bin_path
+
+echo "Copying Binaries (This might take a while)"
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
-# cp /lib/x86_64-linux-gnu/{libtinfo.so.6,libdl.so.2,libc.so.6,libselinux.so.1} "$chroot_path/lib/x86_64-linux-gnu"
-# cp /lib64/ld-linux-x86-64.so.2 "$chroot_path/lib64"
-# cp /lib/x86_64-linux-gnu/{libselinux.so.1,libcap.so.2,libacl.so.1,libc.so.6,libpcre2-8.so.0,libdl.so.2,ld-linux-x86-64.so.2,libattr.so.1,libpthread.so.0} "$chroot_path/lib/x86_64-linux-gnu"
-
 binaries_array=("xterm" "ls" "ln" "date" "rm" "rmdir" "mysql" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping" "node"  "ssh" "sftp" )
 
 for binary in ${binaries_array[@]}; do
@@ -70,10 +72,12 @@ for binary in ${binaries_array[@]}; do
     done
 done
 
-
+echo "Copying Binaries Completed!"
 # cp /lib/x86_64-linux-gnu/*.so* $chroot_path/lib/x86_64-linux-gnu/
 # cp /lib/*.so* $chroot_path/lib/x86_64-linux-gnu/
 
+
+echo "Copying User Binaries (This might take a while)"
 mkdir -p $chroot_path/usr
 mkdir -p $chroot_path/usr/bin
 
@@ -88,8 +92,9 @@ for binary in ${user_binaries_array[@]}; do
     fi  
     done
 done
+echo "Copying User Binaries Completed!"
 
-
+echo "Copying PHP Binaries (This might take a while)"
 php_binaries_array=("php73" "php74" "php80" "php81" )
 
 for binary in ${php_binaries_array[@]}; do    
@@ -105,11 +110,13 @@ for binary in ${php_binaries_array[@]}; do
         done
     done
 done
+echo "Copying PHP Binaries Completed!"
 
-
+echo "Setting Up DNS"
 cp /lib/x86_64-linux-gnu/libnss_files.so.2 $chroot_path/lib/x86_64-linux-gnu/
 cp /lib/x86_64-linux-gnu/libnss_dns.so.2 $chroot_path/lib/x86_64-linux-gnu/
 
+echo "Setting Up Git,terminfo,resolve.conf etc"
 mkdir -p $chroot_path/usr/lib/git-core/
 cp -rf /usr/lib/git-core/* $chroot_path/usr/lib/git-core/
 
@@ -129,7 +136,7 @@ mkdir -p "$chroot_path/etc"
 cp /etc/{passwd,group,resolv.conf,shadow,hosts} "$chroot_path/etc/"
 cp -rf /etc/ssl $chroot_path/etc/
 
-
+echo "Copying PHP Libraries!"
 path_array=("/usr/lib/php" "/etc/php" )
 
 for path in ${path_array[@]}; do
@@ -139,10 +146,7 @@ for path in ${path_array[@]}; do
 done
 
 
-
-chmod 755 -R "$chroot_path/usr/lib"
-chmod 755 -R "$chroot_path/usr/bin"
-
+echo "Setting up bash profiles and paths"
 
 mkdir -p "$chroot_path/.ssh"
 mkdir -p "$chroot_path/.wp-cli"
@@ -152,3 +156,6 @@ cp -rf $DIR/templates/ssh/.bashrc "$chroot_path/.bashrc"
 cp -rf $DIR/templates/ssh/.profile "$chroot_path/.profile" 
 
 
+echo "Fixing Permissions"
+chmod 755 -R "$chroot_path/usr/lib"
+chmod 755 -R "$chroot_path/usr/bin"
