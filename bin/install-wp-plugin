@@ -15,6 +15,7 @@ do
     case "${flag}" in
         u) username=${OPTARG};;        
         p) plugin=${OPTARG};;        
+        a) activate=${OPTARG};;        
     esac
 done
 
@@ -50,7 +51,7 @@ fi
 runuser -l $username -c "wp --path=/home/$username/www plugin install $plugin"
 
 
-if [ ! -z "$plugin" ]
+if [ ! -z "$activate" ]
 then
     runuser -l $username -c "wp --path=/home/$username/www plugin activate $plugin"
 fi
