@@ -1,5 +1,10 @@
 #!/bin/bash
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR && pwd)/templates"
+
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -15,3 +20,6 @@ echo "deb http://openresty.org/package/ubuntu $(lsb_release -sc) main" \
 
 apt update -qqy
 apt install openresty -qqy
+cp $template_path/openresty/nginx.service /lib/systemd/system/nginx.service
+systemctl daemon-reload
+systemctl restart nginx

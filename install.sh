@@ -60,6 +60,8 @@ echo "Installing LEMP Stack"
 ## Install LEMP
 echo "Installing nginx"
 bash nginx.sh > $INSTALL_DIR/nginx.sh.log 2>&1
+echo "Installing OpenResty(LuaJit on Steroids)"
+bash openresty.sh > $INSTALL_DIR/openresty.sh.log 2>&1
 echo "Installing mysql"
 bash mysql.sh > $INSTALL_DIR/$username.sh.log 2>&1
 echo "Installing php"
