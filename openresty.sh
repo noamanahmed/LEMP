@@ -21,6 +21,6 @@ echo "deb http://openresty.org/package/ubuntu $(lsb_release -sc) main" \
 apt update -qqy
 apt install openresty -qqy
 systemctl stop nginx
-cp $template_path/openresty/nginx.service /lib/systemd/system/nginx.service
+cp $template_path/openresty/nginx-openresty /lib/systemd/system/nginx-openresty
 systemctl daemon-reload
-systemctl restart nginx
+systemctl restart nginx-openresty
