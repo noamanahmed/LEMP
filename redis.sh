@@ -18,4 +18,5 @@ fi
 sudo apt install redis-server -qqy
 
 cp $template_path/redis/redis.conf /etc/redis/redis.conf
+usermod -a -G nginx redis
 systemctl restart redis.service
