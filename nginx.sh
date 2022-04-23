@@ -33,9 +33,9 @@ cp $template_path/nginx/htpasswd.users /etc/nginx/htpasswd.users
 cp $template_path/nginx/htpasswd /etc/nginx/htpasswd
 cp $template_path/nginx/performance.conf /etc/nginx/performance.conf
 
-mkdir -p /var/cache/nginx
-chown -R nginx:nginx /etc/nginx/*
-chown -R nginx:nginx /var/cache/nginx*
+# mkdir -p /var/cache/nginx
+# chown -R nginx:nginx /etc/nginx/*
+# chown -R nginx:nginx /var/cache/nginx*
 
 systemctl restart nginx
 systemctl enable nginx

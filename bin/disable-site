@@ -1,0 +1,64 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+if [ ! -f "/etc/nginx/sites-available/$username.conf" && ! -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
+then
+    echo "No Vhost found for this user"    
+    exit;
+fi
+
+
+if [ -L "/etc/nginx/sites-enabled/$username.conf" && -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
+then
+    echo "No Vhost found for this user"    
+    exit;
+fi
+
+
+if [ -f "/etc/nginx/sites-available/$username.conf"] 
+then    
+    nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+    rm $nginx_vhost_enabled
+fi
+
+
+if [ -f "/etc/nginx/sites-available/$username-ssl.conf"] 
+then
+    nginx_vhost_enabled="/etc/nginx/sites-enabled/$usernames-ssl.conf"
+    rm $nginx_vhost_enabled
+fi
+
+nginx -t && service nginx reload
+
+echo "$username site Disabled"
