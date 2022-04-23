@@ -39,9 +39,9 @@ then
 fi
 
 
-if [ -L "/etc/nginx/sites-enabled/$username.conf" ] && [ -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
+if [ ! -L "/etc/nginx/sites-enabled/$username.conf" ] && [ ! -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
 then
-    echo "No Vhost found for this user"    
+    echo "This site is already disabled!"    
     exit;
 fi
 
