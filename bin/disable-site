@@ -46,14 +46,14 @@ then
 fi
 
 
-if [ -f "/etc/nginx/sites-available/$username.conf"] 
+if [ -f "/etc/nginx/sites-available/$username.conf" ] 
 then    
     nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
     rm $nginx_vhost_enabled
 fi
 
 
-if [ -f "/etc/nginx/sites-available/$username-ssl.conf"] 
+if [ -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
 then
     nginx_vhost_enabled="/etc/nginx/sites-enabled/$usernames-ssl.conf"
     rm $nginx_vhost_enabled
