@@ -55,7 +55,7 @@ fi
 
 if [ -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
 then
-    nginx_vhost_enabled="/etc/nginx/sites-enabled/$usernames-ssl.conf"
+    nginx_vhost_enabled="/etc/nginx/sites-enabled/$username-ssl.conf"
     rm $nginx_vhost_enabled
 fi
 
