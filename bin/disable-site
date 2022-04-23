@@ -32,14 +32,14 @@ then
 fi
 
 
-if [ ! -f "/etc/nginx/sites-available/$username.conf" && ! -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
+if [ ! -f "/etc/nginx/sites-available/$username.conf" ] && [ ! -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
 then
     echo "No Vhost found for this user"    
     exit;
 fi
 
 
-if [ -L "/etc/nginx/sites-enabled/$username.conf" && -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
+if [ -L "/etc/nginx/sites-enabled/$username.conf" ] && [ -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
 then
     echo "No Vhost found for this user"    
     exit;
