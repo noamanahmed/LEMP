@@ -25,15 +25,10 @@ chown root:root /home
 
 mkdir -p $chroot_path
 
-echo "Mounting Paths"
-mount --bind /lib $chroot_path/lib
-mount --bind /proc $chroot_path/proc
-mount --bind /sys $chroot_path/sys
-mount --bind /usr $chroot_path/usr
-
 echo "Creating /dev"
 chroot_dev_path="$chroot_path/dev"
 mkdir -p $chroot_dev_path
+
 mknod -m 666 $chroot_dev_path/null c 1 3
 mknod -m 666 $chroot_dev_path/tty c 5 0
 mknod -m 666 $chroot_dev_path/zero c 1 5
@@ -59,6 +54,10 @@ cp -rf $HOME/.config/composer $chroot_path/.config/
 echo "Setting WP-CLI"
 ## Install PHP Specific binaries
 cp /usr/bin/wp $chroot_bin_path
+
+echo "Setting up NVM"
+## Install Node Specific binaries
+cp -r /root/.nvm $chroot_path
 
 echo "Copying Binaries (This might take a while)"
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
@@ -96,7 +95,7 @@ done
 echo "Copying User Binaries Completed!"
 
 echo "Copying PHP Binaries (This might take a while)"
-php_binaries_array=("php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81")
+php_binaries_array=("php73" "php74" "php80" "php81" )
 
 for binary in ${php_binaries_array[@]}; do    
     extension_dir=$($binary -r 'echo ini_get("extension_dir");' 2>/dev/null)
@@ -113,14 +112,38 @@ for binary in ${php_binaries_array[@]}; do
 done
 echo "Copying PHP Binaries Completed!"
 
-# echo "Copying PHP Libraries!"
-# path_array=("/usr/lib/php" "/etc/php" )
+echo "Setting Up DNS"
+cp /lib/x86_64-linux-gnu/libnss_files.so.2 $chroot_path/lib/x86_64-linux-gnu/
+cp /lib/x86_64-linux-gnu/libnss_dns.so.2 $chroot_path/lib/x86_64-linux-gnu/
 
-# for path in ${path_array[@]}; do
-#     mkdir -p "$chroot_path$path"
-#     cp -rf /$path/* "$chroot_path$path"    
-#     chmod 644 $(find "$chroot_path$path" -type f)    
-# done
+echo "Setting Up Git,terminfo,resolve.conf etc"
+mkdir -p $chroot_path/usr/lib/git-core/
+cp -rf /usr/lib/git-core/* $chroot_path/usr/lib/git-core/
+
+mkdir -p $chroot_path/usr/share
+mkdir -p $chroot_path/usr/share/terminfo
+mkdir -p $chroot_path/usr/share/zoneinfo
+mkdir -p $chroot_path/usr/share/git-core
+
+cp -rf /usr/share/terminfo/* $chroot_path/usr/share/terminfo/
+cp -rf /usr/share/zoneinfo/* $chroot_path/usr/share/zoneinfo/
+cp -rf /usr/share/git-core/* $chroot_path/usr/share/git-core/
+
+mkdir -p $chroot_path/lib
+mkdir -p $chroot_path/lib/terminfo
+cp -rf /lib/terminfo/* $chroot_path/lib/terminfo/
+mkdir -p "$chroot_path/etc"
+cp /etc/{passwd,group,resolv.conf,shadow,hosts} "$chroot_path/etc/"
+cp -rf /etc/ssl $chroot_path/etc/
+
+echo "Copying PHP Libraries!"
+path_array=("/usr/lib/php" "/etc/php" )
+
+for path in ${path_array[@]}; do
+    mkdir -p "$chroot_path$path"
+    cp -rf /$path/* "$chroot_path$path"    
+    chmod 644 $(find "$chroot_path$path" -type f)    
+done
 
 
 echo "Setting up bash profiles and paths"
