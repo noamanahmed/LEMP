@@ -31,6 +31,8 @@ then
     exit
 fi
 
+start=$(date +%s)
+
 INSTALL_DIR=/tmp/lemp_$(openssl rand -hex 12)
 mkdir -p $INSTALL_DIR
 echo ""
@@ -143,5 +145,9 @@ bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&
 ##bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 apt autoremove > $INSTALL_DIR/apt_autoremove.log 2>&1
+
+end=$(date +%s)
+echo "Time Taken to install: "
+awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}'
 
 
