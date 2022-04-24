@@ -35,6 +35,7 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - PHP Version 7.3,7.4,8.0,8.1
 - MYSQL Version 8.0
 - Nginx
+- FastCGI Caching for PHP-FPM
 - LetsEncrypt SSL
 - NVM (Node Version Manager)
 - Jailed Users (Chroot)
@@ -74,6 +75,7 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Puppet
 
 ## Utility Scripts
+
 ```sh
 delete-user
 ```
