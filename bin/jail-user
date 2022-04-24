@@ -60,6 +60,7 @@ chmod 755  /home/$username
 ##Copying Files
 cp -rf $chroot_path/* /home/$username/
 cp -rf $chroot_path/.ssh /home/$username/
+cp -rf $chroot_path/.nvm /home/$username/
 cp -rf $chroot_path/.bashrc /home/$username/.bashrc
 cp -rf $chroot_path/.profile /home/$username/.profile
 cp -rf $chroot_path/.profile /home/$username/etc/profile
@@ -73,6 +74,7 @@ chown -R $username:$username /home/$username/.bashrc
 chown -R $username:$username /home/$username/.profile
 chown -R $username:$username /home/$username/.config
 chown -R $username:$username /home/$username/.ssh
+chown -R $username:$username /home/$username/.nvm
 chown -R $username:$username /home/$username/tmp
 chown -R $username:$username /home/$username/etc
 chown -R $username:$username /home/$username/usr
