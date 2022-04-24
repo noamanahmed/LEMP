@@ -39,10 +39,10 @@ fi
 # mkdir -p "$system_root/php/$php_version"
 
 
-if [ -L "/opt/php-fpm/$username/php-fpm.sock" ] 
+if [ -d "/opt/php-fpm/$username" ] 
 then
-    ## Delete PHP FPM .sock file
-    rm /opt/php-fpm/$username/php-fpm.sock
+    ## Delete PHP FPM .sock file directory
+    rm -rf /opt/php-fpm/$username    
 fi
 
 ## Reset PHP FPM Pool
