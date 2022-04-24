@@ -29,7 +29,8 @@ while [ $# -gt 0 ]; do
       mongodb=yes
       ;;
     --port)
-      port=0
+      port=port
+      shift
       ;;    
     *)
       printf "***************************\n"
