@@ -4,7 +4,7 @@
 
 user = {{username}}
 group = {{username}}
-listen = /var/run/php/{{username}}-php-fpm.sock
+listen = /var/run/php/{{username}}-php{{php_version}}-fpm.sock
 listen.owner = {{username}}
 listen.group = {{username}}
 listen.mode = 0660
