@@ -11,10 +11,11 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:f:p flag
+while getopts u:p: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
+        p) user_password=${OPTARG};;        
     esac
 done
 
@@ -30,8 +31,13 @@ then
     exit;
 fi
 
+
+if [ -z "$user_password" ]
+then
+    user_password="$(openssl rand -hex 12)"
+fi
 ##Create user
-user_password="$(openssl rand -hex 12)"
+
 adduser --gecos "" --disabled-password $username
 echo "$username:$user_password" | sudo chpasswd
 
