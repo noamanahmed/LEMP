@@ -59,7 +59,7 @@ then
     exit
 fi
 
-if [ "$port" -ne 0]
+if [ "$port" -ne 0 ]
 then
   echo "Please specify a port using --port for nginx to reverse proxy"
 fi
