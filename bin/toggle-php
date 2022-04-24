@@ -40,20 +40,27 @@ then
     exit;
 fi
 
-if [ ! -L "/home/$username/bin/php" ] && [ ! -S "/var/run/php/$username-php-fpm.sock" ]
-then
-    echo "This is not a PHP site"
-    exit;
-fi
+# if [ ! -L "/home/$username/bin/php" ] && [ ! -S "/var/run/php/$username-php-fpm.sock" ]
+# then
+#     echo "This is not a PHP site"
+#     exit;
+# fi
 
 
 
 echo "Switching Web PHP Version to $php"
 
-current_version=/var/run/php/$username-php-fpm.sock | grep -Po  "(?<=$username-php)[0-9]{2}"
-mv /etc/php/$current_version/fpm/pool.d/$username.conf /etc/php/$php/fpm/pool.d/$username.conf
-systemctl restart php$current_version-fpm
-systemctl restart php$php-fpm
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+Deprecated
+for php_v in ${php_versions_array[@]}; do    
+    if [ -f "/etc/php/$php_v/fpm/pool.d/$username.conf" ]
+    then
+        mv /etc/php/$php_v/fpm/pool.d/$username.conf /etc/php/$php/fpm/pool.d/$username.conf
+        systemctl restart php$php_v-fpm
+        systemctl restart php$php-fpm
+    fi
+done
 
 
 echo "Switching CLI PHP Version to $php"
