@@ -40,11 +40,11 @@ then
     exit;
 fi
 
-# if [ ! -L "/home/$username/bin/php" ] && [ ! -S "/var/run/php/$username-php-fpm.sock" ]
-# then
-#     echo "This is not a PHP site"
-#     exit;
-# fi
+if [ ! -L "/home/$username/bin/php" ] && [ ! -S "/var/run/php/$username-php-fpm.sock" ]
+then
+    echo "This is not a PHP site"
+    exit;
+fi
 
 
 
