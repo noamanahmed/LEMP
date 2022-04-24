@@ -84,7 +84,8 @@ fi
 
 
 
-## Setting up for a reverse proxy app
-if [ -n $app ] 
-    echo "Testing"
-fi
+# ## Setting up for a reverse proxy app
+# if [ -n $app ]
+# then 
+#     echo "Testing"
+# fi
