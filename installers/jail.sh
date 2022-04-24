@@ -57,7 +57,7 @@ cp /usr/bin/wp $chroot_bin_path
 
 echo "Setting up NVM"
 ## Install Node Specific binaries
-cp /root/.nvm $chroot_bin_path
+cp -r /root/.nvm $chroot_bin_path
 
 echo "Copying Binaries (This might take a while)"
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
