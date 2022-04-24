@@ -55,22 +55,22 @@ jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 
 cp -rf /root/.nvm /var/chroot/home/$username/
 
-mkdir -p /var/chroot/home/$username/home/$username/.ssh
-mkdir -p /var/chroot/home/$username/home/$username/.wp-cli
+mkdir -p /var/chroot/home/$username/.ssh
+mkdir -p /var/chroot/home/$username/.wp-cli
 
-cp -rf $template_path/jailed_ssh/.ssh/* /var/chroot/home/$username/home/$username/.ssh
-cp -rf $template_path/jailed_ssh/.bashrc /var/chroot/home/$username/home/$username/.bashrc
-cp -rf $template_path/jailed_ssh/.profile /var/chroot/home/$username/home/$username/.profile
+cp -rf $template_path/jailed_ssh/.ssh/* /var/chroot/home/$username/.ssh
+cp -rf $template_path/jailed_ssh/.bashrc /var/chroot/home/$username/.bashrc
+cp -rf $template_path/jailed_ssh/.profile /var/chroot/home/$username/.profile
 
-chown -R $username:$username /var/chroot/home/$username/home/$username/.wp-cli
-chown -R $username:$username /var/chroot/home/$username/home/$username/.ssh
-chown -R $username:$username /var/chroot/home/$username/home/$username/.bashrc
-chown -R $username:$username /var/chroot/home/$username/home/$username/.profile
-#chown -R $username:$username /var/chroot/home/$username/home/$username/.config
-chown -R $username:$username /var/chroot/home/$username/home/$username/.nvm
+chown -R $username:$username /var/chroot/home/$username/.wp-cli
+chown -R $username:$username /var/chroot/home/$username/.ssh
+chown -R $username:$username /var/chroot/home/$username/.bashrc
+chown -R $username:$username /var/chroot/home/$username/.profile
+#chown -R $username:$username /var/chroot/home/$username/.config
+chown -R $username:$username /var/chroot/home/$username/.nvm
 
-mkdir /var/chroot/home/$username/home/$username/tmp
-chown -R $username:$username /var/chroot/home/$username/home/$username/tmp
+mkdir /var/chroot/home/$username/tmp
+chown -R $username:$username /var/chroot/home/$username/tmp
 
 sed -i "s/$(echo $chroot_path | sed 's/\//\\\//g').\/home\/$username/\/home\/$username\//" /etc/passwd
 sed -i "s/\/usr\/sbin\/jk_chrootsh/\/bin\/bash/" /etc/passwd
