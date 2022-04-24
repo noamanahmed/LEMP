@@ -55,9 +55,9 @@ echo "Setting WP-CLI"
 ## Install PHP Specific binaries
 cp /usr/bin/wp $chroot_bin_path
 
-echo "Setting NPM"
+echo "Setting up NVM"
 ## Install Node Specific binaries
-cp $(which npm) $chroot_bin_path
+cp /root/.nvm $chroot_bin_path
 
 echo "Copying Binaries (This might take a while)"
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
@@ -144,9 +144,6 @@ for path in ${path_array[@]}; do
     cp -rf /$path/* "$chroot_path$path"    
     chmod 644 $(find "$chroot_path$path" -type f)    
 done
-
-echo "Copying NPM Libraries!"
-cp -rf $(dirname $(which npm))/../lib/* $chroot_path/lib/
 
 
 echo "Setting up bash profiles and paths"
