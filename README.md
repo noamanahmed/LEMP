@@ -36,6 +36,7 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Nginx
 - LetsEncrypt SSL
 - NVM (Node Version Manager)
+- Jailed Users (Chroot)
 - Composer
 - WP-CLI
 - Redis
@@ -55,6 +56,8 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Mail Server Setup (A complete alternative to iRedMail Setup)
 - ELK Stack (Elasticsearch Logstash Kibana)
 - Server Hardening
+- Reducing Disk Usage for Jailed Users
+- Pushing backups to offsite storage as object storage etc 
 
 ## In Future
 - Prometheus (Netdata can be used for the timebeing)
