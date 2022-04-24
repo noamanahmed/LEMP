@@ -17,7 +17,7 @@ cp $template_path/jailkit/jk_init.ini /etc/jailkit/jk_init.ini
 
 #Setting up JailKit
 echo "Setting up JailKit"
-chroot_path=/var/chroot
+chroot_path=/var/chroot/
 mkdir -p $chroot_path
 jk_init -v $chroot_path netutils extendedshell jk_lsh openvpn ssh sftp 
 
