@@ -29,7 +29,7 @@ for binary in ${binaries_array[@]}; do
     cp "$(which $binary)" $chroot_bin_path
     for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
     if [ -f "$lib" ] ; then
-            jk_cp -j $chroot_path $lib                
+        jk_cp -j $chroot_path $lib                
     fi  
     done        
 done
@@ -49,7 +49,7 @@ mkdir -p $chroot_path/.ssh
 mkdir -p $chroot_path/.wp-cli
 
 
-cp -rf $DIR/templates/jailed_ssh/.ssh/* "$chroot_path/.ssh" 
-cp -rf $DIR/templates/jailed_ssh/.bashrc "$chroot_path/.bashrc" 
-cp -rf $DIR/templates/jailed_ssh/.profile "$chroot_path/.profile" 
+cp -rf $template_path/jailed_ssh/.ssh/* "$chroot_path/.ssh" 
+cp -rf $template_path/jailed_ssh/.bashrc "$chroot_path/.bashrc" 
+cp -rf $template_path/jailed_ssh/.profile "$chroot_path/.profile" 
 cp -rf /root/.nvm $chroot_path
