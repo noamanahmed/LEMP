@@ -15,7 +15,6 @@ do
     case "${flag}" in
         u) username=${OPTARG};;        
         d) domain=${OPTARG};;
-        e) port=${OPTARG};;
     esac
 done
 
@@ -32,12 +31,6 @@ then
     exit
 fi
 
-
-if [ -z "$port" ]
-then
-    echo "Please provide a port using -p "
-    exit
-fi
 
 
 if id "$username" &>/dev/null
