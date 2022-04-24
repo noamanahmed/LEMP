@@ -4,6 +4,7 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 DIR=$(realpath "${DIR}") 
 
 template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -26,11 +27,14 @@ fi
 
 
 
-if ! id "$username" &>/dev/null
+if id "$username" &>/dev/null
 then
-    echo "The $username doesn't exist"    
+    echo "The $username already exists"    
     exit;
 fi
+
+pam-auth-update
+chmod 640 /etc/shadow
 
 ##Create user
 user_password="$(openssl rand -hex 12)"

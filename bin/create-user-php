@@ -4,21 +4,40 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 DIR=$(realpath "${DIR}") 
 
 template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
 
-while getopts u:d:p:l:w: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-        d) domain=${OPTARG};;
-        p) php=${OPTARG};;
-        l) laravel=${OPTARG};;
-        w) wordpress=${OPTARG};;
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --php)
+      php="$2"
+      shift
+      ;;
+    --wordpress)
+      wordpress=yes
+      ;;
+    --laravel)
+      laravel=yes
+      ;;    
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
 
 if [ -z "$username" ]
@@ -34,14 +53,8 @@ then
     exit
 fi
 
-
-if [ -z "$php" ]
-then
-php_version="7.4"
-else
-php_version=$php
-fi
-
+echo $username $domain $laravel $wordpress $php
+exit 0;
 
 if id "$username" &>/dev/null
 then
@@ -49,20 +62,8 @@ then
     exit
 fi
 
-## Create system user if doesnt't exists
-
-# $system_root="/home/$username";
-# mkdir -p $system_root
-# mkdir -p "$system_root/php/$php_version"
-
-
 ##Create user
-pam-auth-update
-chmod 640 /etc/shadow
-user_password="$(openssl rand -hex 12)"
-
-adduser --gecos "" --disabled-password $username
-echo "$username:$user_password" | sudo chpasswd
+bash create-linux-user -u $username
 
 ## Adding user to groups
 usermod -a -G web $username

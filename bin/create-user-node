@@ -4,19 +4,32 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 DIR=$(realpath "${DIR}") 
 
 template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
 
-while getopts u:d:p:l:w: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-        d) domain=${OPTARG};;
-        p) port=${OPTARG};;
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      ;;
+    -d|--domain)
+      domain="$2"
+      ;;
+    --mysql)
+      mysql=yes
+      ;;    
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac
+  shift
+  shift
 done
 
 if [ -z "$username" ]
@@ -39,7 +52,6 @@ then
 fi
 
 
-port=3000
 
 ## Create system user if doesnt't exists
 
@@ -49,12 +61,7 @@ port=3000
 
 
 ##Create user
-pam-auth-update
-chmod 640 /etc/shadow
-user_password="$(openssl rand -hex 12)"
-
-adduser --gecos "" --disabled-password $username
-echo "$username:$user_password" | sudo chpasswd
+bash create-linux-user -u $username
 
 ## Adding user to groups
 usermod -a -G web $username
@@ -72,43 +79,8 @@ mkdir -p "$user_root/logs/mail"
 mkdir -p "$user_root/cache"
 mkdir -p "$user_root/cache/nginx"
 
-if [ -z "$laravel" ]
-then
-www_path=$user_root/www
-else
-mkdir -p $user_root/www/
-www_path=$user_root/www/public
-fi
-
-
-#mkdir -p "$user_root/cache/php"
-
 ## Fixing Permissions for nginx logs
-chown -R $username:$username $user_root/logs/php
 chown -R nginx:nginx $user_root/cache/nginx
-
-## Setting up default static HTML site
-mkdir -p $www_path
-cp $template_path/www/*.php $www_path/
-cp $template_path/www/*.html $www_path/
-
-## Creating PHP FPM Pool
-mkdir -p /opt/php-fpm/$username
-chown $username:$username /opt/php-fpm/$username
-
-## Setup all versions of pHP for quick switching(Needs to be optimized to allow one active PHP Versin per site/user)
-php_versions_array=("7.3" "7.4" "8.0" "8.1")
-
-for php_v in ${php_versions_array[@]}; do
-    sudo cp /etc/php/$php_v/fpm/pool.d/template.tpl /etc/php/$php_v/fpm/pool.d/$username.conf
-    sed -i "s/{{\$username}}/$username/" /etc/php/$php_v/fpm/pool.d/$username.conf
-    systemctl restart php$php_v-fpm
-done
-
-## Setup PHP-fpm for www
-ln -s /var/run/php/$username-$(echo "php$php" | sed 's/\.//')-fpm.sock /opt/php-fpm/$username/php-fpm.sock
-chown $username:$username /opt/php-fpm/$username/php-fpm.sock
-
 
 ## Creating MYSQL user and database
 database_name="$(echo $username | head -c 12)"
