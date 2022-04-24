@@ -146,7 +146,7 @@ for path in ${path_array[@]}; do
 done
 
 echo "Copying NPM Libraries!"
-cp $(dirname $(which npm))/../lib/* $chroot_path/lib/
+cp -rf $(dirname $(which npm))/../lib/* $chroot_path/lib/
 
 
 echo "Setting up bash profiles and paths"
