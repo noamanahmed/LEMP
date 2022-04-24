@@ -17,6 +17,7 @@ bash $DIR/../installers/jail.sh
 home_users=`ls /home/`
 
 for user in $home_users    
-do    
+do
+  echo "Jailing User : $user"    
   bash jail-user -u $user
 done
