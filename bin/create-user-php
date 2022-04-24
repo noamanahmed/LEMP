@@ -60,7 +60,14 @@ then
     exit
 fi
 
+
 php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
+    echo "This is not a valid PHP Version"
+    exit 1;
+fi
+
 
 ##Create user
 bash create-linux-user -u $username
@@ -101,16 +108,6 @@ chown -R nginx:nginx $user_root/cache/nginx
 mkdir -p $www_path
 cp $template_path/www/*.php $www_path/
 cp $template_path/www/*.html $www_path/
-
-## Setup all versions of pHP for quick switching(Needs to be optimized to allow one active PHP Versin per site/user)
-php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
-
-# Deprecated
-# for php_v in ${php_versions_array[@]}; do
-#     sudo cp /etc/php/$php_v/fpm/pool.d/template.tpl /etc/php/$php_v/fpm/pool.d/$username.conf
-#     sed -i "s/{{\$username}}/$username/" /etc/php/$php_v/fpm/pool.d/$username.conf
-#     systemctl restart php$php_v-fpm
-# done
 
 ## Setup PHP
 sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
