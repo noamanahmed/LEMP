@@ -39,7 +39,7 @@ fi
 # mkdir -p "$system_root/php/$php_version"
 
 
-if [ -f "/opt/php-fpm/$username/php-fpm.sock" ] 
+if [ -L "/opt/php-fpm/$username/php-fpm.sock" ] 
 then
     ## Delete PHP FPM .sock file
     rm /opt/php-fpm/$username/php-fpm.sock
