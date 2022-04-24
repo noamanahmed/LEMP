@@ -60,12 +60,16 @@ then
     exit
 fi
 
-if [ -z "$port" ] || [ $port -lt 0 ] || [ $port -gt 65535 ]
+if [ -z "$port" ] || [ $port -lt 1025 ] || [ $port -gt 65535 ]
 then
-  echo "Please specify a port using --port for nginx to reverse proxy"
+  echo "Please specify a a valid port between 1025-65535 using --port for nginx to reverse proxy"
   exit
 fi
 
+if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
+then
+  echo "This port is currently in use"
+fi
 exit;
 
 ##Create user
