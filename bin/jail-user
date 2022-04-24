@@ -51,4 +51,4 @@ fi
 
 chroot_path=/var/chroot/
 
-jk_jailuser -m -j $chroot_path –shell=/bin/bash $username
+jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
