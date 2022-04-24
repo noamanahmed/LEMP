@@ -15,9 +15,7 @@ do
     case "${flag}" in
         u) username=${OPTARG};;        
         d) domain=${OPTARG};;
-        p) php=${OPTARG};;
-        l) laravel=${OPTARG};;
-        w) wordpress=${OPTARG};;
+        p) port=${OPTARG};;
     esac
 done
 
@@ -34,20 +32,14 @@ then
     exit
 fi
 
-
-if [ -z "$php" ]
-then
-php_version="7.4"
-else
-php_version=$php
-fi
-
-
 if id "$username" &>/dev/null
 then
     echo "The $username already exists!. Please run delete-site -u $username"
     exit
 fi
+
+
+port=3000
 
 ## Create system user if doesnt't exists
 
@@ -141,7 +133,7 @@ sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
-sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
+sed -i "s/{{port}}/$port/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx

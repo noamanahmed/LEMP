@@ -1,5 +1,10 @@
 #!/bin/bash
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR && pwd)/templates"
+
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -14,5 +19,6 @@ apt update -qqy
 
 
 apt install mongodb -qqy
-systemctl restart mongod
-systemctl enable --now mongod
+cp $template_path/mongodb/mongodb.conf /etc/mongodb/mongodb.conf
+systemctl stop mongodb
+systemctl enable --now mongodb
