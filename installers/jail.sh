@@ -57,7 +57,7 @@ cp /usr/bin/wp $chroot_bin_path
 
 echo "Setting NPM"
 ## Install Node Specific binaries
-cp /usr/bin/npm $chroot_bin_path
+cp $(which npm) $chroot_bin_path
 
 echo "Copying Binaries (This might take a while)"
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
@@ -151,9 +151,9 @@ echo "Setting up bash profiles and paths"
 mkdir -p "$chroot_path/.ssh"
 mkdir -p "$chroot_path/.wp-cli"
 
-cp -rf $DIR/templates/ssh/.ssh/* "$chroot_path/.ssh" 
-cp -rf $DIR/templates/ssh/.bashrc "$chroot_path/.bashrc" 
-cp -rf $DIR/templates/ssh/.profile "$chroot_path/.profile" 
+cp -rf $DIR/../templates/ssh/.ssh/* "$chroot_path/.ssh" 
+cp -rf $DIR/../templates/ssh/.bashrc "$chroot_path/.bashrc" 
+cp -rf $DIR/../templates/ssh/.profile "$chroot_path/.profile" 
 
 
 echo "Fixing Permissions"
