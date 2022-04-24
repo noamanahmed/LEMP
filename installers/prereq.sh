@@ -1,15 +1,13 @@
 #!/bin/bash
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+source $DIR/../includes/helpers.sh
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
-
-exists()
-{
-  command -v "$1" >/dev/null 2>&1
-}
 
 
 #Install prereq
@@ -23,7 +21,8 @@ binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zi
 
 for binary in ${binaries_array[@]}; do      
   if ! command -v $binary &> /dev/null
-  then    
+  then
+    echo "Installing $binary"  
     apt-get install $binary -qqy
   fi
 done
