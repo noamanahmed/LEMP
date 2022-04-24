@@ -128,7 +128,7 @@ nginx -t && systemctl reload nginx
 
 ## Generate SSL
 certbot --dry-run certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
-
+exit;
 ## Removing Static site
 rm -rf $nginx_vhost_enabled
 rm -rf $nginx_vhost_file
