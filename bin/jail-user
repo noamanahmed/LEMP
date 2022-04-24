@@ -11,14 +11,30 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:p:a flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-        p) php=${OPTARG};;        
-        a) app=${OPTARG};;        
-    esac
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -p|--php)
+      php="$2"
+      shift
+      ;;
+    -a|--app)
+      app="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
+
 
 if [ -z "$username" ]
 then
@@ -76,12 +92,13 @@ then
     then
         ln -s php74 /home/$username/bin/php 
     fi
-
 else
     rm -rf /home/$username/usr/lib/php
     rm -rf /home/$username/etc/php
     rm -rf /home/$username/.config/composer
 fi
+
+
 
 
 
