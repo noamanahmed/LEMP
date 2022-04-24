@@ -60,7 +60,7 @@ done
 
 ## Deleting nginx settings
 
-if [ -f "/etc/nginx/sites-enabled/$username.conf" ] 
+if [ -L "/etc/nginx/sites-enabled/$username.conf" ] 
 then
     rm "/etc/nginx/sites-enabled/$username.conf"
 fi
@@ -71,7 +71,7 @@ then
     rm "/etc/nginx/sites-available/$username.conf"
 fi
 
-if [ -f "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
+if [ -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
 then
     rm "/etc/nginx/sites-enabled/$username-ssl.conf"
 fi
