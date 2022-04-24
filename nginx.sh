@@ -27,6 +27,8 @@ else
 fi
 
 systemctl stop nginx
+wget -O /etc/nginx/conf.d/blacklist.conf https://raw.githubusercontent.com/mariusv/nginx-badbot-blocker/master/blacklist.conf
+wget -O /etc/nginx/conf.d/blockips.conf https://raw.githubusercontent.com/mariusv/nginx-badbot-blocker/master/blockips.conf
 cp $template_path/nginx/nginx.conf /etc/nginx/nginx.conf
 sed -i "s/{{cpu_cores}}/$(grep -c ^processor /proc/cpuinfo)/" /etc/nginx/nginx.conf
 cp $template_path/nginx/htpasswd.users /etc/nginx/htpasswd.users

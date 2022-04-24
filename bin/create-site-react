@@ -10,14 +10,12 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:p:l:w: flag
+while getopts u:d:p flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
         d) domain=${OPTARG};;
-        p) php=${OPTARG};;
-        l) laravel=${OPTARG};;
-        w) wordpress=${OPTARG};;
+        e) port=${OPTARG};;
     esac
 done
 
@@ -35,11 +33,10 @@ then
 fi
 
 
-if [ -z "$php" ]
+if [ -z "$port" ]
 then
-php_version="7.4"
-else
-php_version=$php
+    echo "Please provide a port using -p "
+    exit
 fi
 
 
@@ -64,6 +61,7 @@ user_password="$(openssl rand -hex 12)"
 adduser --gecos "" --disabled-password $username
 echo "$username:$user_password" | sudo chpasswd
 
+
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
@@ -80,55 +78,18 @@ mkdir -p "$user_root/logs/mail"
 mkdir -p "$user_root/cache"
 mkdir -p "$user_root/cache/nginx"
 
-if [ -z "$laravel" ]
-then
-www_path=$user_root/www
-else
-mkdir -p $user_root/www/
-www_path=$user_root/www/public
-fi
-
-
 #mkdir -p "$user_root/cache/php"
 
 ## Fixing Permissions for nginx logs
 chown -R $username:$username $user_root/logs/php
 chown -R nginx:nginx $user_root/cache/nginx
 
-## Setting up default static HTML site
-mkdir -p $www_path
-cp $template_path/www/* $www_path/
+## Setting up default static HTML site for a react site
+mkdir -p /home/$username/www/
+mkdir -p /home/$username/www/build/
 
-## Creating PHP FPM Pool
-mkdir -p /opt/php-fpm/$username
-chown $username:$username /opt/php-fpm/$username
-
-## Setup all versions of pHP for quick switching(Needs to be optimized to allow one active PHP Versin per site/user)
-php_versions_array=("7.3" "7.4" "8.0" "8.1")
-
-for php_v in ${php_versions_array[@]}; do
-    sudo cp /etc/php/$php_v/fpm/pool.d/template.tpl /etc/php/$php_v/fpm/pool.d/$username.conf
-    sed -i "s/{{\$username}}/$username/" /etc/php/$php_v/fpm/pool.d/$username.conf
-    systemctl restart php$php_v-fpm
-done
-
-## Setup PHP-fpm for www
-ln -s /var/run/php/$username-$(echo "php$php" | sed 's/\.//')-fpm.sock /opt/php-fpm/$username/php-fpm.sock
-chown $username:$username /opt/php-fpm/$username/php-fpm.sock
-
-
-## Creating MYSQL user and database
-database_name="$(echo $username | head -c 12)"
-database_user="$(echo $username | head -c 12)"
-database_password="$(openssl rand -hex 8)"
-
-mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
-mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
-mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
-mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
-mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
-mysql -e "FLUSH PRIVILEGES;"
-
+www_path=/home/$username/www/build
+cp $template_path/www/react/* $www_path/
 
 
 ## Creating nginx settings
@@ -142,6 +103,7 @@ sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 
+## Enable site and reload nginx
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
@@ -150,6 +112,8 @@ certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m n
 
 ## Enabling SSL in nginx settings
 sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+
+## Enable SSL configured vhost and reload nginx
 nginx -t && systemctl reload nginx
 
 ## Setup Log rotation
@@ -175,21 +139,6 @@ bash toggle-php -u $username -p $php
 ## Setting up Logrotation
 bash logrotate -u $username
 
-if [ -z "$wordpress" ]
-then
-    echo "Not a wordpress site skipping"
-else
-    wp_password="$(openssl rand -hex 8)"
-
-    runuser -l $username -c "cd /home/$username/www && wp core download"
-    runuser -l $username -c "cd /home/$username/www && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
-    runuser -l $username -c "cd /home/$username/www && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
-    # runuser -l $username -c "cd /home/$username/www && wp option update siteurl $(wp option get siteurl | sed  's/http:\/\//https:\/\//')"
-    # runuser -l $username -c "cd /home/$username/www && wp option update home $(wp option get home | sed  's/http:\/\//https:\/\//')"
-
-
-fi
-
 
 echo "*****************************************"
 echo "*****************************************"
@@ -197,26 +146,19 @@ echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
-echo "Complete Path : $www_path"
+echo "Complete WWW Path : $www_path"
 echo ""
-if [ -n "$wordpress" ]
-then
-echo ""
-echo "WordPress user: $username"
-echo "WordPress password: $wp_password"
-echo ""
-fi
-echo ""
-echo "Database Credentials"
-echo "Database name: $database_name"
-echo "Database user: $database_user"
-echo "Database password: $database_password"
+
 echo ""
 echo "SFTP/SSH Details"
 echo "Host: $domain"
 echo "Port: 22"
 echo "Username: $username"
 echo "Password: $user_password"
+
+
+echo "React APP Configuration"
+
 
 
 

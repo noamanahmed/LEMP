@@ -10,10 +10,12 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u: flag
+while getopts u:p:a flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
+        p) php=${OPTARG};;        
+        a) app=${OPTARG};;        
     esac
 done
 
@@ -31,23 +33,25 @@ then
 fi
 
 chroot_path=/var/chroot
-chown root:root /home/$username/
+
+##Fixing Permissions
+chown root:root /
+chown root:root /home
+chown root:root /home/$username
+chmod 755  /home/$username
+
+##Copying Files
 cp -rf $chroot_path/* /home/$username/
 cp -rf $chroot_path/.ssh /home/$username/
 cp -rf $chroot_path/.bashrc /home/$username/.bashrc
 cp -rf $chroot_path/.profile /home/$username/.profile
 cp -rf $chroot_path/.profile /home/$username/etc/profile
-cp -rf $chroot_path/.wp-cli /home/$username/.wp-cli
 cp -rf $chroot_path/.config /home/$username/.config
 
-if [ -z "/home/$username/bin/php" ] 
-then
-ln -s php74 /home/$username/bin/php 
-fi
-
-
+## Create temporary directory
 mkdir -p /home/$username/tmp
-chown -R $username:$username /home/$username/.wp-cli
+
+## Fix User Permissions
 chown -R $username:$username /home/$username/.bashrc
 chown -R $username:$username /home/$username/.profile
 chown -R $username:$username /home/$username/.config
@@ -60,3 +64,26 @@ chown -R $username:$username /home/$username/lib
 chown -R $username:$username /home/$username/lib64
 chown -R $username:$username /home/$username/dev/null
 
+
+## Set up for php site
+if [ -n $php ] 
+
+    cp -rf $chroot_path/.wp-cli /home/$username/.wp-cli
+    chown -R $username:$username /home/$username/.wp-cli
+
+    if [ -z "/home/$username/bin/php" ] 
+    then
+        ln -s php74 /home/$username/bin/php 
+    fi
+else
+    rm -rf /home/$username/usr/lib/php
+    rm -rf /home/$username/etc/php
+    rm -rf /home/$username/.config/composer
+fi
+
+
+
+## Setting up for a reverse proxy app
+if [ -n $app ] 
+    echo "Testing"
+fi

@@ -1,0 +1,12 @@
+[Unit]
+Description=A node site for username {{username}}
+After=network.target
+
+[Service]
+Type=simple
+User={{username}}
+ExecStart=/bin/node /home/{{username}}/www/app.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
