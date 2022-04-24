@@ -58,6 +58,7 @@ for php_v in ${php_versions_array[@]}; do
         mv /etc/php/$php_v/fpm/pool.d/$username.conf /etc/php/$php/fpm/pool.d/$username.conf
         systemctl restart php$php_v-fpm
         systemctl restart php$php-fpm
+        break
     fi
 done
 
@@ -71,4 +72,6 @@ fi
 
 ln -s $(echo "php$php" | sed 's/\.//') /home/$username/bin/php 
 
+echo "Clearing Cache"
+clear-cache -u $username
 
