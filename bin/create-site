@@ -97,7 +97,8 @@ chown -R nginx:nginx $user_root/cache/nginx
 
 ## Setting up default static HTML site
 mkdir -p $www_path
-cp $template_path/www/* $www_path/
+cp $template_path/www/*.php $www_path/
+cp $template_path/www/*.html $www_path/
 
 ## Creating PHP FPM Pool
 mkdir -p /opt/php-fpm/$username
