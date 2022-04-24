@@ -53,7 +53,7 @@ chroot_path=/var/chroot/
 jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 
 
-cp -rf /root/.nvm /var/chroot/home/$username/
+cp -rf /root/.nvm /var/chroot/home/$username/.nvm
 
 mkdir -p /var/chroot/home/$username/.ssh
 mkdir -p /var/chroot/home/$username/.wp-cli
