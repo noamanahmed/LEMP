@@ -52,6 +52,11 @@ echo "Installing PreReqs"
 ## Install prereqs
 bash $DIR/installers/prereq.sh > $INSTALL_DIR/prereq.sh.log 2>&1
 
+
+echo "Setting up SSH"
+## Setting up SSH
+bash $DIR/installers/ssh.sh > $INSTALL_DIR/ssh.sh.log 2>&1
+
 echo "Installing Python"
 ## Install python
 bash $DIR/installers/python.sh > $INSTALL_DIR/python.sh.log 2>&1
