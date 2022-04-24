@@ -33,8 +33,7 @@ then
     exit;
 fi
 
-pam-auth-update
-chmod 640 /etc/shadow
+
 
 ##Create user
 user_password="$(openssl rand -hex 12)"

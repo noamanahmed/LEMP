@@ -17,6 +17,8 @@ echo "_________________________"
 echo ""
 echo "Installing Pre Req Binaries"
 echo ""
+
+
 binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zip" "speedtest-cli gzip" "pv" "logrotate" "rig" "runuser" "gnupg" "ca-certificates")
 
 for binary in ${binaries_array[@]}; do      
