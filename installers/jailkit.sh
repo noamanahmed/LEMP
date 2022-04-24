@@ -52,4 +52,4 @@ mkdir -p $chroot_path/.wp-cli
 cp -rf $DIR/templates/jailed_ssh/.ssh/* "$chroot_path/.ssh" 
 cp -rf $DIR/templates/jailed_ssh/.bashrc "$chroot_path/.bashrc" 
 cp -rf $DIR/templates/jailed_ssh/.profile "$chroot_path/.profile" 
-cp /root/.nvm $chroot_path
+cp -rf /root/.nvm $chroot_path
