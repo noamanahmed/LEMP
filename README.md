@@ -31,3 +31,34 @@ When done with the configuration run the installer.Change the default_site and e
 ```
 Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the backgroun
 ## Features
+- PHP Version 7.3,7.4,8.0,8.1
+- MYSQL Version 8.0
+- Nginx
+- LetsEncrypt SSL
+- NVM (Node Version Manager)
+- Composer
+- WP-CLI
+- Redis
+- Docker
+- Java
+- MeiliSearch
+- PHPMyadmin
+- Apache Kafka
+- Rabbit MQ
+- NetData
+- Mailhog
+- UFW
+
+## Work in Progress
+- Jenkins(Looking to Automate Installation without using GUI)
+- Glitchtip (Alternative to Sentry)
+- Mail Server Setup (A complete alternative to iRedMail Setup)
+- ELK Stack (Elasticsearch Logstash Kibana)
+- Server Hardening
+
+## In Future
+- Prometheus (Netdata can be used for the timebeing)
+- Zabbix
+- Chef
+- Ansible
+- Puppet
