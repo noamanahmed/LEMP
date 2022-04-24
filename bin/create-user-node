@@ -11,24 +11,32 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+
 while [ $# -gt 0 ]; do
   case "$1" in
     -u|--username)
       username="$2"
+      shift
       ;;
     -d|--domain)
       domain="$2"
+      shift
       ;;
     --mysql)
       mysql=yes
+      ;;
+    --mongodb)
+      mongodb=yes
+      ;;
+    --port)
+      port=0
       ;;    
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
       printf "***************************\n"
       exit 1
-  esac
-  shift
+  esac  
   shift
 done
 
@@ -51,14 +59,10 @@ then
     exit
 fi
 
-
-
-## Create system user if doesnt't exists
-
-# $system_root="/home/$username";
-# mkdir -p $system_root
-# mkdir -p "$system_root/php/$php_version"
-
+if [ "$port" -eq 0]
+then
+  echo "Please specify a port using --port for nginx to reverse proxy"
+fi
 
 ##Create user
 bash create-linux-user -u $username
@@ -82,18 +86,20 @@ mkdir -p "$user_root/cache/nginx"
 ## Fixing Permissions for nginx logs
 chown -R nginx:nginx $user_root/cache/nginx
 
-## Creating MYSQL user and database
-database_name="$(echo $username | head -c 12)"
-database_user="$(echo $username | head -c 12)"
-database_password="$(openssl rand -hex 8)"
+if [ -d "$mysql" ]
+then
+  ## Creating MYSQL user and database
+  database_name="$(echo $username | head -c 12)"
+  database_user="$(echo $username | head -c 12)"
+  database_password="$(openssl rand -hex 8)"
 
-mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
-mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
-mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
-mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
-mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
-mysql -e "FLUSH PRIVILEGES;"
-
+  mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+  mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+  mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+  mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+  mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+  mysql -e "FLUSH PRIVILEGES;"
+fi
 
 
 ## Creating nginx settings
@@ -149,11 +155,14 @@ echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
 echo "Complete Path : $www_path"
 echo ""
+if [ -d "$mysql" ]
+then
 echo ""
 echo "MySQL Database Credentials"
 echo "Database name: $database_name"
 echo "Database user: $database_user"
 echo "Database password: $database_password"
+fi
 echo ""
 echo "SFTP/SSH Details"
 echo "Host: $domain"

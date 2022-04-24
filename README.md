@@ -32,7 +32,7 @@ When done with the configuration run the installer.Change the default_site and e
 ```
 Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the backgroun
 ## Features
-- PHP Version 7.3,7.4,8.0,8.1
+- PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1
 - MYSQL Version 8.0
 - Nginx
 - FastCGI Caching for PHP-FPM
@@ -66,6 +66,8 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Reducing Disk Usage for Jailed Users
 - Kernel Optimization for fast nginx
 - Pushing backups to offsite storage as object storage etc 
+- Postgres
+- MariaDB (One of them would be enabled in install.sh)
 
 ## In Future
 - Prometheus (Netdata can be used for the timebeing)
