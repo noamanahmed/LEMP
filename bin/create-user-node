@@ -68,9 +68,9 @@ fi
 
 if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
 then
-  echo "This port is currently in use"
+  echo "This port is currently in use! Please select another port"
 fi
-exit;
+
 
 ##Create user
 bash create-linux-user -u $username
