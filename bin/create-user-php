@@ -83,6 +83,8 @@ mkdir -p "$user_root/cache/nginx"
 
 mkdir -p $user_root/www/
 
+www_path=$user_root/www/
+
 if [ -n "$laravel" ]
 then
   www_path=$user_root/www/public
