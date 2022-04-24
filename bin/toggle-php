@@ -39,10 +39,17 @@ then
     exit;
 fi
 
-if [ ! -f "/home/$username/bin/php" ] && [ ! -d "/opt/php-fpm/$username" ]
+if [ ! -L "/home/$username/bin/php" ] && [ ! -d "/opt/php-fpm/$username" ]
 then
     echo "This is not a PHP site"
     exit;
+fi
+
+
+if [ ! -d "/opt/php-fpm/$username" ]
+then
+    echo "Creating PHP-FPM Directory"
+    chown $username:$username /opt/php-fpm/$username
 fi
 
 echo "Switching Web PHP Versin to $php"
