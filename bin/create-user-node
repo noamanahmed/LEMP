@@ -60,9 +60,10 @@ then
     exit
 fi
 
-if [ ! $port -gt 0 ] && [ ! $port -lt 65535 ]
+if [ -z "$port" ] || [ $port -lt 0 ] || [ $port -gt 65535 ]
 then
   echo "Please specify a port using --port for nginx to reverse proxy"
+  exit
 fi
 
 exit;
