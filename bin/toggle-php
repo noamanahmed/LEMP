@@ -57,7 +57,7 @@ chown $username:$username /opt/php-fpm/$username/php-fpm.sock
 
 echo "Switching CLI PHP Versin to $php"
 
-if [ -f "/home/$username/bin/php" ]
+if [ -L "/home/$username/bin/php" ]
 then
     rm -rf /home/$username/bin/php
 fi
