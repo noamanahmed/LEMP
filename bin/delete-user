@@ -47,7 +47,7 @@ then
 fi
 
 ## Reset PHP FPM Pool
-php_versions_array=("7.3" "7.4" "8.0" "8.1")
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 for php_v in ${php_versions_array[@]}; do    
     if [ -f "/etc/php/$php_v/fpm/pool.d/$username.conf" ] 
@@ -56,6 +56,7 @@ for php_v in ${php_versions_array[@]}; do
         systemctl restart php$php_v-fpm
     fi    
 done
+
 
 
 ## Deleting nginx settings
