@@ -59,7 +59,7 @@ then
     echo "The $username already exists!. Please run delete-user -u $username"
     exit
 fi
-echo "Port$port Usage"
+
 if [ ! $port -gt 0 ] && [ ! $port -lt 65535 ]
 then
   echo "Please specify a port using --port for nginx to reverse proxy"
