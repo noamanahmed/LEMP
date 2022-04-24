@@ -39,23 +39,47 @@ fi
 # mkdir -p "$system_root/php/$php_version"
 
 
+if [ -f "/opt/php-fpm/$username/php-fpm.sock" ] 
+then
+    ## Delete PHP FPM .sock file
+    rm /opt/php-fpm/$username/php-fpm.sock
+fi
 
 ## Reset PHP FPM Pool
 php_versions_array=("7.3" "7.4" "8.0" "8.1")
 
 for php_v in ${php_versions_array[@]}; do    
-    rm /etc/php/$php_v/fpm/pool.d/$username.conf
-    systemctl restart php$php_v-fpm
+    if [ -f "/etc/php/$php_v/fpm/pool.d/$username.conf" ] 
+    then
+        rm /etc/php/$php_v/fpm/pool.d/$username.conf
+        systemctl restart php$php_v-fpm
+    fi    
 done
 
-## Delete PHP FPM .sock file
-rm /opt/php-fpm/$username/php-fpm.sock
 
 ## Deleting nginx settings
-rm "/etc/nginx/sites-enabled/$username.conf"
-rm "/etc/nginx/sites-available/$username.conf"
-rm "/etc/nginx/sites-enabled/$username-ssl.conf"
-rm "/etc/nginx/sites-available/$username-ssl.conf"
+
+if [ -f "/etc/nginx/sites-enabled/$username.conf" ] 
+then
+    rm "/etc/nginx/sites-enabled/$username.conf"
+fi
+
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ] 
+then
+    rm "/etc/nginx/sites-available/$username.conf"
+fi
+
+if [ -f "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
+then
+    rm "/etc/nginx/sites-enabled/$username-ssl.conf"
+fi
+
+if [ -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
+then
+    rm "/etc/nginx/sites-available/$username-ssl.conf"
+fi
+
 systemctl reload nginx
 
 ## Delete Database
@@ -67,8 +91,7 @@ userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 
 ## Delete Logrotation
-rm /etc/logrotate.d/site-$username.conf
-
+bash logrotate-user -u $username -d yes
 
 echo "Username $username deleted successfully!"      
 

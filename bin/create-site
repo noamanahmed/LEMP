@@ -173,7 +173,7 @@ bash jail-user -u $username -p yes
 bash toggle-php -u $username -p $php
 
 ## Setting up Logrotation
-bash logrotate -u $username
+bash logrotate-user -u $username -e yes
 
 if [ -z "$wordpress" ]
 then
