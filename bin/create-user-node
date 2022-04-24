@@ -102,10 +102,30 @@ then
 fi
 
 
-## Creating nginx settings
+## Setup a static HTML site for LetsEncrypt First
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
-cp "$template_path/nginx/vhost.conf" $nginx_vhost_file
+cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+## Generate SSL
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+
+## Removing Static site
+rm -rf $nginx_vhost_enabled
+rm -rf $nginx_vhost_file
+
+## Creating nginx settings with reverse proxy
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+cp "$template_path/nginx/node/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
@@ -115,9 +135,6 @@ sed -i "s/{{port}}/$port/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
-
-## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
 
 ## Enabling SSL in nginx settings
 sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
