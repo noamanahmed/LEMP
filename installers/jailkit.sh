@@ -12,7 +12,7 @@ fi
 
 #Installing Jailkit
 echo "Installing JailKit"
-sudo apt install jailkit -qqy
+apt install jailkit -qqy
 cp $template_path/jailkit/jk_init.ini /etc/jailkit/jk_init.ini
 
 #Setting up JailKit

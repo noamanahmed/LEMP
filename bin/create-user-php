@@ -72,6 +72,10 @@ fi
 ##Create user
 bash create-linux-user -u $username
 
+## Jail User for a php site
+bash jail-user -u $username -p yes
+exit;
+
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
@@ -162,9 +166,6 @@ chown -R $username:$username /backups/$username
 
 ## Fixing permissions
 bash fix-permissions -u $username
-
-## Jail User for a php site
-bash jail-user -u $username -p yes
 
 ## Switch php version to the one specified 
 bash toggle-php -u $username -p $php
