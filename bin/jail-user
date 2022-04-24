@@ -57,4 +57,5 @@ ln -s /var/chroot/home/$username /home/$username
 cp -rf /root/.nvm /home/$username/
 
 sed -i "s/$(echo $chroot_path | sed 's/\//\\\//g').\/home\/$username/\/home\/$username\//" /etc/passwd
+sed -i "s/\/usr\/sbin\/jk_chrootsh/\/bin\/bash/" /etc/passwd
 
