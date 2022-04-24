@@ -55,7 +55,7 @@ fi
 
 if id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-site -u $username"
+    echo "The $username already exists!. Please run delete-user -u $username"
     exit
 fi
 
@@ -63,6 +63,8 @@ if [ "$port" -ne 0]
 then
   echo "Please specify a port using --port for nginx to reverse proxy"
 fi
+
+exit;
 
 ##Create user
 bash create-linux-user -u $username
