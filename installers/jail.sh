@@ -61,7 +61,7 @@ cp /root/.nvm $chroot_bin_path
 
 echo "Copying Binaries (This might take a while)"
 mkdir -p "$chroot_path/lib/x86_64-linux-gnu" "$chroot_path/lib64"
-binaries_array=("xterm" "ls" "ln" "date" "rm" "rmdir" "mysql" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping" "node"  "ssh" "sftp" )
+binaries_array=("xterm" "ls" "ln" "date" "rm" "rmdir" "mysql" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping"  "ssh" "sftp" )
 
 for binary in ${binaries_array[@]}; do
     cp "$(which $binary)" $chroot_bin_path
