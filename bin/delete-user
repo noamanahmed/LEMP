@@ -94,6 +94,8 @@ delgroup $username > /dev/null 2>&1
 ## Delete Logrotation
 bash logrotate-user -u $username -d yes
 
+## Delete Chroot Directory
+rm -rf /var/chroot/home/$username
 echo "Username $username deleted successfully!"      
 
 
