@@ -47,23 +47,16 @@ then
 fi
 
 
-if [ ! -d "/opt/php-fpm/$username" ]
-then
-    echo "Creating PHP-FPM Directory"
-    chown $username:$username /opt/php-fpm/$username
-fi
 
-echo "Switching Web PHP Versin to $php"
+echo "Switching Web PHP Version to $php"
 
-if [ -L "/opt/php-fpm/$username/php-fpm.sock" ]
-then
-    rm /opt/php-fpm/$username/php-fpm.sock
-fi
+current_version = readlink /opt/php-fpm/$username/php-fpm.sock | grep -Po  '(?<=$username-php)[0-9]{2}'
+mv /etc/php/$current_version/fpm/pool.d/$username.conf /etc/php/$php/fpm/pool.d/$username.conf
+systemctl restart php$current_version-fpm
+systemctl restart php$php-fpm
 
-ln -s /var/run/php/$username-$(echo "php$php" | sed 's/\.//')-fpm.sock /opt/php-fpm/$username/php-fpm.sock
-chown $username:$username /opt/php-fpm/$username/php-fpm.sock
 
-echo "Switching CLI PHP Versin to $php"
+echo "Switching CLI PHP Version to $php"
 
 if [ -L "/home/$username/bin/php" ]
 then

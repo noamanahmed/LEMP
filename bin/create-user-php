@@ -53,14 +53,14 @@ then
     exit
 fi
 
-echo $username $domain $laravel $wordpress $php
-exit 0;
 
 if id "$username" &>/dev/null
 then
     echo "The $username already exists!. Please run delete-site -u $username"
     exit
 fi
+
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 ##Create user
 bash create-linux-user -u $username
@@ -81,12 +81,11 @@ mkdir -p "$user_root/logs/mail"
 mkdir -p "$user_root/cache"
 mkdir -p "$user_root/cache/nginx"
 
-if [ -z "$laravel" ]
-then
-www_path=$user_root/www
-else
 mkdir -p $user_root/www/
-www_path=$user_root/www/public
+
+if [ -n "$laravel" ]
+then
+  www_path=$user_root/www/public
 fi
 
 
@@ -101,23 +100,21 @@ mkdir -p $www_path
 cp $template_path/www/*.php $www_path/
 cp $template_path/www/*.html $www_path/
 
-## Creating PHP FPM Pool
-mkdir -p /opt/php-fpm/$username
-chown $username:$username /opt/php-fpm/$username
-
 ## Setup all versions of pHP for quick switching(Needs to be optimized to allow one active PHP Versin per site/user)
-php_versions_array=("7.3" "7.4" "8.0" "8.1")
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
-for php_v in ${php_versions_array[@]}; do
-    sudo cp /etc/php/$php_v/fpm/pool.d/template.tpl /etc/php/$php_v/fpm/pool.d/$username.conf
-    sed -i "s/{{\$username}}/$username/" /etc/php/$php_v/fpm/pool.d/$username.conf
-    systemctl restart php$php_v-fpm
-done
+# Deprecated
+# for php_v in ${php_versions_array[@]}; do
+#     sudo cp /etc/php/$php_v/fpm/pool.d/template.tpl /etc/php/$php_v/fpm/pool.d/$username.conf
+#     sed -i "s/{{\$username}}/$username/" /etc/php/$php_v/fpm/pool.d/$username.conf
+#     systemctl restart php$php_v-fpm
+# done
 
-## Setup PHP-fpm for www
-ln -s /var/run/php/$username-$(echo "php$php" | sed 's/\.//')-fpm.sock /opt/php-fpm/$username/php-fpm.sock
-chown $username:$username /opt/php-fpm/$username/php-fpm.sock
-
+## Setup PHP
+sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{php_version}}/$php/" /etc/php/$php/fpm/pool.d/$username.conf
+systemctl restart php$php-fpm
 
 ## Creating MYSQL user and database
 database_name="$(echo $username | head -c 12)"
