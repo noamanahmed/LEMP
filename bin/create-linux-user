@@ -39,6 +39,8 @@ fi
 ##Create user
 
 adduser --gecos "" --disabled-password $username
+groupadd $username
+usermod -a -G $username $username
 echo "$username:$user_password" | sudo chpasswd
 
 
