@@ -145,9 +145,11 @@ for path in ${path_array[@]}; do
     chmod 644 $(find "$chroot_path$path" -type f)    
 done
 
+echo "Copying NPM Libraries!"
+cp $(which npm)../lib/* $chroot_path/lib/
+
 
 echo "Setting up bash profiles and paths"
-
 mkdir -p "$chroot_path/.ssh"
 mkdir -p "$chroot_path/.wp-cli"
 
