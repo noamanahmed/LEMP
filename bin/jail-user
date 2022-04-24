@@ -49,6 +49,6 @@ then
     exit;
 fi
 
-chroot_path=/var/chroot
+chroot_path=/var/chroot/
 
 jk_jailuser -m -j $chroot_path $username
