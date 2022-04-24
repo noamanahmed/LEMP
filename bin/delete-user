@@ -96,6 +96,7 @@ bash logrotate-user -u $username -d yes
 
 ## Delete Chroot Directory
 rm -rf /var/chroot/home/$username
+rm -rf /home/$username
 echo "Username $username deleted successfully!"      
 
 
