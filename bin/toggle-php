@@ -40,6 +40,7 @@ then
 fi
 
 if [ ! -f "/home/$username/bin/php" ] && [ ! -d "/opt/php-fpm/$username" ]
+then
     echo "This is not a PHP site"
     exit;
 fi
