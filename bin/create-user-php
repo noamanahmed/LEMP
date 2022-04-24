@@ -84,15 +84,15 @@ usermod -a -G $username nginx
 
 ## Create user directories
 chroot_path=/var/chroot/
-user_root="/var/chroot/home/$username"
+user_root="/home/$username"
 
 mkdir -p $user_root
-mkdir -p "$user_root/logs"
-mkdir -p "$user_root/logs/nginx"
-mkdir -p "$user_root/logs/php"
-mkdir -p "$user_root/logs/mail"
-mkdir -p "$user_root/cache"
-mkdir -p "$user_root/cache/nginx"
+mkdir -p "chroot_path/$user_root/logs"
+mkdir -p "chroot_path/$user_root/logs/nginx"
+mkdir -p "chroot_path/$user_root/logs/php"
+mkdir -p "chroot_path/$user_root/logs/mail"
+mkdir -p "chroot_path/$user_root/cache"
+mkdir -p "chroot_path/$user_root/cache/nginx"
 
 mkdir -p $user_root/www/
 
