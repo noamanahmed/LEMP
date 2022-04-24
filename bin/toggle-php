@@ -47,7 +47,7 @@ fi
 
 echo "Switching Web PHP Versin to $php"
 
-if [ -f "/opt/php-fpm/$username/php-fpm.sock" ]
+if [ -L "/opt/php-fpm/$username/php-fpm.sock" ]
 then
     rm /opt/php-fpm/$username/php-fpm.sock
 fi
