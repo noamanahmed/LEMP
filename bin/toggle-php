@@ -40,7 +40,7 @@ then
     exit;
 fi
 
-if [ ! -L "/home/$username/bin/php" ] && [ ! -d "/opt/php-fpm/$username" ]
+if [ ! -L "/home/$username/bin/php" ] && [ ! -f "/var/run/php/{{username}}-php-fpm.sock" ]
 then
     echo "This is not a PHP site"
     exit;
@@ -50,7 +50,7 @@ fi
 
 echo "Switching Web PHP Version to $php"
 
-current_version = readlink /opt/php-fpm/$username/php-fpm.sock | grep -Po  '(?<=$username-php)[0-9]{2}'
+current_version = readlink /var/run/php/{{username}}-php-fpm.sock | grep -Po  '(?<=$username-php)[0-9]{2}'
 mv /etc/php/$current_version/fpm/pool.d/$username.conf /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$current_version-fpm
 systemctl restart php$php-fpm
