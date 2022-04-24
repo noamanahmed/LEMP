@@ -23,6 +23,7 @@ php_admin_flag[log_errors] = on
 php_admin_value[memory_limit] = 128M
 php_admin_value[upload_max_filesize] = 256M
 php_admin_value[post_max_size] = 258M
+php_admin_value[session.save_path] = /home/{{username}}/tmp/
 
 
 [global]
