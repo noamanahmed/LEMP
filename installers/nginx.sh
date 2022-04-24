@@ -13,10 +13,18 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
+if command -v apache2 &> /dev/null
+then
+  #Remove apache2 and its HTML directories
+  apt-get remove --purge apache2 -qqy
+  rm -rf /var/www/html/  
+fi
+
 if ! command -v nginx &> /dev/null
 then
   #Remove apache2
-  apt-get remove --purge apache2 -y
+  apt-get remove --purge apache2 -qqy
+  rm -rf /var/www/html/
   #Install nginx
   adduser --gecos "" --disabled-password --no-create-home  nginx 
   groupadd web
