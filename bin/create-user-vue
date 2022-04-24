@@ -1,0 +1,145 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:d:p flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+        d) domain=${OPTARG};;
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+
+
+if id "$username" &>/dev/null
+then
+    echo "The $username already exists!. Please run delete-site -u $username"
+    exit
+fi
+
+
+##Create user
+pam-auth-update
+chmod 640 /etc/shadow
+user_password="$(openssl rand -hex 12)"
+
+adduser --gecos "" --disabled-password $username
+echo "$username:$user_password" | sudo chpasswd
+
+
+## Adding user to groups
+usermod -a -G web $username
+usermod -a -G sftp $username
+usermod -a -G $username nginx
+
+## Create user directories
+user_root="/home/$username"
+
+mkdir -p $user_root
+mkdir -p "$user_root/logs"
+mkdir -p "$user_root/logs/nginx"
+mkdir -p "$user_root/logs/mail"
+mkdir -p "$user_root/cache"
+mkdir -p "$user_root/cache/nginx"
+
+
+## Fixing Permissions for nginx logs
+chown -R $username:$username $user_root/logs/nginx
+chown -R nginx:nginx $user_root/cache/nginx
+
+## Setting up default static HTML site for a vue site
+mkdir -p /home/$username/www/
+mkdir -p /home/$username/www/build/
+
+www_path=/home/$username/www/build
+cp $template_path/www/vue/* $www_path/
+
+
+## Creating nginx settings
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+cp "$template_path/nginx/vue/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+
+## Enable site and reload nginx
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+## Generate SSL
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+
+## Enabling SSL in nginx settings
+sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+
+## Enable SSL configured vhost and reload nginx
+nginx -t && systemctl reload nginx
+
+## Setup Log rotation
+# cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
+# sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
+
+## Restart nginx as we added our user to nginx group and for some reason nginx reload doesn't work
+systemctl restart nginx
+
+## Setting up backup folder
+mkdir -p /backups/$username
+chown -R $username:$username /backups/$username 
+
+## Fixing permissions
+bash fix-permissions -u $username
+
+## Jail User for a site
+bash jail-user -u $username
+
+## Setting up Logrotation
+bash logrotate-user -u $username
+
+
+echo "*****************************************"
+echo "*****************************************"
+echo ""
+echo "Site Setup succssfull"
+echo "URL : http://$domain"
+echo "URL(SSL) : https://$domain"
+echo "Complete WWW Path : $www_path"
+echo ""
+
+echo ""
+echo "SFTP/SSH Details"
+echo "Host: $domain"
+echo "Port: 22"
+echo "Username: $username"
+echo "Password: $user_password"
+
+
+
+
+
+
+

@@ -208,7 +208,7 @@ echo "WordPress password: $wp_password"
 echo ""
 fi
 echo ""
-echo "Database Credentials"
+echo "MySQL Database Credentials"
 echo "Database name: $database_name"
 echo "Database user: $database_user"
 echo "Database password: $database_password"

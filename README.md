@@ -173,7 +173,7 @@ fix-permissions
 ```
 
 ```sh
-create-user
+create-user-php
 ```
 
 ```sh

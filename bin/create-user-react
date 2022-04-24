@@ -39,12 +39,6 @@ then
     exit
 fi
 
-## Create system user if doesnt't exists
-
-# $system_root="/home/$username";
-# mkdir -p $system_root
-# mkdir -p "$system_root/php/$php_version"
-
 
 ##Create user
 pam-auth-update
@@ -66,15 +60,13 @@ user_root="/home/$username"
 mkdir -p $user_root
 mkdir -p "$user_root/logs"
 mkdir -p "$user_root/logs/nginx"
-mkdir -p "$user_root/logs/php"
 mkdir -p "$user_root/logs/mail"
 mkdir -p "$user_root/cache"
 mkdir -p "$user_root/cache/nginx"
 
-#mkdir -p "$user_root/cache/php"
 
 ## Fixing Permissions for nginx logs
-chown -R $username:$username $user_root/logs/php
+chown -R $username:$username $user_root/logs/nginx
 chown -R nginx:nginx $user_root/cache/nginx
 
 ## Setting up default static HTML site for a react site
@@ -122,11 +114,8 @@ chown -R $username:$username /backups/$username
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Jail User for a php site
-bash jail-user -u $username -p yes
-
-## Switch php version to the one specified 
-bash toggle-php -u $username -p $php
+## Jail User for a site
+bash jail-user -u $username
 
 ## Setting up Logrotation
 bash logrotate-user -u $username

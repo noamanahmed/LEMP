@@ -30,7 +30,7 @@ fi
 
 
 
-apt  install golang-go -y
+apt  install golang-go -qqy
 mkdir -p $HOME/gocode
 echo "export GOPATH=$HOME/gocode" >> ~/.profile
 source ~/.profile

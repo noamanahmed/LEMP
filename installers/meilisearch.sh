@@ -15,7 +15,7 @@ fi
 
 
 
-apt install curl -y
+apt install curl -qqy
 
 curl -L https://install.meilisearch.com | sh
 mv ./meilisearch /usr/bin/

@@ -68,6 +68,15 @@ echo "Installing php"
 bash installers/php.sh > $INSTALL_DIR/php.sh.log 2>&1
 echo "LEMP Stack Installation completed!"
 
+
+echo "Installing MERN Stack"
+## Install MERN
+echo "Installing mongodb"
+bash installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
+echo "Installing Node Version Manager and setting up latest node"
+bash installers/nvm.sh > $INSTALL_DIR/nvm.sh.log 2>&1
+echo "LEMP Stack Installation completed!"
+
 ## Install Misc
 # echo "Installing Proftpd" (SFTP Preferred)
 # bash installers/proftpd.sh > $INSTALL_DIR/proftpd.sh.log 2>&1
@@ -75,8 +84,6 @@ echo "Installing LetsEncrypt SSL"
 bash installers/ssl.sh > $INSTALL_DIR/ssl.sh.log 2>&1
 echo "Installing Redis"
 bash installers/redis.sh > $INSTALL_DIR/redis.sh.log 2>&1
-echo "Installing Node Version Manager and setting up latest node"
-bash installers/nvm.sh > $INSTALL_DIR/nvm.sh.log 2>&1
 echo "Installing Docker"
 bash installers/docker.sh > $INSTALL_DIR/docker.sh.log 2>&1
 echo "Installing Composer"
