@@ -6,10 +6,10 @@ if [ "$EUID" -e 0 ]
 fi
 
 # Install OpenSSL
-sudo apt-get install openssl -y
+sudo apt-get install openssl -qqy
 
 # Install Proftpd
-sudo apt-get install proftpd -y
+sudo apt-get install proftpd -qqy
 
 useradd -s /bin/false sftp
 

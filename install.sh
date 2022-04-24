@@ -114,7 +114,7 @@ source ~/.profile
 
 ## Setup hostname site for phpmyadmin and other stuff
 echo "Creating $hostname site with username $username"
-bash $DIR/installers/create-site-php -u $username -d $hostname -p 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+bash $DIR/installers/create-user-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
 
 ## Install phpmyadmin
 echo "Installing phpmyadmin at $hostname"
@@ -125,24 +125,24 @@ bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyad
 ##bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Kafka
-##echo "Installing Kafka at $hostname"
-#bash $DIR/installers/kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
+echo "Installing Kafka at $hostname"
+bash $DIR/installers/kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
 
 ## Optional RabbitMQ
-##echo "Installing RabbitMQ at $hostname"
-#bash $DIR/installers/rabbitmq.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+echo "Installing RabbitMQ at $hostname"
+bash $DIR/installers/rabbitmq.sh -h $hostname > $INSTALL_DIR/rabbitmq.sh.log 2>&1
 
 ## Optional Mailhog
-##echo "Installing Mailhog at $hostname"
-#bash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+echo "Installing Mailhog at $hostname"
+ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
 
 ## Optional Netdata
-##echo "Installing NetData at $hostname"
-bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+echo "Installing NetData at $hostname"
+bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
 
-## Optional glitchtip (requires docker) and there alot of bugs
+## Optional glitchtip (requires docker) and there are alot of bugs
 ##echo "Installing Glitchtip at $hostname"
-##bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+##bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/glitchtip.sh.log 2>&1
 
 apt autoremove > $INSTALL_DIR/apt_autoremove.log 2>&1
 

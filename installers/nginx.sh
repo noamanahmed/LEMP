@@ -28,6 +28,7 @@ then
   #Install nginx
   adduser --gecos "" --disabled-password --no-create-home  nginx 
   groupadd web
+  groupadd sftp
   apt install nginx -y
   
 else
