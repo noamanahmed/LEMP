@@ -17,7 +17,6 @@ cp $template_path/jailkit/jk_init.ini /etc/jailkit/jk_init.ini
 
 #Setting up JailKit
 echo "Setting up JailKit"
-rm -rf /var/chroot/
 chroot_path=/var/chroot/
 mkdir -p $chroot_path
 jk_init $chroot_path netutils extendedshell jk_lsh openvpn ssh sftp 
@@ -52,4 +51,3 @@ mkdir -p $chroot_path/.wp-cli
 cp -rf $template_path/jailed_ssh/.ssh/* "$chroot_path/.ssh" 
 cp -rf $template_path/jailed_ssh/.bashrc "$chroot_path/.bashrc" 
 cp -rf $template_path/jailed_ssh/.profile "$chroot_path/.profile" 
-cp -rf /root/.nvm $chroot_path
