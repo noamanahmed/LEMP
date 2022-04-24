@@ -134,7 +134,7 @@ mysql -e "FLUSH PRIVILEGES;"
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
-cp "$template_path/nginx/vhost.conf" $nginx_vhost_file
+cp "$template_path/nginx/php/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
