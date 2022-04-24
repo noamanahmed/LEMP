@@ -44,10 +44,3 @@ cp /usr/local/bin/composer1 $chroot_bin_path
 cp /usr/local/bin/composer2 $chroot_bin_path
 cp /usr/bin/wp $chroot_bin_path
 
-mkdir -p $chroot_path/.ssh
-mkdir -p $chroot_path/.wp-cli
-
-
-cp -rf $template_path/jailed_ssh/.ssh/* "$chroot_path/.ssh" 
-cp -rf $template_path/jailed_ssh/.bashrc "$chroot_path/.bashrc" 
-cp -rf $template_path/jailed_ssh/.profile "$chroot_path/.profile" 
