@@ -51,11 +51,18 @@ fi
 
 chroot_path=/var/chroot
 
+
 ##Fixing Permissions
 chown root:root /
 chown root:root /home
 chown root:root /home/$username
 chmod 755  /home/$username
+
+##Mounting
+mount --bind /lib /home/$username/lib
+mount --bind /proc /home/$username/proc
+mount --bind /sys /home/$username/sys
+mount --bind /usr /home/$username/usr
 
 ##Copying Files
 cp -rf $chroot_path/* /home/$username/

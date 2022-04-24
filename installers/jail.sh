@@ -25,11 +25,6 @@ chown root:root /home
 
 mkdir -p $chroot_path
 
-echo "Mounting Paths"
-mount --bind /lib $chroot_path/lib
-mount --bind /proc $chroot_path/proc
-mount --bind /sys $chroot_path/sys
-mount --bind /usr $chroot_path/usr
 
 echo "Creating /dev"
 chroot_dev_path="$chroot_path/dev"

@@ -11,10 +11,6 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-umount -l /var/chroot/lib
-umount -l /var/chroot/proc
-umount -l /var/chroot/sys
-umount -l /var/chroot/usr
 rm -rf /var/chroot/
 bash $DIR/../installers/jail.sh
 
