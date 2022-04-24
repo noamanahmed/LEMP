@@ -10,11 +10,12 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:p:a flag
+while getopts u:d:e:a flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
-        p) php=${OPTARG};;        
+        d) disable=${OPTARG};;        
+        e) enable=${OPTARG};;        
         a) app=${OPTARG};;        
     esac
 done
