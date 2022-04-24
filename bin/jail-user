@@ -52,5 +52,6 @@ fi
 chroot_path=/var/chroot/
 
 cp -rf /root/.nvm /home/$username/
+ln -s /var/chroot/home/$username /home/$username 
 
 jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
