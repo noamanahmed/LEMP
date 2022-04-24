@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts d: flag
+do
+    case "${flag}" in    
+        d) database=${OPTARG};;        
+    esac
+done
+
+
+mysql -e "DROP DATABASE IF EXISTS $database"

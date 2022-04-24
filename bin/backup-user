@@ -31,11 +31,26 @@ then
     exit;
 fi
 
+
+
+if [ ! -d "/var/lib/mysql/$username" ] && [ ! -d "/home/$username/www/" ] 
+then
+    echo "Database and files are not present"
+fi
+
 backup_name=$(date +%s)_$(openssl rand -hex 4)
 mkdir -p /backups/$username
 mkdir -p /backups/$username/$backup_name
 echo "Backup Site Location /backups/$username/$backup_name"
-echo "Backing up MySQL DB"
-mysqldump $username | pv | gzip > /backups/$username/$backup_name/db.sql.gz | pv
-echo "Backing up Files in www"
-tar -czf /backups/$username/$backup_name/www.gz -C /home/$username/www/ . | pv
+
+if [ -d "/var/lib/mysql/$username" ] 
+then
+    echo "Backing up MySQL DB"
+    mysqldump $username | pv | gzip > /backups/$username/$backup_name/db.sql.gz | pv
+fi
+
+if [ -d "/home/$username/www/" ] 
+then    
+    echo "Backing up Files in www"
+    tar -czf /backups/$username/$backup_name/www.gz -C /home/$username/www/ . | pv
+fi

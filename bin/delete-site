@@ -82,7 +82,7 @@ fi
 
 systemctl reload nginx
 
-## Delete Database
+## Delete Database and users
 mysql -e "DROP DATABASE IF EXISTS $username"
 mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 
