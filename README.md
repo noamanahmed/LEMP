@@ -74,125 +74,124 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Puppet
 
 ## Utility Scripts
-
 ```sh
 delete-user
-```sh
+```
 
 ```sh
 clear-cache
-```sh
+```
 
 ```sh
 update-jail
-```sh
+```
 
 ```sh
 create-user-svelte
-```sh
+```
 
 ```sh
 restore-user
-```sh
+```
 
 ```sh
 create-db
-```sh
+```
 
 ```sh
 create-user-vue
-```sh
+```
 
 ```sh
 delete-backup
-```sh
+```
 
 ```sh
 create-user-react
-```sh
+```
 
 ```sh
 install-wp
-```sh
+```
 
 ```sh
 create-jail-user
-```sh
+```
 
 ```sh
 backup-user
-```sh
+```
 
 ```sh
 toggle-php
-```sh
+```
 
 ```sh
 create-wp-user
-```sh
+```
 
 ```sh
 install-wp-plugin
-```sh
+```
 
 ```sh
 create-user-db
-```sh
+```
 
 ```sh
 create-user-angular
-```sh
+```
 
 ```sh
 jail-user
-```sh
+```
 
 ```sh
 disable-site
-```sh
+```
 
 ```sh
 create-app-user
-```sh
+```
 
 ```sh
 delete-db
-```sh
+```
 
 ```sh
 create-user-node
-```sh
+```
 
 ```sh
 enable-site
-```sh
+```
 
 ```sh
 fix-permissions
-```sh
+```
 
 ```sh
 create-user
-```sh
+```
 
 ```sh
 update-lemp
-```sh
+```
 
 ```sh
 create-user-python
-```sh
+```
 
 ```sh
 create-linux-user
-```sh
+```
 
 ```sh
 logrotate-user
-```sh
+```
 
 ```sh
 delete-wp-plugin
-```sh
+```
 
 
