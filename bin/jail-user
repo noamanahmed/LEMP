@@ -59,6 +59,8 @@ chroot_home=/var/www/home/$username
 
 mkdir -p $chroot_home/.ssh
 mkdir -p $chroot_home/.wp-cli
+mkdir -p $chroot_home/.wp-cli/cache
+mkdir -p $chroot_home/tmp
 
 cp -rf $template_path/jailed_ssh/.ssh/* $chroot_home/.ssh
 cp -rf $template_path/jailed_ssh/.bashrc $chroot_home/.bashrc
@@ -70,9 +72,9 @@ chown -R $username:$username $chroot_home/.bashrc
 chown -R $username:$username $chroot_home/.profile
 #chown -R $username:$username $chroot_home/.config
 #chown -R $username:$username $chroot_home/.nvm
-
-mkdir -p $chroot_home/tmp
 chown -R $username:$username $chroot_home/tmp
+
+
 
 sed -i "s/$(echo $chroot_path | sed 's/\//\\\//g').\/home\/$username/\/home\/$username\//" /etc/passwd
 sed -i "s/\/usr\/sbin\/jk_chrootsh/\/bin\/bash/" /etc/passwd

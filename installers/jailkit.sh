@@ -35,9 +35,11 @@ done
 
 #Fix Internet
 echo "Fixing Internet for Jailed users" 
+jk_cp -j $chroot_path /lib/x86_64-linux-gnu/libnss_files.so.2
+jk_cp -j $chroot_path /lib/x86_64-linux-gnu/libnss_dns.so.2
 
-jk_cp -v -j $chroot_path /lib/x86_64-linux-gnu/libnss_files.so.2
-jk_cp -v -j $chroot_path /lib/x86_64-linux-gnu/libnss_dns.so.2
+echo "Copying Certificates"
+jk_cp -j $chroot_path /etc/ssl/certs/ca-certificates.crt
 
 cp /usr/local/bin/composer $chroot_bin_path
 cp /usr/local/bin/composer1 $chroot_bin_path
