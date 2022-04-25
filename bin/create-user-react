@@ -36,7 +36,7 @@ fi
 
 if id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-site -u $username"
+    echo "The $username already exists!. Please run delete-user -u $username"
     exit
 fi
 
@@ -63,23 +63,14 @@ chroot_home=$chroot_path/$user_root
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
 mkdir -p $chroot_home/logs/nginx
-mkdir -p $chroot_home/logs/php
-mkdir -p $chroot_home/logs/mail
-mkdir -p $chroot_home/cache
-mkdir -p $chroot_home/cache/nginx
 mkdir -p $chroot_home/www/
 
 www_path=$chroot_home/www
 
-## Fixing Permissions for nginx logs
-chown -R $username:$username $chroot_home/logs/php
-chown -R nginx:nginx $chroot_home/cache/nginx
 
 ## Setting up default static HTML site for a react site
-mkdir -p /home/$username/www/
-mkdir -p /home/$username/www/build/
-
-www_path=/home/$username/www/build
+mkdir -p $www_path
+mkdir -p $www_path/build/
 cp $template_path/www/react/* $www_path/
 
 
