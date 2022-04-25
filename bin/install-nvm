@@ -33,3 +33,7 @@ then
     exit;
 fi
 
+runuser -l $username -c 'curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash '
+export NVM_DIR="$HOME/.nvm"
+runuser -l $username -c 'nvm install node'
+runuser -l $username -c 'nvm use stable'
