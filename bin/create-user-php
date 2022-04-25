@@ -182,9 +182,9 @@ if [ -n "$wordpress" ]
 then
 
     wp_password="$(openssl rand -hex 8)"
-    su - $username -c "cd ~/www && wp core download"
-    su - $username -c "cd ~/www && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
-    su - $username -c "cd ~/www && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
+    su - $username -c "cd $www_path && wp core download"
+    su - $username -c "cd $www_path && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
+    su - $username -c "cd $www_path && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
     # runuser -l $username -c "cd /home/$username/www && wp option update siteurl $(wp option get siteurl | sed  's/http:\/\//https:\/\//')"
     # runuser -l $username -c "cd /home/$username/www && wp option update home $(wp option get home | sed  's/http:\/\//https:\/\//')"
 
