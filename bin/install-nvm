@@ -39,5 +39,6 @@ mkdir /var/www/home/$username/.nvm
 chmod +x /var/www/home/$username/install.sh
 chown $username:$username  /var/www/home/$username/install.sh
 chown $username:$username  /var/www/home/$username/.nvm
-cd /var/www/home/$username/ && su $username -c "NVM_DIR=.nvm /var/www/home/$username/install.sh"
-
+cd /var/www/home/$username/ 
+su $username -c "NVM_DIR=.nvm /var/www/home/$username/install.sh"
+su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm install node"
