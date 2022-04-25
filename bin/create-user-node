@@ -76,6 +76,10 @@ fi
 user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
 
+
+## Jail User for a php site
+bash jail-user -u $username -p yes
+
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
