@@ -34,6 +34,6 @@ then
 fi
 
 
-jk_chrootlaunch -j /var/www/ -u $username -x 'curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash '
-jk_chrootlaunch -j /var/www/ -u $username -x 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && nvm install node'
-jk_chrootlaunch -j /var/www/ -u $username -x 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && nvm use stable'
+chroot /var/www /bin/bash -c " 'su $username -c 'curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash ' "
+chroot /var/www /bin/bash -c " 'su $username -c 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && nvm install node' "
+chroot /var/www /bin/bash -c " 'su $username -c 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && nvm use stable' "
