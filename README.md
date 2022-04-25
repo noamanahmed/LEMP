@@ -55,15 +55,13 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - UFW
 
 ## Work in Progress
-- Utility Scripts to create python,node backend with SSL using nginx reverse proxy
-- Utility Scripts to create react,angular,vue.js,svelte frontend with SSL using nginx reverse proxy
+- Utility Scripts to create python backend with SSL using nginx reverse proxy
 - Jenkins(Looking to Automate Installation without using GUI)
 - Sentry Open Source
 - Glitchtip (Alternative to Sentry)
 - Mail Server Setup (A complete alternative to iRedMail Setup)
 - ELK Stack (Elasticsearch Logstash Kibana)
 - Server Hardening
-- Reducing Disk Usage for Jailed Users
 - Kernel Optimization for fast nginx
 - Pushing backups to offsite storage as object storage etc 
 - Postgres
