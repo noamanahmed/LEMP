@@ -34,7 +34,7 @@ then
 fi
 
 
-if [ -c "$command" ]
+if [ -z "$command" ]
 then
     echo "Please provide a command using -c "
     exit
