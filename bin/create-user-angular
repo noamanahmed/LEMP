@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:p flag
+while getopts u:d: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
@@ -36,46 +36,42 @@ fi
 
 if id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-site -u $username"
+    echo "The $username already exists!. Please run delete-user -u $username"
     exit
 fi
 
 
 ##Create user
-pam-auth-update
-chmod 640 /etc/shadow
 user_password="$(openssl rand -hex 12)"
+bash create-linux-user -u $username -p $user_password
 
-adduser --gecos "" --disabled-password $username
-echo "$username:$user_password" | sudo chpasswd
+## Jail User for a php site
+bash jail-user -u $username -p yes
 
 
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
+usermod -a -G nginx $username
 usermod -a -G $username nginx
 
 ## Create user directories
-user_root="/home/$username"
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
 
-mkdir -p $user_root
-mkdir -p "$user_root/logs"
-mkdir -p "$user_root/logs/nginx"
-mkdir -p "$user_root/logs/mail"
-mkdir -p "$user_root/cache"
-mkdir -p "$user_root/cache/nginx"
+mkdir -p $chroot_home
+mkdir -p $chroot_home/logs
+mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/www/
 
+www_path=$chroot_home/www
 
-## Fixing Permissions for nginx logs
-chown -R $username:$username $user_root/logs/nginx
-chown -R nginx:nginx $user_root/cache/nginx
 
 ## Setting up default static HTML site for a angular site
-mkdir -p /home/$username/www/
-mkdir -p /home/$username/www/build/
-
-www_path=/home/$username/www/build
-cp $template_path/www/angular/* $www_path/
+mkdir -p $www_path
+mkdir -p $www_path/build/
+cp $template_path/www/angular/* $www_path/build/
 
 
 ## Creating nginx settings
@@ -83,17 +79,17 @@ nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
 cp "$template_path/nginx/angular/vhost.conf" $nginx_vhost_file
 
-sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $www_path/build/ | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
-sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
 
 ## Enable site and reload nginx
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
 ## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/build/
 
 ## Enabling SSL in nginx settings
 sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
@@ -112,11 +108,18 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
-## Fixing permissions
-bash fix-permissions -u $username
 
 ## Jail User for a site
 bash jail-user -u $username
+
+## Fixing permissions
+bash fix-permissions -u $username
+
+
+## Installing nvm
+bash install-nvm -u $username
+
+
 
 ## Setting up Logrotation
 bash logrotate-user -u $username
@@ -128,7 +131,7 @@ echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
-echo "Complete WWW Path : $www_path"
+echo "Complete WWW Path : /home/$username"
 echo ""
 
 echo ""

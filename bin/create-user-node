@@ -81,17 +81,22 @@ usermod -a -G sftp $username
 usermod -a -G $username nginx
 
 ## Create user directories
-user_root="/home/$username"
 
-mkdir -p $user_root
-mkdir -p "$user_root/logs"
-mkdir -p "$user_root/logs/nginx"
-mkdir -p "$user_root/logs/php"
-mkdir -p "$user_root/logs/mail"
-mkdir -p "$user_root/cache"
-mkdir -p "$user_root/cache/nginx"
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
 
-## Fixing Permissions for nginx logs
+mkdir -p $chroot_home
+mkdir -p $chroot_home/logs
+mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/logs/node
+mkdir -p $chroot_home/cache
+mkdir -p $chroot_home/cache/nginx
+mkdir -p $chroot_home/www/
+
+www_path=$chroot_home/www
+
+## Fixing Permissions for nginx cache
 chown -R nginx:nginx $user_root/cache/nginx
 
 if [ -d "$mysql" ]
@@ -121,7 +126,7 @@ cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
-sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
@@ -141,7 +146,7 @@ cp "$template_path/nginx/node/vhost.conf" $nginx_vhost_file
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
-sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{port}}/$port/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
@@ -165,11 +170,8 @@ chown -R $username:$username /backups/$username
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Jail User for a php site
-bash jail-user -u $username -p yes
-
-## Switch php version to the one specified 
-bash toggle-node -u $username -p 3.0
+##(TODO) Switch node version to the one specified 
+##bash toggle-node -u $username -p 
 
 ## Setting up Logrotation
 bash logrotate-user -u $username -e yes

@@ -97,7 +97,7 @@ mkdir -p $chroot_home/cache
 mkdir -p $chroot_home/cache/nginx
 mkdir -p $chroot_home/www/
 
-www_path=$chroot_home/www
+www_path=$chroot_home/www 
 
 if [ -n "$laravel" ]
 then
@@ -107,7 +107,7 @@ fi
 
 #mkdir -p "$user_root/cache/php"
 
-## Fixing Permissions for nginx logs
+## Fixing Permissions for nginx cache and php logs
 chown -R $username:$username $chroot_home/logs/php
 chown -R nginx:nginx $chroot_home/cache/nginx
 
