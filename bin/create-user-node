@@ -101,6 +101,7 @@ mkdir -p $chroot_home/cache/nginx
 mkdir -p $chroot_home/www/
 
 www_path=$chroot_home/www
+mkdir -p $www_path
 
 ## Fixing Permissions for nginx cache
 chown -R nginx:nginx $chroot_home/cache/nginx
@@ -122,8 +123,6 @@ fi
 
 
 ## Setup a static HTML site for LetsEncrypt First
-www_path=$user_root/www/
-mkdir -p $www_path
 
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
