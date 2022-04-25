@@ -88,13 +88,15 @@ systemctl reload nginx
 mysql -e "DROP DATABASE IF EXISTS $username"
 mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 
+
+## Delete Logrotation
+bash logrotate-user -u $username -d yes
+
 ## Delete linux user and processes
 pkill -9 -u $username 
 userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 
-## Delete Logrotation
-bash logrotate-user -u $username -d yes
 
 ## Delete Chroot Directory
 rm -rf /var/www/home/$username
