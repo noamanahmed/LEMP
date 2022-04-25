@@ -144,9 +144,6 @@ rm -rf $nginx_vhost_enabled
 rm -rf $nginx_vhost_file
 
 
-##Copying demo app for simple proxy server
-cp $template_path/www/node/* $www_path/
-sed -i "s/{{port}}/$port/" $www_path/app.js
 
 ## Creating nginx settings with reverse proxy
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
@@ -185,6 +182,11 @@ bash install-nvm -u $username
 
 ##(TODO) Switch node version to the one specified 
 ##bash toggle-node -u $username -p 
+
+##Copying demo app for simple proxy server
+cp $template_path/www/node/* $www_path/
+sed -i "s/{{port}}/$port/" $www_path/app.js
+nvm-user -u $username -c "cd $www_path && npm install"
 
 ## Setting up Logrotation
 bash logrotate-user -u $username -e yes
