@@ -108,11 +108,12 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
-## Fixing permissions
-bash fix-permissions -u $username
 
 ## Jail User for a site
 bash jail-user -u $username
+
+## Fixing permissions
+bash fix-permissions -u $username
 
 
 ## Installing nvm
