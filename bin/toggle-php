@@ -80,7 +80,7 @@ then
     rm -rf /var/chroot/home/$username/bin/php
 fi
 
-ln -s $(echo "php$php" | sed 's/\.//') /var/chroot/home/$username/bin/php 
+cp /var/chroot/home/$username/bin/$(echo "php$php" | sed 's/\.//') /var/chroot/home/$username/bin/php 
 
 echo "Clearing Cache"
 clear-cache -u $username
