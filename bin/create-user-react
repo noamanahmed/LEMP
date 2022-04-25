@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:d:p flag
+while getopts u:d: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;        
@@ -89,7 +89,7 @@ ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
 ## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/build/
 
 ## Enabling SSL in nginx settings
 sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
