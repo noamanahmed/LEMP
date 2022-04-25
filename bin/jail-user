@@ -71,7 +71,7 @@ chown -R $username:$username $chroot_home/.profile
 #chown -R $username:$username $chroot_home/.config
 chown -R $username:$username $chroot_home/.nvm
 
-mkdir $chroot_home/tmp
+mkdir -p $chroot_home/tmp
 chown -R $username:$username $chroot_home/tmp
 
 sed -i "s/$(echo $chroot_path | sed 's/\//\\\//g').\/home\/$username/\/home\/$username\//" /etc/passwd
