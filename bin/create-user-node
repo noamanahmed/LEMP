@@ -174,11 +174,12 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
+## Installing nvm
+bash install-nvm -u $username
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Installing nvm
-bash install-nvm -u $username
 
 ##(TODO) Switch node version to the one specified 
 ##bash toggle-node -u $username -p 
