@@ -88,7 +88,8 @@ systemctl reload nginx
 mysql -e "DROP DATABASE IF EXISTS $username"
 mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 
-## Delete linux user
+## Delete linux user and processes
+pkill -9 -u $username 
 userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 
@@ -98,7 +99,7 @@ bash logrotate-user -u $username -d yes
 ## Delete Chroot Directory
 rm -rf /var/www/home/$username
 rm -rf /home/$username
-pkill -9 -u $username 
+
 
 echo "Username $username deleted successfully!"      
 
