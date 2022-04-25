@@ -83,9 +83,9 @@ usermod -a -G sftp $username
 usermod -a -G $username nginx
 
 ## Create user directories
-chroot_path=/var/chroot/
+chroot_path=/var/chroot
 user_root=/home/$username
-chroot_home=$chroot_path/$user_root
+chroot_home=$chroot_path$user_root
 
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
