@@ -34,6 +34,8 @@ then
 fi
 
 
-su $username -c "cd /var/www/home/$username && curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /var/www/home/$username/install.sh && chmod +x /var/www/home/$username/install.sh"
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /var/www/home/$username/install.sh
+chmod +x /var/www/home/$username/install.sh
+chown $username:$username  /var/www/home/$username/install.sh
 su $username -c "NVM_DIR=/var/www/home/$username ./var/www/home/$username/install.sh"
 #su $username -c "rm -rf /var/www/home/$username/install.sh"
