@@ -33,8 +33,9 @@ then
 fi
 
 
+user_root=/var/www/home/$username
 
-if [ ! -d "/var/lib/mysql/$username" ] && [ ! -d "/home/$username/www/" ] 
+if [ ! -d "/var/lib/mysql/$username" ] && [ ! -d "$user_root/www/" ] 
 then
     echo "Database and files are not present"
 fi
@@ -50,8 +51,8 @@ then
     mysqldump $username | pv | gzip > /backups/$username/$backup_name/db.sql.gz | pv
 fi
 
-if [ -d "/home/$username/www/" ] 
+if [ -d "$user_root/www/" ] 
 then    
     echo "Backing up Files in www"
-    tar -czf /backups/$username/$backup_name/www.gz -C /home/$username/www/ . | pv
+    tar -czf /backups/$username/$backup_name/www.gz -C $user_root/www/ . | pv
 fi
