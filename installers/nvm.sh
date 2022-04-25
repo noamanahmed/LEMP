@@ -5,6 +5,9 @@ if [ "$EUID" -e 0 ]
   exit
 fi
 
+# Remove already exisitng versions
+rm -rf $(which node)
+rm -rf $(which npm)
 
 # Install NVM -- Node Version Manager
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 

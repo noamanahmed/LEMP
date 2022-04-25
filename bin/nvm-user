@@ -41,5 +41,5 @@ then
 fi
 
 echo "Running Command"
-echo su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && $command"
-su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && $command"
+echo su $username -c 'HOME=/var/www/home/$username NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && cd /var/www/home/$username/www/ && $command'
+su $username -c 'HOME=/var/www/home/$username NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && cd /var/www/home/$username/www/ && $command'
