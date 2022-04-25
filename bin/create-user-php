@@ -73,6 +73,9 @@ fi
 user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
 
+## Jail User for a php site
+bash jail-user -u $username -p yes
+
 
 ## Adding user to groups
 usermod -a -G web $username
@@ -80,10 +83,9 @@ usermod -a -G sftp $username
 usermod -a -G $username nginx
 
 ## Create user directories
-chroot_path=/var/chroot
+chroot_path=/var/www/
 user_root=/home/$username
 chroot_home=$chroot_path$user_root
-chroot_home=$user_root
 
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
@@ -92,7 +94,6 @@ mkdir -p $chroot_home/logs/php
 mkdir -p $chroot_home/logs/mail
 mkdir -p $chroot_home/cache
 mkdir -p $chroot_home/cache/nginx
-
 mkdir -p $chroot_home/www/
 
 www_path=$chroot_home/www/
@@ -117,7 +118,7 @@ cp $template_path/www/*.html $www_path/
 ## Setup PHP
 sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
-sed -i "s/{{user_path}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
 
 ## Creating MYSQL user and database
@@ -177,17 +178,13 @@ bash toggle-php -u $username -p $php
 bash logrotate-user -u $username -e yes
 
 
-## Jail User for a php site
-bash jail-user -u $username -p yes
-
-
 if [ -n "$wordpress" ]
 then
 
     wp_password="$(openssl rand -hex 8)"
-    su - $username -c "cd $www_path && wp core download"
-    su - $username -c "cd $www_path && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
-    su - $username -c "cd $www_path && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
+    #su - $username -c "cd $www_path && wp core download"
+    #su - $username -c "cd $www_path && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
+    #su - $username -c "cd $www_path && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
     # runuser -l $username -c "cd /home/$username/www && wp option update siteurl $(wp option get siteurl | sed  's/http:\/\//https:\/\//')"
     # runuser -l $username -c "cd /home/$username/www && wp option update home $(wp option get home | sed  's/http:\/\//https:\/\//')"
 

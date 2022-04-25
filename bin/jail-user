@@ -49,13 +49,13 @@ then
     exit;
 fi
 
-chroot_path=/var/chroot/
+chroot_path=/var/www/
 jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 
-chroot_home=/var/chroot/home/$username
+chroot_home=/var/www/home/$username
 
 
-cp -rf /root/.nvm $chroot_home/.nvm
+cp -rf /root/.nvm $chroot_home/
 
 mkdir -p $chroot_home/.ssh
 mkdir -p $chroot_home/.wp-cli
