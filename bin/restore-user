@@ -47,27 +47,31 @@ then
 fi
 
 
-if [ ! -f "/backups/$username/$backup_name/www.gz" ] 
+
+if [ ! -f "/backups/$username/$backup_name/www.gz" ] && [ ! -f "/backups/$username/$backup_name/db.sql.gz" ] 
 then
-    echo "There are no files to replace as /backups/$username/$backup_name/www.gz doesn't exist"    
+    echo "There are no SQL or www files to replace at /backups/$username/$backup_name/ "    
     exit;
+fi
+
+user_root=/var/www/home/$username
+
+
+if [ -f "/backups/$username/$backup_name/www.gz" ] 
+then
+    echo "Restoring Files in www"
+    mv -f $user_root/www/ $user_root/www_backup
+    mkdir -p $user_root/www/
+    pv /backups/$username/$backup_name/www.gz | tar -xz -C $user_root/www/
+    rm -rf $user_root/www_backup
+    echo "Fixing permissions"
+    fix-permissions -u $username
 fi
 
 
 if [ ! -f "/backups/$username/$backup_name/db.sql.gz" ] 
 then
-    echo "There is no database backup to replace as /backups/$username/$backup_name/db.sql.gz doesn't exist"    
-    exit;
+    echo "Restoring MySQL DB"
+    pv /backups/$username/$backup_name/db.sql.gz | gunzip | mysql -u root $username
+
 fi
-
-
-user_root=/var/www/home/$username
-echo "Restoring MySQL DB"
-pv /backups/$username/$backup_name/db.sql.gz | gunzip | mysql -u root $username
-echo "Restoring Files in www"
-mv -f $user_root/www/ $user_root/www_backup
-mkdir -p $user_root/www/
-pv /backups/$username/$backup_name/www.gz | tar -xz -C $user_root/www/
-rm -rf $user_root/www_backup
-echo "Fixing permissions"
-fix-permissions -u $username
