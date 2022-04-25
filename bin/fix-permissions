@@ -36,7 +36,7 @@ user_root=/var/www/home/$username
 www_path=$user_root/www
 
 chown root:root /var/www/home/$username
-chmod 750  /var/www/home/$username
+chmod 755  /var/www/home/$username
 chown -R $username:$username $www_path
 chmod 750 $(find $www_path -type d)
 chmod 640 $(find $www_path -type f)
