@@ -75,7 +75,7 @@ bash create-linux-user -u $username -p $user_password
 
 ## Jail User for a php site
 bash jail-user -u $username -p yes
-exit;
+
 
 ## Adding user to groups
 usermod -a -G web $username
@@ -84,31 +84,32 @@ usermod -a -G $username nginx
 
 ## Create user directories
 chroot_path=/var/chroot/
-user_root="/home/$username"
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
 
 mkdir -p $user_root
-mkdir -p "chroot_path/$user_root/logs"
-mkdir -p "chroot_path/$user_root/logs/nginx"
-mkdir -p "chroot_path/$user_root/logs/php"
-mkdir -p "chroot_path/$user_root/logs/mail"
-mkdir -p "chroot_path/$user_root/cache"
-mkdir -p "chroot_path/$user_root/cache/nginx"
+mkdir -p $chroot_home/logs
+mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/logs/php
+mkdir -p $chroot_home/logs/mail
+mkdir -p $chroot_home/cache
+mkdir -p $chroot_home/cache/nginx
 
-mkdir -p $user_root/www/
+mkdir -p $chroot_home/www/
 
-www_path=$user_root/www/
+www_path=$chroot_home/www/
 
 if [ -n "$laravel" ]
 then
-  www_path=$user_root/www/public
+  www_path=$chroot_home/www/public
 fi
 
 
 #mkdir -p "$user_root/cache/php"
 
 ## Fixing Permissions for nginx logs
-chown -R $username:$username $user_root/logs/php
-chown -R nginx:nginx $user_root/cache/nginx
+chown -R $username:$username $chroot_home/logs/php
+chown -R nginx:nginx $chroot_home/cache/nginx
 
 ## Setting up default static HTML site
 mkdir -p $www_path

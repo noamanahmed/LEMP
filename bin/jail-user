@@ -52,25 +52,26 @@ fi
 chroot_path=/var/chroot/
 jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 
+chroot_home=$chroot_path/home/$username
 
-cp -rf /root/.nvm /var/chroot/home/$username/.nvm
+cp -rf /root/.nvm $chroot_home/.nvm
 
-mkdir -p /var/chroot/home/$username/.ssh
-mkdir -p /var/chroot/home/$username/.wp-cli
+mkdir -p $chroot_home/.ssh
+mkdir -p $chroot_home/.wp-cli
 
-cp -rf $template_path/jailed_ssh/.ssh/* /var/chroot/home/$username/.ssh
-cp -rf $template_path/jailed_ssh/.bashrc /var/chroot/home/$username/.bashrc
-cp -rf $template_path/jailed_ssh/.profile /var/chroot/home/$username/.profile
+cp -rf $template_path/jailed_ssh/.ssh/* $chroot_home/.ssh
+cp -rf $template_path/jailed_ssh/.bashrc $chroot_home/.bashrc
+cp -rf $template_path/jailed_ssh/.profile $chroot_home/.profile
 
-chown -R $username:$username /var/chroot/home/$username/.wp-cli
-chown -R $username:$username /var/chroot/home/$username/.ssh
-chown -R $username:$username /var/chroot/home/$username/.bashrc
-chown -R $username:$username /var/chroot/home/$username/.profile
-#chown -R $username:$username /var/chroot/home/$username/.config
-chown -R $username:$username /var/chroot/home/$username/.nvm
+chown -R $username:$username $chroot_home/.wp-cli
+chown -R $username:$username $chroot_home/.ssh
+chown -R $username:$username $chroot_home/.bashrc
+chown -R $username:$username $chroot_home/.profile
+#chown -R $username:$username $chroot_home/.config
+chown -R $username:$username $chroot_home/.nvm
 
-mkdir /var/chroot/home/$username/tmp
-chown -R $username:$username /var/chroot/home/$username/tmp
+mkdir $chroot_home/tmp
+chown -R $username:$username $chroot_home/tmp
 
 sed -i "s/$(echo $chroot_path | sed 's/\//\\\//g').\/home\/$username/\/home\/$username\//" /etc/passwd
 sed -i "s/\/usr\/sbin\/jk_chrootsh/\/bin\/bash/" /etc/passwd
