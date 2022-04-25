@@ -55,7 +55,7 @@ jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 chroot_home=/var/www/home/$username
 
 
-cp -rf /root/.nvm $chroot_home/
+#cp -rf /root/.nvm $chroot_home/
 
 mkdir -p $chroot_home/.ssh
 mkdir -p $chroot_home/.wp-cli
@@ -69,7 +69,7 @@ chown -R $username:$username $chroot_home/.ssh
 chown -R $username:$username $chroot_home/.bashrc
 chown -R $username:$username $chroot_home/.profile
 #chown -R $username:$username $chroot_home/.config
-chown -R $username:$username $chroot_home/.nvm
+#chown -R $username:$username $chroot_home/.nvm
 
 mkdir -p $chroot_home/tmp
 chown -R $username:$username $chroot_home/tmp
