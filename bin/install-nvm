@@ -11,6 +11,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+
 while getopts u: flag
 do
     case "${flag}" in
@@ -32,10 +33,3 @@ then
     exit;
 fi
 
-user_root=/var/www/home/$username
-www_path=$user_root/www
-
-chown -R $username:$username /var/www/home/$username
-chmod 711 /var/www/home/$username
-chmod 750 $(find $www_path -type d)
-chmod 640 $(find $www_path -type f)
