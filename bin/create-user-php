@@ -87,7 +87,7 @@ chroot_path=/var/chroot/
 user_root=/home/$username
 chroot_home=$chroot_path/$user_root
 
-mkdir -p $user_root
+mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
 mkdir -p $chroot_home/logs/nginx
 mkdir -p $chroot_home/logs/php
@@ -119,6 +119,7 @@ cp $template_path/www/*.html $www_path/
 ## Setup PHP
 sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{user_path}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
 
 ## Creating MYSQL user and database
