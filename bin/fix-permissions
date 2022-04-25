@@ -32,9 +32,8 @@ then
     exit;
 fi
 
-
-user_root="/home/$username"
-www_path="$user_root/www"
+user_root=/var/chroot/home/$username
+www_path=$user_root/www
 
 chown root:root /home/$username
 chmod 755  /home/$username
