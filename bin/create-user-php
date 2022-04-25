@@ -144,8 +144,9 @@ cp "$template_path/nginx/php/vhost.conf" $nginx_vhost_file
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
-sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
+
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
