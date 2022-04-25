@@ -177,9 +177,6 @@ chown -R $username:$username /backups/$username
 ## Installing nvm
 bash install-nvm -u $username
 
-## Fixing permissions
-bash fix-permissions -u $username
-
 
 ##(TODO) Switch node version to the one specified 
 ##bash toggle-node -u $username -p 
@@ -187,6 +184,9 @@ bash fix-permissions -u $username
 ##Copying demo app for simple proxy server
 cp $template_path/www/node/* $www_path/
 sed -i "s/{{port}}/$port/" $www_path/app.js
+
+## Fixing permissions
+bash fix-permissions -u $username
 
 ## Install demo app packages
 nvm-user -u $username -c 'cd www && npm install'
