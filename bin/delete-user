@@ -92,10 +92,6 @@ mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 ## Delete Logrotation
 bash logrotate-user -u $username -d yes
 
-## Delete linux user and processes
-pkill -9 -u $username 
-userdel -r -f $username > /dev/null 2>&1
-delgroup $username > /dev/null 2>&1
 
 
 ## Delete Chroot Directory
@@ -103,6 +99,12 @@ rm -rf /var/www/home/$username
 rm -rf /home/$username
 sed -i "/\/home\/$username/d" /var/www/etc/passwd      
 sed -i "/$username:/d" /var/www/etc/group
+
+## Delete linux user and processes
+pkill -9 -u $username 
+userdel -r -f $username > /dev/null 2>&1
+delgroup $username > /dev/null 2>&1
+
 
 echo "Username $username deleted successfully!"      
 
