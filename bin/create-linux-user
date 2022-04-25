@@ -42,5 +42,5 @@ adduser --gecos "" --disabled-password --no-create-home $username
 groupadd $username
 usermod -a -G $username $username
 echo "$username:$user_password" | sudo chpasswd
-ln -s /var/chroot/home/$username /home/$username
+#ln -s /var/chroot/home/$username /home/$username
 
