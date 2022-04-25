@@ -35,7 +35,9 @@ fi
 
 
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /var/www/home/$username/install.sh
+mkdir /var/www/home/$username/.nvm
 chmod +x /var/www/home/$username/install.sh
 chown $username:$username  /var/www/home/$username/install.sh
-su $username -c "mkdir -p .nvm && NVM_DIR=.nvm /home/$username/install.sh"
+chown $username:$username  /var/www/home/$username/.nvm
+cd /var/www/home/$username/ && su $username -c "NVM_DIR=.nvm /var/www/home/$username/install.sh"
 
