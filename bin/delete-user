@@ -96,7 +96,7 @@ delgroup $username > /dev/null 2>&1
 bash logrotate-user -u $username -d yes
 
 ## Delete Chroot Directory
-rm -rf /var/chroot/home/$username
+rm -rf /var/www/home/$username
 rm -rf /home/$username
 echo "Username $username deleted successfully!"      
 
