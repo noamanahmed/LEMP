@@ -73,11 +73,13 @@ fi
 
 
 ##Create user
-bash create-linux-user -u $username
+user_password="$(openssl rand -hex 12)"
+bash create-linux-user -u $username -p $user_password
 
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
+usermod -a -G $username nginx
 usermod -a -G $username nginx
 
 ## Create user directories
@@ -97,7 +99,7 @@ mkdir -p $chroot_home/www/
 www_path=$chroot_home/www
 
 ## Fixing Permissions for nginx cache
-chown -R nginx:nginx $user_root/cache/nginx
+chown -R nginx:nginx $chroot_home/cache/nginx
 
 if [ -d "$mysql" ]
 then
