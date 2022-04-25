@@ -32,5 +32,5 @@ then
     exit;
 fi
 
-rm -rf /home/$username/cache/nginx/*
+rm -rf /var/www/home/$username/cache/nginx/*
 echo "Cache Purged"
