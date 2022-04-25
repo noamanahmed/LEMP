@@ -52,7 +52,7 @@ fi
 chroot_path=/var/chroot/
 jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 
-chroot_home=$chroot_path/home/$username
+chroot_home=/var/chroot/home/$username
 
 cp -rf /root/.nvm $chroot_home/.nvm
 
