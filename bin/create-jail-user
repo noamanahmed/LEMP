@@ -43,5 +43,5 @@ echo "$username:$user_password" | sudo chpasswd
 usermod -a -G web $username
 usermod -a -G sftp $username
 bash jail-user -u $username
-ln -s /var/chroot/home/$username /home/$username
+#ln -s /var/chroot/home/$username /home/$username
 
