@@ -75,12 +75,12 @@ done
 
 echo "Switching CLI PHP Version to $php"
 
-if [ -L "/var/www/home/$username/bin/php" ]
+if [ -L "/var/www/home/$username/.local/bin/php" ]
 then
-    rm -rf /var/www/home/$username/bin/php
+    rm -rf /var/www/home/$username/.local/bin/php
 fi
 
-ln -s /bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/bin/php 
+ln -s /bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/.local/bin/php 
 
 echo "Clearing Cache"
 clear-cache -u $username

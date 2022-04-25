@@ -59,6 +59,8 @@ chroot_home=/var/www/home/$username
 
 mkdir -p $chroot_home/.ssh
 mkdir -p $chroot_home/.wp-cli
+mkdir -p $chroot_home/.local
+mkdir -p $chroot_home/.local/bin
 mkdir -p $chroot_home/.wp-cli/cache
 mkdir -p $chroot_home/tmp
 
@@ -70,6 +72,7 @@ chown -R $username:$username $chroot_home/.wp-cli
 chown -R $username:$username $chroot_home/.ssh
 chown -R $username:$username $chroot_home/.bashrc
 chown -R $username:$username $chroot_home/.profile
+chown -R $username:$username $chroot_home/.local
 #chown -R $username:$username $chroot_home/.config
 #chown -R $username:$username $chroot_home/.nvm
 chown -R $username:$username $chroot_home/tmp

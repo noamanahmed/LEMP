@@ -31,13 +31,6 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-
-# set PATH so it includes lemp stack bin if it exists
-if [ -d "/opt/lemp/bin" ] ; then
-    PATH="/opt/lemp/bin:$PATH"
-fi
-
-
 # set PATH so it includes composer bins if it exists
 if [ -d "$HOME/.config/composer/vendor/bin" ] ; then
     PATH="$HOME/.config/composer/vendor/bin:$PATH"
