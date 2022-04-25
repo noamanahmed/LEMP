@@ -196,7 +196,7 @@ echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
-echo "Complete Path : $www_path"
+echo "Complete Path : /home/$username/www"
 echo ""
 if [ -d "$mysql" ]
 then
