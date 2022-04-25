@@ -186,7 +186,9 @@ bash install-nvm -u $username
 ##Copying demo app for simple proxy server
 cp $template_path/www/node/* $www_path/
 sed -i "s/{{port}}/$port/" $www_path/app.js
-nvm-user -u $username -c "cd $www_path && npm install"
+
+## Install demo app packages
+nvm-user -u $username -c 'cd www && npm install'
 
 ## Setting up Logrotation
 bash logrotate-user -u $username -e yes
