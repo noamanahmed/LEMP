@@ -71,7 +71,7 @@ www_path=$chroot_home/www
 ## Setting up default static HTML site for a react site
 mkdir -p $www_path
 mkdir -p $www_path/build/
-cp $template_path/www/react/* $www_path/
+cp $template_path/www/react/* $www_path/build/
 
 
 ## Creating nginx settings
@@ -79,7 +79,7 @@ nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
 cp "$template_path/nginx/react/vhost.conf" $nginx_vhost_file
 
-sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $www_path/build/ | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
