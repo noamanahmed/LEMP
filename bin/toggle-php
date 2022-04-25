@@ -73,14 +73,14 @@ for php_v in ${php_versions_array[@]}; do
 done
 
 
-# echo "Switching CLI PHP Version to $php"
+echo "Switching CLI PHP Version to $php"
 
-# if [ -L "/var/www/home/$username/bin/php" ]
-# then
-#     rm -rf /var/www/home/$username/bin/php
-# fi
+if [ -L "/var/www/home/$username/bin/php" ]
+then
+    rm -rf /var/www/home/$username/bin/php
+fi
 
-# cp /var/www/home/$username/bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/bin/php 
+ln -s /bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/bin/php 
 
 echo "Clearing Cache"
 clear-cache -u $username
