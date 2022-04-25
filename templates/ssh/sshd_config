@@ -122,7 +122,7 @@ ClientAliveCountMax 240
 
 Subsystem sftp internal-sftp
 Match Group web
-        ChrootDirectory /var/chroot
+        ChrootDirectory /var/www
         AllowTcpForwarding no
         X11Forwarding no
 

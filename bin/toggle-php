@@ -40,7 +40,7 @@ then
     exit 1;
 fi
 
-if [ ! -L "/var/chroot/home/$username/bin/php" ] && [ ! -S "/var/run/php/$username-php-fpm.sock" ]
+if [ ! -L "/var/www/home/$username/bin/php" ] && [ ! -S "/var/run/php/$username-php-fpm.sock" ]
 then
     echo "This is not a PHP site"
     exit 1;
@@ -75,12 +75,12 @@ done
 
 echo "Switching CLI PHP Version to $php"
 
-if [ -L "/var/chroot/home/$username/bin/php" ]
+if [ -L "/var/www/home/$username/bin/php" ]
 then
-    rm -rf /var/chroot/home/$username/bin/php
+    rm -rf /var/www/home/$username/bin/php
 fi
 
-cp /var/chroot/home/$username/bin/$(echo "php$php" | sed 's/\.//') /var/chroot/home/$username/bin/php 
+cp /var/www/home/$username/bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/bin/php 
 
 echo "Clearing Cache"
 clear-cache -u $username

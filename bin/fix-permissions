@@ -32,7 +32,7 @@ then
     exit;
 fi
 
-user_root=/var/chroot/home/$username
+user_root=/var/www/home/$username
 www_path=$user_root/www
 
 chown root:root /home/$username
