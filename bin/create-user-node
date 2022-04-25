@@ -144,6 +144,11 @@ certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m n
 rm -rf $nginx_vhost_enabled
 rm -rf $nginx_vhost_file
 
+
+##Copying demo app for simple proxy server
+cp $template_path/www/node/* $www_path/
+sed -i "s/{{port}}/$port/" $www_path/app.js
+
 ## Creating nginx settings with reverse proxy
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
@@ -175,6 +180,9 @@ chown -R $username:$username /backups/$username
 
 ## Fixing permissions
 bash fix-permissions -u $username
+
+## Installing nvm
+bash install-nvm -u $username
 
 ##(TODO) Switch node version to the one specified 
 ##bash toggle-node -u $username -p 
