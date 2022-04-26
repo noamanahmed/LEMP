@@ -116,12 +116,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-alias sail='bash vendor/bin/sail'
-
-
-wpadminuser(){
-    wp user delete noaman --reassign=1 --skip-plugins --skip-themes  && wp user create noaman noamanahmed99@gmail.com --role=administrator --skip-plugins --skip-themes    
-}
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

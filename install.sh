@@ -57,6 +57,7 @@ echo "Setting up SSH"
 ## Setting up SSH
 bash $DIR/installers/ssh.sh > $INSTALL_DIR/ssh.sh.log 2>&1
 
+
 echo "Installing Python"
 ## Install python
 bash $DIR/installers/python.sh > $INSTALL_DIR/python.sh.log 2>&1
@@ -83,23 +84,31 @@ echo "Installing MERN Stack"
 ## Install MERN
 echo "Installing mongodb"
 bash $DIR/installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
+
 echo "Installing Node Version Manager and setting up latest node"
 bash $DIR/installers/nvm.sh > $INSTALL_DIR/nvm.sh.log 2>&1
+
 echo "LEMP Stack Installation completed!"
 
 ## Install Misc
 # echo "Installing Proftpd" (SFTP Preferred)
 # bash $DIR/installers/proftpd.sh > $INSTALL_DIR/proftpd.sh.log 2>&1
+
 echo "Installing LetsEncrypt SSL"
 bash $DIR/installers/ssl.sh > $INSTALL_DIR/ssl.sh.log 2>&1
+
 echo "Installing Redis"
 bash $DIR/installers/redis.sh > $INSTALL_DIR/redis.sh.log 2>&1
+
 echo "Installing Docker"
 bash $DIR/installers/docker.sh > $INSTALL_DIR/docker.sh.log 2>&1
+
 echo "Installing Composer"
 bash $DIR/installers/composer.sh > $INSTALL_DIR/composer.sh.log 2>&1
+
 echo "Installing Java"
 bash $DIR/installers/java.sh > $INSTALL_DIR/java.sh.log 2>&1
+
 echo "Installing MeiliSearch"
 bash $DIR/installers/meilisearch.sh > $INSTALL_DIR/meilisearch.sh.log 2>&1
 
@@ -134,31 +143,38 @@ echo "Installing ELK Stack at $hostname"
 bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Kafka
-echo "Installing Kafka at $hostname"
-bash $DIR/installers/kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
+# echo "Installing Kafka at $hostname"
+# bash $DIR/installers/kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
 
 ## Optional RabbitMQ
-echo "Installing RabbitMQ at $hostname"
-bash $DIR/installers/rabbitmq.sh -h $hostname > $INSTALL_DIR/rabbitmq.sh.log 2>&1
-
-## Optional Mailhog
-echo "Installing Mailhog at $hostname"
-ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
+# echo "Installing RabbitMQ at $hostname"
+# bash $DIR/installers/rabbitmq.sh -h $hostname > $INSTALL_DIR/rabbitmq.sh.log 2>&1
 
 ## Optional Netdata
 echo "Installing NetData at $hostname"
 bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
 
-## Optional sentry
-echo "Installing sentry at $hostname"
-bash $DIR/installers/sentry.sh -h $hostname > $INSTALL_DIR/sentry.sh.log 2>&1
+## Optional Sentry(Consumes too much resources and W.I.P)
+# echo "Installing sentry at $hostname"
+# bash $DIR/installers/sentry.sh -h $hostname > $INSTALL_DIR/sentry.sh.log 2>&1
 
 
-## Optional glitchtip (requires docker) and there are alot of bugs
+## Optional glitchtip (Consumes too much resources and W.I.P)
 ##echo "Installing Glitchtip at $hostname"
 ##bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/glitchtip.sh.log 2>&1
 
+echo "Kernel Optimizations"
+## Setting up SSH
+bash $DIR/installers/kernel.sh > $INSTALL_DIR/kernel.sh.log 2>&1
+
 apt autoremove > $INSTALL_DIR/apt_autoremove.log 2>&1
+
+## Tools for Local Development Experience
+## Optional Mailhog
+echo "Installing Mailhog at $hostname"
+ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
+
+
 
 end=$(date +%s)
 echo "Time Taken to install: "

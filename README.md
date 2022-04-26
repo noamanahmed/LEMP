@@ -34,6 +34,8 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 ## Features
 - PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1
 - MYSQL Version 8.0
+- Postgres Version 14
+- MongoDB
 - Nginx
 - FastCGI Caching for PHP-FPM
 - LetsEncrypt SSL
@@ -56,15 +58,10 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 
 ## Work in Progress
 - Utility Scripts to create python backend with SSL using nginx reverse proxy
-- Sentry Open Source
-- Glitchtip (Alternative to Sentry)
 - Mail Server Setup (A complete alternative to iRedMail Setup)
 - ELK Stack (Elasticsearch Logstash Kibana)
 - Server Hardening
-- Kernel Optimization for fast nginx
 - Pushing backups to offsite storage as object storage etc 
-- Postgres
-- MariaDB (One of them would be enabled in install.sh)
 - Working on writing usage for the utility scripts
 
 ## In Future

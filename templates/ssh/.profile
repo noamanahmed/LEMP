@@ -10,10 +10,6 @@
 
 # if running bash
 
-##For Chroot
-##export HOME=/
-
-
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
@@ -43,8 +39,10 @@ if [ -d "$HOME/.config/composer/vendor/bin" ] ; then
     PATH="$HOME/.config/composer/vendor/bin:$PATH"
 fi
 
-alias sail='bash vendor/bin/sail'
-
+# Setup NVM (if is installed)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# You can custom add your aliases here
+alias sail='bash vendor/bin/sail'
