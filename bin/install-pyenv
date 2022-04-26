@@ -44,7 +44,9 @@ echo "Directory doesn't exists!"
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 source $HOME/.profile
 source $HOME/.bashrc
+pyenv install 3.8.5
+pyenv global 3.8.5
 fi
 
-cp $HOME/.pyenv /var/www/home/$username/
+cp -rf $HOME/.pyenv /var/www/home/$username/
 chown -R $username:$username /var/www/home/$username/.pyenv
