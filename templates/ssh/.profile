@@ -39,6 +39,13 @@ if [ -d "$HOME/.config/composer/vendor/bin" ] ; then
     PATH="$HOME/.config/composer/vendor/bin:$PATH"
 fi
 
+
+# set PATH so it includes pyenv bins if it exists
+if [ -d "$HOME/.pyenv/bin" ] ; then
+    PATH="$HOME/.pyenv/bin:$PATH"
+fi
+
+
 # Setup NVM (if is installed)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
