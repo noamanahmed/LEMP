@@ -68,7 +68,7 @@ sed -i "s/{{domain}}/$hostname/" $glitchtip_path/.env
 sed -i "s/{{hash}}/$(openssl rand -hex 32)/" $glitchtip_path/.env
 
 chown -R glitchtip:glitchtip $glitchtip_path
-sudo -u glitchtip -c 'python manage.py migrate'
+sudo -u glitchtip -c "'python $glitchtip_path/manage.py migrate'"
 
 git clone https://gitlab.com/glitchtip/glitchtip-frontend.git $glitchtip_path/frontend
 npm install --prefix $glitchtip_path/frontend/
