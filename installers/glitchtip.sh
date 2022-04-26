@@ -57,7 +57,6 @@ git clone https://gitlab.com/glitchtip/glitchtip-backend.git $glitchtip_path/bac
 cd $glitchtip_path/backend
 sed -i "/uWSGI/d" pyproject.toml      
 poetry install
-poetry remove uWSGI
 poetry add gunicorn
 cd $DIR
 #Setup DB Users
