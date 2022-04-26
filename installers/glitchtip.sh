@@ -73,8 +73,19 @@ chown -R glitchtip:glitchtip $glitchtip_path
 su glitchtip -c "'python $glitchtip_path/backend/manage.py migrate'"
 
 git clone https://gitlab.com/glitchtip/glitchtip-frontend.git $glitchtip_path/frontend
-npm --prefix $glitchtip_path/frontend/ install 
-npm --prefix $glitchtip_path/frontend/ run build-prod
+
+username=glitchtip
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /home/$username/install.sh
+mkdir /home/$username/.nvm
+chmod +x /home/$username/install.sh
+chown $username:$username  /home/$username/install.sh
+chown $username:$username  /home/$username/.nvm
+cd /home/$username/ 
+su $username -c "NVM_DIR=.nvm /home/$username/install.sh"
+su $username -c "NVM_DIR=/home/$username/.nvm && . /home/$username/.nvm/nvm.sh && . /home/$username/.nvm/bash_completion && nvm install node"
+rm -rf /home/$username/install.sh
+
+su $username -c "HOME=/var/www/home/$username NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && cd $glitchtip_path/frontend && npm -f install && npm run build-prod"
 
 
 nginx_vhost_file="/etc/nginx/sites-available/glitchtip.conf"
