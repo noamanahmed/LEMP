@@ -42,8 +42,7 @@ if [ ! -d "$HOME/.pyenv" ]
 then
 echo "Directory doesn't exists!"
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-source $HOME/.profile
-source $HOME/.bashrc
+export PATH="$HOME/.pyenv/bin:$PATH"
 pyenv install 3.8.5
 pyenv global 3.8.5
 fi
