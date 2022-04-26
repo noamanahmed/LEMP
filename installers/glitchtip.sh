@@ -58,6 +58,7 @@ cd $glitchtip_path/backend
 poetry install
 poetry remove uWSGI
 poetry add gunicorn
+cd $DIR
 #Setup DB Users
 adduser glitchtip --disabled-login
 sudo -u postgres createuser glitchtip
