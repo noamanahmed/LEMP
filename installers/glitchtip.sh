@@ -54,6 +54,7 @@ source $HOME/.poetry/env
 #Initiate setup
 mkdir -p $glitchtip_path
 git clone https://gitlab.com/glitchtip/glitchtip-backend.git $glitchtip_path/backend.
+cd $glitchtip_path/backend
 poetry install
 poetry remove uWSGI
 poetry add gunicorn
