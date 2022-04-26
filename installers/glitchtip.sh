@@ -61,8 +61,8 @@ poetry add gunicorn
 cd $DIR
 #Setup DB Users
 adduser glitchtip --disabled-login
-sudo -u postgres createuser glitchtip
-sudo -u postgres createdb -O glitchtip glitchtip
+sudo -u postgres -c 'createuser glitchtip'
+sudo -u postgres -c 'createdb -O glitchtip glitchtip'
 #Setup backend app itself
 mkdir -p $glitchtip_path/runtime
 cp $template_path/glitchtip/.env $glitchtip_path/
