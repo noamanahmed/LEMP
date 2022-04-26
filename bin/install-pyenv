@@ -31,21 +31,23 @@ then
     exit;
 fi
 
-# Tooks too much resources
-# su $username -c "curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | PYENV_ROOT=/var/www/home/$username/.pyenv bash"
-# su $username -c "cd /var/www/home/$username && PYENV_ROOT=/var/www/home/$username/.pyenv /var/www/home/$username/.pyenv/bin/pyenv install 3.8.5"
-# su $username -c "cd /var/www/home/$username && PYENV_ROOT=/var/www/home/$username/.pyenv /var/www/home/$username/.pyenv/bin/pyenv global 3.8.5"
+# Takes too much resources
+su $username -c "curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | PYENV_ROOT=/var/www/home/$username/.pyenv bash"
+su $username -c "cd /var/www/home/$username && PYENV_ROOT=/var/www/home/$username/.pyenv /var/www/home/$username/.pyenv/bin/pyenv install 3.8.5"
+su $username -c "cd /var/www/home/$username && PYENV_ROOT=/var/www/home/$username/.pyenv /var/www/home/$username/.pyenv/bin/pyenv global 3.8.5"
 
 # Generating pyenv for each user is very resource taking
 # We will generate it for this user and simply copy it in the user folder.
-if [ ! -d "$HOME/.pyenv" ]
-then
-echo "Installing for the first time. It might take a while!"
-curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-export PATH="$HOME/.pyenv/bin:$PATH"
-pyenv install 3.8.5
-pyenv global 3.8.5
-fi
+# if [ ! -d "$HOME/.pyenv" ]
+# then
+# echo "Installing for the first time. It might take a while!"
+# curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+# export PATH="$HOME/.pyenv/bin:$PATH"
+# pyenv install 3.8.5
+# pyenv global 3.8.5
+# fi
 
-cp -rf $HOME/.pyenv /var/www/home/$username/
-chown -R $username:$username /var/www/home/$username/.pyenv
+# echo "Copying .pyenv from $HOME/.pyenv"
+
+# cp -rf $HOME/.pyenv /var/www/home/$username/
+# chown -R $username:$username /var/www/home/$username/.pyenv
