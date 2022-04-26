@@ -177,8 +177,8 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
-## Installing nvm
-bash install-nvm -u $username
+## Installing pyenv
+bash install-pyenv -u $username
 
 
 ##(TODO) Switch python version to the one specified 
