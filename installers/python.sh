@@ -17,7 +17,7 @@ curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer 
 # source $HOME/.poetry/env
 source $HOME/.profile
 source $HOME/.bashrc
-exec $SHELL
+
 
 #Install python version 3.8.5
 pyenv install 3.8.5
