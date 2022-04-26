@@ -40,7 +40,7 @@ fi
 # We will generate it for this user and simply copy it in the user folder.
 if [ ! -d "$HOME/.pyenv" ]
 then
-echo "Directory doesn't exists!"
+echo "Installing for the first time. It might take a while!"
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 export PATH="$HOME/.pyenv/bin:$PATH"
 pyenv install 3.8.5
