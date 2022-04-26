@@ -72,8 +72,9 @@ sed -i "s/{{hash}}/$(openssl rand -hex 32)/" $glitchtip_path/.env
 chown -R glitchtip:glitchtip $glitchtip_path
 su glitchtip -c "'python $glitchtip_path/backend/manage.py migrate'"
 
+##Setting up frontend
 git clone https://gitlab.com/glitchtip/glitchtip-frontend.git $glitchtip_path/frontend
-
+chown -R glitchtip:glitchtip $glitchtip_path
 username=glitchtip
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /home/$username/install.sh
 mkdir /home/$username/.nvm
