@@ -19,7 +19,7 @@ echo "Installing Pre Req Binaries"
 echo ""
 
 
-binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zip" "speedtest-cli gzip" "pv" "logrotate" "rig" "runuser" "gnupg" "ca-certificates")
+binaries_array=("screen" "htop"  "nload" "curl" "wget" "git" "unrar" "unzip" "zip" "speedtest-cli gzip" "pv" "logrotate" "rig" "runuser" "gnupg" "ca-certificates" "gnupg2")
 
 for binary in ${binaries_array[@]}; do      
   if ! command -v $binary &> /dev/null

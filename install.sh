@@ -73,7 +73,7 @@ bash $DIR/installers/nginx.sh > $INSTALL_DIR/nginx.sh.log 2>&1
 ##echo "Installing OpenResty(LuaJit on Steroids) Not Working properly"
 ##bash $DIR/installers/openresty.sh > $INSTALL_DIR/openresty.sh.log 2>&1
 echo "Installing mysql"
-bash $DIR/installers/mysql.sh > $INSTALL_DIR/$username.sh.log 2>&1
+bash $DIR/installers/mysql.sh > $INSTALL_DIR/mysql.sh.log 2>&1
 echo "Installing php"
 bash $DIR/installers/php.sh > $INSTALL_DIR/php.sh.log 2>&1
 echo "LEMP Stack Installation completed!"
@@ -124,6 +124,10 @@ bash $DIR/installers/create-user-php -u $username -d $hostname --php 8.1 > $INST
 ## Install phpmyadmin
 echo "Installing phpmyadmin at $hostname"
 bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+
+## Optional Postgres
+echo "Installing postgres"
+bash $DIR/installers/postgres.sh > $INSTALL_DIR/postgres.sh.log 2>&1
 
 ## Optional ELK Stack
 echo "Installing ELK Stack at $hostname"
