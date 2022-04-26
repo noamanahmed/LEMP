@@ -31,5 +31,4 @@ then
     exit;
 fi
 
-
-su $username -c "curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash"
+su $username -c "curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | PYENV_ROOT=/var/www/home/$username/.pyenv bash"
