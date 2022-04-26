@@ -4,8 +4,11 @@ After=network.target
 
 [Service]
 Type=simple
+Environment=HOME={{user_root}} NVM_DIR={{user_root}}/.nvm
 User={{username}}
-ExecStart=/bin/node /home/{{username}}/www/app.js
+ExecStartPre=source $NVM_DIR/nvm.sh && source $NVM_DIR/bash_completion && cd 
+WorkingDirectory={{user_root}}
+ExecStart=node {{user_root}}/www/app.js
 Restart=on-failure
 
 [Install]

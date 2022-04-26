@@ -22,6 +22,8 @@ ufw allow 6120/tcp
 ufw allow 6130/tcp
 ##For GlitchTip
 ufw allow 6140/tcp 
+##For Jenkins
+ufw allow 6150/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp

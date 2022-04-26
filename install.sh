@@ -103,8 +103,8 @@ bash $DIR/installers/java.sh > $INSTALL_DIR/java.sh.log 2>&1
 echo "Installing MeiliSearch"
 bash $DIR/installers/meilisearch.sh > $INSTALL_DIR/meilisearch.sh.log 2>&1
 
-#echo "Installing Jenkins(Work In Progress)"
-#bash $DIR/installers/jenkins.sh > $INSTALL_DIR/jenkins.sh.log 2>&1
+echo "Installing Jenkins"
+bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
 
 ## Install User jail
 echo "Installing UserJail"
