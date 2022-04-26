@@ -70,7 +70,7 @@ echo "Installing LEMP Stack"
 ## Install LEMP
 echo "Installing nginx"
 bash $DIR/installers/nginx.sh > $INSTALL_DIR/nginx.sh.log 2>&1
-##echo "Installing OpenResty(LuaJit on Steroids)"
+##echo "Installing OpenResty(LuaJit on Steroids) Not Working properly"
 ##bash $DIR/installers/openresty.sh > $INSTALL_DIR/openresty.sh.log 2>&1
 echo "Installing mysql"
 bash $DIR/installers/mysql.sh > $INSTALL_DIR/$username.sh.log 2>&1
@@ -106,9 +106,9 @@ bash $DIR/installers/meilisearch.sh > $INSTALL_DIR/meilisearch.sh.log 2>&1
 echo "Installing Jenkins"
 bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
 
-## Install User jail
-echo "Installing UserJail"
-bash $DIR/installers/jail.sh > $INSTALL_DIR/jail.sh.log 2>&1
+## Install Jailkit
+echo "Installing jailkit"
+bash $DIR/installers/jailkit.sh > $INSTALL_DIR/jail.sh.log 2>&1
 
 ## Install misc scripts
 echo "Installing wpcli,laravel installer and other misc tasks"
@@ -126,8 +126,8 @@ echo "Installing phpmyadmin at $hostname"
 bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
 
 ## Optional ELK Stack
-##echo "Installing ELK Stack at $hostname"
-##bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+echo "Installing ELK Stack at $hostname"
+bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Kafka
 echo "Installing Kafka at $hostname"
@@ -144,6 +144,11 @@ ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
 ## Optional Netdata
 echo "Installing NetData at $hostname"
 bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
+
+## Optional sentry
+echo "Installing sentry at $hostname"
+bash $DIR/installers/sentry.sh -h $hostname > $INSTALL_DIR/sentry.sh.log 2>&1
+
 
 ## Optional glitchtip (requires docker) and there are alot of bugs
 ##echo "Installing Glitchtip at $hostname"

@@ -7,6 +7,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 apt install ufw -y
+#Basic security
 ufw default deny incoming
 ufw default allow outgoing
 ## For SSH
@@ -23,7 +24,9 @@ ufw allow 6130/tcp
 ##For GlitchTip
 ufw allow 6140/tcp 
 ##For Jenkins
-ufw allow 6150/tcp 
+ufw allow 6150/tcp
+##For Sentry
+ufw allow 6160/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp

@@ -56,7 +56,6 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 
 ## Work in Progress
 - Utility Scripts to create python backend with SSL using nginx reverse proxy
-- Jenkins(Looking to Automate Installation without using GUI)
 - Sentry Open Source
 - Glitchtip (Alternative to Sentry)
 - Mail Server Setup (A complete alternative to iRedMail Setup)
