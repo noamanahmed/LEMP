@@ -114,8 +114,9 @@ AcceptEnv LANG LC_*
 
 
 TCPKeepAlive no 
-ClientAliveInterval 30
-ClientAliveCountMax 240
+ClientAliveInterval 600
+ClientAliveCountMax 36
+
 
 # override default of no subsystems
 #Subsystem	sftp	/usr/lib/openssh/sftp-server

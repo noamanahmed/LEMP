@@ -42,6 +42,11 @@ if [ -d "$HOME/.pyenv/bin" ] ; then
 fi
 
 
+# set PATH so it includes python shims from pyenv
+if [ -d "$HOME/.pyenv/shims" ] ; then
+    PATH="$HOME/.pyenv/shims:$PATH"
+fi
+
 
 # set PATH so it includes pyenv bins if it exists
 if [ -d "$HOME/.pyenv/bin" ] ; then

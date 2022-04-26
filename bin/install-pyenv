@@ -32,9 +32,10 @@ then
 fi
 
 # Takes too much resources
-su $username -c "curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | PYENV_ROOT=/var/www/home/$username/.pyenv bash"
-su $username -c "cd /var/www/home/$username && PYENV_ROOT=/var/www/home/$username/.pyenv /var/www/home/$username/.pyenv/bin/pyenv install 3.8.5"
-su $username -c "cd /var/www/home/$username && PYENV_ROOT=/var/www/home/$username/.pyenv /var/www/home/$username/.pyenv/bin/pyenv global 3.8.5"
+chown -R $username:$username /var/www/home/$username
+su $username -c "cd /var/www/home/$username && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | PYENV_ROOT=/var/www/home/$username/.pyenv bash"
+su $username -c "export HOME=/home/$username/ && /var/www/home/$username/.pyenv/bin/pyenv install 3.8.5"
+su $username -c "export HOME=/home/$username/ && /var/www/home/$username/.pyenv/bin/pyenv global 3.8.5"
 
 # Generating pyenv for each user is very resource taking
 # We will generate it for this user and simply copy it in the user folder.

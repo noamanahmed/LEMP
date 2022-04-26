@@ -46,6 +46,12 @@ if [ -d "$HOME/.pyenv/bin" ] ; then
 fi
 
 
+# set PATH so it includes python shims from pyenv
+if [ -d "$HOME/.pyenv/shims" ] ; then
+    PATH="$HOME/.pyenv/shims:$PATH"
+fi
+
+
 # Setup NVM (if is installed)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
