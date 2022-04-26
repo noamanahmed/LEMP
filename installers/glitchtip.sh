@@ -73,8 +73,8 @@ chown -R glitchtip:glitchtip $glitchtip_path
 su glitchtip -c "'python $glitchtip_path/backend/manage.py migrate'"
 
 git clone https://gitlab.com/glitchtip/glitchtip-frontend.git $glitchtip_path/frontend
-npm --prefix install $glitchtip_path/frontend/
-npm --prefix run build-prod
+npm --prefix $glitchtip_path/frontend/ install 
+npm --prefix $glitchtip_path/frontend/ run build-prod
 
 
 nginx_vhost_file="/etc/nginx/sites-available/glitchtip.conf"
