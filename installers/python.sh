@@ -13,7 +13,7 @@ if ! grep -q "^deb .*$the_ppa" /etc/apt/sources.list /etc/apt/sources.list.d/*; 
     apt update -y
 fi
 
-python_versions_array=( "2.7" "3.1" "3.2" "3.3" "3.4" "3.5" "3.6" "3.7" "3.8" "3.9" "3.10")
+python_versions_array=( "2.7" "3.5" "3.6" "3.7" "3.8" "3.9" "3.10")
 
 for python_version in ${python_versions_array[@]}; do
   apt install python$python_version -qqy
