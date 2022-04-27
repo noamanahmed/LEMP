@@ -194,6 +194,14 @@ nvm-user -u $username -c 'cd www && npm install'
 ## Setting up Logrotation
 bash logrotate-user -u $username -e yes
 
+## Finaly Start the systemd script to run the demo app
+cp $template_path/systemd/node-site.service /etc/systemd/system/$username-site.service
+sed -i "s/{{username}}/$username/" /etc/systemd/system/$username-site.service
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/systemd/system/$username-site.service
+
+systemctl daemon-reload
+systemctl start $username-site
+
 
 echo "*****************************************"
 echo "*****************************************"

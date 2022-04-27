@@ -124,6 +124,7 @@ ClientAliveCountMax 36
 Subsystem sftp internal-sftp
 Match Group web
         ChrootDirectory /var/www
+        AuthorizedKeysFile /var/www/home/%u/.ssh/authorized_keys
         AllowTcpForwarding no
         X11Forwarding no
 
