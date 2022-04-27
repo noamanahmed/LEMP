@@ -128,7 +128,7 @@ source ~/.profile
 
 ## Setup hostname site for phpmyadmin and other stuff
 echo "Creating $hostname site with username $username"
-bash $DIR/installers/create-user-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+bash $DIR/installers/create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
 
 ## Install phpmyadmin
 echo "Installing phpmyadmin at $hostname"
@@ -167,6 +167,8 @@ echo "Kernel Optimizations"
 ## Setting up SSH
 bash $DIR/installers/kernel.sh > $INSTALL_DIR/kernel.sh.log 2>&1
 
+echo "apt autoremove"
+## Removing any Extra Packages
 apt autoremove > $INSTALL_DIR/apt_autoremove.log 2>&1
 
 ## Tools for Local Development Experience
