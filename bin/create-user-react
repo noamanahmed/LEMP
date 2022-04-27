@@ -131,7 +131,7 @@ echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
-echo "Complete WWW Path : /home/$username"
+echo "Complete WWW Path : /home/$username/www"
 echo ""
 
 echo ""
