@@ -169,7 +169,7 @@ bash $DIR/installers/kernel.sh > $INSTALL_DIR/kernel.sh.log 2>&1
 
 echo "apt autoremove"
 ## Removing any Extra Packages
-apt autoremove > $INSTALL_DIR/apt_autoremove.log 2>&1
+apt autoremove -y > $INSTALL_DIR/apt_autoremove.log 2>&1
 
 ## Tools for Local Development Experience
 ## Optional Mailhog
