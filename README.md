@@ -64,10 +64,11 @@ When done with the configuration run the installer.Change the default_site and e
 ```
 Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the background. It generally took a 60 minute installation time with a 1GB Virmach VPS 
 
-## Getting Started
+## Read Me First!
 - Make sure the installer has completed to avoid any hiccups.
 - Update the current bash shell using source ~/.profile or exit/logout and login again. If you are logging in again,then make sure you are using the correct SSH port which is NOT 22 but would have been changed to 6000.
 - The installer outputs a log file location in /tmp path. Its best to review it and see if everything went well
+- All most all of the sites (PHP,Python,NodeJS etc) comes with a basic setup to make sure everyhing went well 
 
 ## Creating your first PHP Site
 Before creating your sites make sure that your domain name is pointing towards you IP with an A record.
@@ -104,6 +105,13 @@ Port: 6000
 Username: your_first_name
 Password: random_password
 
+```
+## Creating your Python,NodeJS Site (Reverse Proxy App)
+Everything is almost similar to creating PHP site except that you need to pass a --port flag in the create-python-site or create-node-site script. Your Node JS app needs to listen on this port and this port must be available for you to use. I would recommend a port range from 11000 and incrementing by 10 for each of your sites. You need to pass an optional --mysql flag to generate credentials as mongodb even though is installed but still hasn't been tested yet
+
+```sh
+create-site-node -u your_first_name -d my_site.com --port 11000
+create-site-python -u your_first_name -d my_site.com --port 11010
 ```
 
 ## Architecture Foundations
