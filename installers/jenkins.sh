@@ -33,19 +33,23 @@ then
 fi
 
 
-
+#Install Jenkins
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-
 apt update
-apt install jenkins 
+apt install jenkins -qqy
+
+##Reset default username and password
 systemctl stop jenkins
 cp $template_path/jenkins/jenkins.service /lib/systemd/system/jenkins.service
-systemctl deamon-reload
 mkdir -p /var/lib/jenkins/init.groovy.d
 cp $template_path/jenkins/basic-security.groovy /var/lib/jenkins/init.groovy.d/
+sed -i "s/{{username}}/$username/" /var/lib/jenkins/init.groovy.d/basic-security.groovy
+sed -i "s/{{password}}/$password/" /var/lib/jenkins/init.groovy.d/basic-security.groovy
 chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
+systemctl deamon-reload
 systemctl start jenkins
+sleep 10
 rm -rf /var/lib/jenkins/init.groovy.d/basic-security.groovy
 systemctl enable jenkins
 
