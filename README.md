@@ -1,36 +1,17 @@
 # LEMP Stack
 This script will setup LEMP stack with additional utilites. There are alot of scripts already outthere which do this but this has been designed from the scratch to do minimal configuration and only do the basic installation,configuration which are sometimes done on daily basis.
 
+## Who is this for?
+This script is for the PHP,Python,NodeJS developers who don't want to use docker and want to setup VPS quickly. The whole code in repository is written by me to reducue the amount taken for daily tasks.
+
+## Who is this NOT for?
+This is my first bash script for automation. This is not built for pro level system admins as I am pretty sure they already have something for this.
+
 ## Requirements
-- Ubuntu 20.04
+- Ubuntu 20.04 (Working on 22)
 - A FQDN pointing to the VPS Server IP to be used as hostname
 - Root Level Access
 
-## Installation Steps
-```sh
-sudo apt-get update
-```
-Setup Screen and Git
-```sh
-sudo apt-get install screen git -y
-```
-Use Screen to install the LEMP Stack
-```sh
-screen -S installer
-```
-Clone the repo at the specified path (The path is important!)
-```sh
-sudo git clone https://gitlab.com/noamanahmed/lemp /opt/lemp
-```
-Edit the install.sh script (Default should be good for most people)
-```sh
-nano /opt/lemp/install.sh
-```
-When done with the configuration run the installer.Change the default_site and example.com according to your settings.
-```sh
-/opt/lemp/install.sh -u default_site -h hostname.example.com
-```
-Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the backgroun
 ## Features
 - PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1
 - Python Versions 2.7,3.5,3.6,3.7,3.8,3.9,3.10
@@ -56,6 +37,85 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Mailhog
 - Fail2Ban
 - UFW
+
+## Installation Steps
+```sh
+sudo apt-get update
+```
+Setup Screen and Git
+```sh
+sudo apt-get install screen git -y
+```
+Use Screen to install the LEMP Stack
+```sh
+screen -S installer
+```
+Clone the repo at the specified path (The path is important!)
+```sh
+sudo git clone https://gitlab.com/noamanahmed/lemp /opt/lemp
+```
+Edit the install.sh script (Default should be good for most people)
+```sh
+nano /opt/lemp/install.sh
+```
+When done with the configuration run the installer.Change the default_site and example.com according to your settings.
+```sh
+/opt/lemp/install.sh -u default_site -h hostname.example.com
+```
+Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the background. It generally took a 60 minute installation time with a 1GB Virmach VPS 
+
+## Getting Started
+- Make sure the installer has completed to avoid any hiccups.
+- Update the current bash shell using source ~/.profile or exit/logout and login again. If you are logging in again,then make sure you are using the correct SSH port which is NOT 22 but would have been changed to 6000.
+- The installer outputs a log file location in /tmp path. Its best to review it and see if everything went well
+
+## Creating your first PHP Site
+Before creating your sites make sure that your domain name is pointing towards you IP with an A record.
+Otherwise SSL certificate generation will fail and webserver would stop working alltogether
+
+If everything went well then you can run this command to generate a new PHP site with SSL.Please replace the placeholder my_site with you rsite and your_first_name to a username without hyphens,underscores,digits etc. The user paremeter your_first_name is also your SSH/SFTP user as well as your $username field which you can later use in the helper scripts mentioned below.
+
+```sh
+create-site-php -u your_first_name -d my_site.com --php 7.4 --wordpress
+create-site-php -u your_first_name -d my_site.com --php 7.4 --laravel
+```
+
+If everything went accordingly you should see your site running and a console message like this
+
+```sh
+Site Setup succssfull
+URL : http://my_site.com
+URL(SSL) : https://my_site.com
+Complete Path : /home/your_first_name/www
+
+
+WordPress user: your_first_name
+WordPress password: random_password
+
+
+MySQL Database Credentials
+Database name: your_first_name
+Database user: your_first_name
+Database password: random_password
+
+SFTP/SSH Details
+Host: my_site.com
+Port: 6000
+Username: your_first_name
+Password: random_password
+
+```
+
+## Architecture Foundations
+- Each site is created with its own jailed linux user.A jailed linux user has reduced previliges in case of possible hack
+- $username in the documentation refers to the linux user and would have one site attached to it.
+- If you ever want to delete a user, please use delete-site -u $username command to avoid any bugs
+
+## Code Structure
+There are two main folders in this repository
+- The bin folder contains all the utilty  and helper scripts to acheive automation for creating,deleting,restoring web sites and apps of different types.   
+- The installer folder contains bash script for installing different types of linux softwares.
+- The install.sh script is the main executable designed to be modified before running
 
 ## Work in Progress
 - Mail Server Setup (A complete alternative to iRedMail Setup)
