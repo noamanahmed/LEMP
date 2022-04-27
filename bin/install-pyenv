@@ -31,24 +31,27 @@ then
     exit;
 fi
 
-# Takes too much resources
-chown -R $username:$username /var/www/home/$username
-su $username -c "export HOME=/home/$username/ cd /var/www/home/$username && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash"
-su $username -c "export HOME=/home/$username/ && /var/www/home/$username/.pyenv/bin/pyenv install 3.8.5"
-su $username -c "export HOME=/home/$username/ && /var/www/home/$username/.pyenv/bin/pyenv global 3.8.5"
 
-# Generating pyenv for each user is very resource taking
-# We will generate it for this user and simply copy it in the user folder.
-# if [ ! -d "$HOME/.pyenv" ]
-# then
-# echo "Installing for the first time. It might take a while!"
-# curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-# export PATH="$HOME/.pyenv/bin:$PATH"
-# pyenv install 3.8.5
-# pyenv global 3.8.5
-# fi
+# # Takes too much resources
+# sudo -- chroot /var/www/ /bin/bash "export HOME=/home/$username && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash"
+# sudo -- chroot /var/www/ /bin/bash "export HOME=/home/$username && /home/$username/.pyenv/bin/pyenv install 3.8.5)"
+# sudo -- chroot /var/www/ /bin/bash "export HOME=/home/$username && /home/$username/.pyenv/bin/pyenv global 3.8.5)"
 
-# echo "Copying .pyenv from $HOME/.pyenv"
+# su $username -c "cd /var/www/home/$username && PYENV_ROOT=/var/www/home/$username/.pyenv /var/www/home/$username/.pyenv/bin/pyenv global 3.8.5"
 
-# cp -rf $HOME/.pyenv /var/www/home/$username/
-# chown -R $username:$username /var/www/home/$username/.pyenv
+#Generating pyenv for each user is very resource taking
+#We will generate it for this user and simply copy it in the user folder.
+
+if [ ! -d "$HOME/.pyenv" ]
+then
+echo "Installing for the first time. It might take a while!"
+curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+export PATH="$HOME/.pyenv/bin:$PATH"
+pyenv install 3.8.5
+pyenv global 3.8.5
+fi
+
+echo "Copying .pyenv from $HOME/.pyenv"
+
+cp -rf $HOME/.pyenv /var/www/home/$username/
+chown -R $username:$username /var/www/home/$username/.pyenv

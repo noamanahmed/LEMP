@@ -22,7 +22,7 @@ mkdir -p $chroot_path
 jk_init $chroot_path netutils extendedshell jk_lsh openvpn ssh sftp 
 chroot_bin_path=$chroot_path/bin/
 echo "Copying binaries for JailKit"
-binaries_array=("xterm" "ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping"  "ssh" "sftp" "sed" "awk" "tr" "tail" "sort" "less" "head" "cut" "egrep" "uname" "uniq" "groups" "env" "dirname" "sha256sum" "sha256" "sha1sum" "sha1" "readlink" "bzip2" "sqlite3")
+binaries_array=("xterm" "ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free" "gdb" "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping"  "ssh" "sftp" "sed" "awk" "tr" "tail" "sort" "less" "head" "cut" "egrep" "uname" "uniq" "groups" "env" "dirname" "sha256sum" "sha256" "sha1sum" "sha1" "readlink" "bzip2" "sqlite3" "python" "python3")
 
 for binary in ${binaries_array[@]}; do
     cp "$(which $binary)" $chroot_bin_path
@@ -45,9 +45,13 @@ jk_cp -j $chroot_path /usr/share/git-core
 echo "Copying Locales"
 cp -rf /etc/default/locale $chroot_path/etc/default/
 
-
+echo "Copying Composer"
 cp /usr/local/bin/composer $chroot_bin_path
 cp /usr/local/bin/composer1 $chroot_bin_path
 cp /usr/local/bin/composer2 $chroot_bin_path
 cp /usr/bin/wp $chroot_bin_path
 ln -s /bin/env $chroot_path/usr/bin/env
+
+echo "Copying Python libraries"
+cp -rf /usr/lib/python* /var/www/usr/lib
+cp -rf /usr/share/python* /var/www/usr/share
