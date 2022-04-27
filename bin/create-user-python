@@ -34,6 +34,10 @@ while [ $# -gt 0 ]; do
     --port)
       port="$2"
       shift
+      ;;
+    --python)
+      python="$2"
+      shift
       ;;    
     *)
       printf "***************************\n"
@@ -74,6 +78,20 @@ then
   echo "This port is currently in use! Please select another port"
 fi
 
+
+if [ -z "$python" ]
+then
+    echo "Selecting python version 3.9"
+    python=3.9    
+fi
+
+
+python_versions_array=( "2.7" "3.5" "3.6" "3.7" "3.8" "3.9" "3.10")
+
+if [[ ! " ${python_versions_array[*]} " =~ " ${python} " ]]; then
+    echo "This is not a valid python Version"
+    exit 1;
+fi
 
 ##Create user
 user_password="$(openssl rand -hex 12)"
@@ -188,8 +206,8 @@ sed -i "s/{{port}}/$port/" $www_path/app.py
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Installing pyenv
-bash install-pyenv -u $username
+## Switch python version to the one specified 
+bash toggle-python -u $username -p $python
 
 
 ## Setting up Logrotation

@@ -23,32 +23,3 @@ for python_version in ${python_versions_array[@]}; do
     ln -s $(which python$python_version) /usr/bin/$(echo "python$python_version" | sed 's/\.//')
   fi
 done
-
-
-# https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tar.xz
-# https://www.python.org/ftp/python/3.9.12/Python-3.9.12.tar.xz
-# https://www.python.org/ftp/python/3.10.3/Python-3.10.3.tar.xz
-
-# Depreceated Lets install from the source
-# apt install make build-essential libssl-dev zlib1g-dev 
-# libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm 
-# libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev -qqy 
-
-# # Install pyenv
-# curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-
-# # #Install poetry
-# # curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-# # source $HOME/.poetry/env
-# source $HOME/.profile
-# source $HOME/.bashrc
-
-
-# #Install python version 3.8.5
-# pyenv install 3.8.5
-# pyenv global 3.8.5
-
-# python3 -m pip install --user pipx
-# python3 -m pipx ensurepath
-# exec $SHELL
-
