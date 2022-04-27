@@ -71,7 +71,7 @@ www_path=$chroot_home/www
 ## Setting up default static HTML site for a react site
 mkdir -p $www_path
 mkdir -p $www_path/build/
-cp $template_path/www/react/* $www_path/build/
+cp -rf $template_path/www/react/* $www_path/build/
 
 
 ## Creating nginx settings
