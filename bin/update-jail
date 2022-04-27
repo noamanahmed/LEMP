@@ -11,10 +11,9 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-rm -rf /var/chroot/
 bash $DIR/../installers/jailkit.sh
 
-home_users=`ls /home/`
+home_users=`ls /var/www/home/`
 
 for user in $home_users    
 do
