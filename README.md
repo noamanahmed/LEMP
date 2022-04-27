@@ -74,11 +74,11 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 
 ## Utility Scripts
 ```sh
-backup-site
+backup-site -u $username
 ```
 Backups your site to /backups
 ```sh
-clear-cache
+clear-cache -u $username
 ```
 Clears fastcgi cache for nginx.
 ```sh
@@ -86,43 +86,44 @@ create-app-user
 ```
 W.I.P Ignore this
 ```sh
-create-jail-user
+create-jail-user -u $username 
 ```
 Jails a user 
 ```sh
-create-linux-user
+create-linux-user -u $username -p $password
 ```
-Helper script to create mysql user
+Helper script to create a linux user
 ```sh
 create-mysql-db
 ```
 Helper script to create mysql database with user
 ```sh
-create-site-node
+create-site-node -u $username -d example.com --port $available_port
 ```
 creates a node application with reverse proxy using nginx proxy pass. 
 ```sh
-create-site-php
+create-site-php -u $username -d example.com --php 7.4 --wordpress
+create-site-php -u $username -d example.com --php 7.4 --laravel
 ```
 creates a PHP application using php-fpm and mysql
 ```sh
-create-site-python
+create-site-python -u $username -d example.com --port $available_port
 ```
 creates a python application with reverse proxy using nginx proxy pass
 ```sh
-create-site-react
+create-site-react -u $username -d example.com
 ```
 creates a react front end site with node installed with nvm. It comes with a basic react to get going.
 ```sh
-create-site-svelte
+create-site-svelte -u $username -d example.com
 ```
 (W.I.P) Creates a svelete front end site with node installed with nvm
 ```sh
-create-site-vue
+create-site-vue -u $username -d example.com
 ```
 (W.I.P) Creates a vue front end site with node installed with nvm
 ```sh
-create-user-angular
+create-user-angular -u $username -d example.com
 ```
 (W.I.P) Creates a vue front end site with node installed with nvm
 ```sh
@@ -132,77 +133,77 @@ create-user-mysql-db
 ```sh
 create-wp-user
 ```
-(W.I.P) Resets wp user by deleting accounta and creating new.
+(W.I.P) Resets wp user noaman by deleting accounta and creating new.
 ```sh
-delete-backup
+delete-backup -u $username -n backup_name
 ```
 Delete a backup for a site
 ```sh
-delete-mysql-db
+delete-mysql-db -d $database_name
 ```
 Drop MySQL database
 ```sh
-delete-site
+delete-site -u $username
 ```
 Removes a site completely from system.
 ```sh
-delete-wp-plugin
+delete-wp-plugin -u $username -p $plugin_name
 ```
 Removes wordpress plugin
 ```sh
-disable-site
+disable-site -u $username
 ```
 Disables nginx vhost by removing symlinks
 ```sh
-enable-site
+enable-site -u $username
 ```
-Enables nginx vhost by removing symlinks
+Enables nginx vhost by adding symlinks
 ```sh
-fix-permissions
+fix-permissions -u $username
 ```
 Fixes permissions for sites to remove any permission related issues
 ```sh
-install-nvm
+install-nvm -u $username
 ```
 Installes Node Version Manager(N.V.M) for a site 
 ```sh
-install-wp
+install-wp -u $username -d example.com
 ```
 Installs wordpress in a site
 ```sh
-install-wp-plugin
+install-wp-plugin -u $username -p $plugin -a yes
 ```
-Installs wordpress plugins in a site
+Installs wordpress plugins in a site. Add -a flag with any value to auto activate it too.
 ```sh
-jail-binary
+jail-binary -b $binary
 ```
 Helper script to allow a binary to all jailed user.
 ```sh
-jail-user
+jail-user -u $username
 ```
 Move user to a jail
 ```sh
-logrotate-site
+logrotate-site -u $username -e $enable -d $disable 
 ```
 Enable/Disable log rotation for a site specific logs 
 ```sh
-nvm-user
+nvm-user -u $username -c $command
 ```
 Run shell commands for a specific user with NVM already bootstrapped.You can use this to run npm install and other commands.
 ```sh
-restore-site
+restore-site -u $username
 ```
 Restores a site from a backup
 ```sh
-toggle-node
+toggle-node -u $username -v $version
 ```
 (W.I.P) Change node version for a user
 ```sh
-toggle-php
+toggle-php -u $username -p $php_version
 ```
 Changes php version for web and CLI for a site
 ```sh
-toggle-python
+toggle-python -u $username -p $python_version
 ```
 Changes php version for CLI and auto restarts systemd script
 ```sh
