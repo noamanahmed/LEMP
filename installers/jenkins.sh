@@ -47,7 +47,7 @@ cp $template_path/jenkins/basic-security.groovy /var/lib/jenkins/init.groovy.d/
 sed -i "s/{{username}}/$username/" /var/lib/jenkins/init.groovy.d/basic-security.groovy
 sed -i "s/{{password}}/$password/" /var/lib/jenkins/init.groovy.d/basic-security.groovy
 chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
-systemctl deamon-reload
+systemctl daemon-reload
 systemctl start jenkins
 sleep 10
 rm -rf /var/lib/jenkins/init.groovy.d/basic-security.groovy
