@@ -33,6 +33,7 @@ When done with the configuration run the installer.Change the default_site and e
 Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the backgroun
 ## Features
 - PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1
+- Python Versions 2.7,3.5,3.6,3.7,3.8,3.9,3.10
 - MYSQL Version 8.0
 - Postgres Version 14
 - MongoDB
@@ -57,7 +58,6 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - UFW
 
 ## Work in Progress
-- Utility Scripts to create python backend with SSL using nginx reverse proxy
 - Mail Server Setup (A complete alternative to iRedMail Setup)
 - ELK Stack (Elasticsearch Logstash Kibana)
 - Server Hardening
@@ -65,6 +65,7 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Working on writing usage for the utility scripts
 
 ## In Future
+- Compile nginx from source to allow brotli,redis and work on page speed
 - Prometheus (Netdata can be used for the timebeing)
 - Zabbix
 - Chef
