@@ -1,0 +1,14 @@
+[Unit]
+Description=A node site for username {{username}}
+After=network.target
+
+[Service]
+Type=simple
+#Environment=HOME={{user_root}}
+User={{username}}
+WorkingDirectory={{user_root}}/www
+ExecStart=python /app.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
