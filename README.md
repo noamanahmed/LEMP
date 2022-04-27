@@ -26,7 +26,7 @@ This is my first bash script for automation. This is not built for pro level sys
 - Composer
 - WP-CLI
 - Redis
-- ProFTPD
+- ProFTPD (Deprecreated)
 - Docker
 - Java
 - MeiliSearch
@@ -37,6 +37,8 @@ This is my first bash script for automation. This is not built for pro level sys
 - Mailhog
 - Fail2Ban
 - UFW
+- Kernel Tuning
+
 
 ## Installation Steps
 ```sh
