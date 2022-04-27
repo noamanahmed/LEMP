@@ -90,7 +90,7 @@ mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 
 
 ## Delete Logrotation
-bash logrotate-user -u $username -d yes
+bash logrotate-site -u $username -d yes
 
 
 
