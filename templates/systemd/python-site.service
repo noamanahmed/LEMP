@@ -1,13 +1,13 @@
 [Unit]
-Description=A node site for username {{username}}
+Description=A python site for username {{username}}
 After=network.target
 
 [Service]
 Type=simple
-#Environment=HOME={{user_root}}
 User={{username}}
-WorkingDirectory={{user_root}}/www
-ExecStart=python /app.js
+RootDirectory=/var/www/
+WorkingDirectory=/home/{{username}}/www
+ExecStart=/home/{{username}}/.local/bin/python app.py
 Restart=on-failure
 
 [Install]

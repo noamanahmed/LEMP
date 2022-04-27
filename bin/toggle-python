@@ -48,7 +48,6 @@ fi
 
 
 echo "Switching CLI Python Version to $python"
-
 if [ -L "/var/www/home/$username/.local/bin/python" ]
 then
     rm -rf /var/www/home/$username/.local/bin/python
@@ -56,7 +55,13 @@ fi
 
 ln -s /bin/$(echo "python$python" | sed 's/\.//') /var/www/home/$username/.local/bin/python 
 
-echo "Clearing Cache"
 
+if [ -f "/etc/systemd/system/$username-site.service" ] 
+then
+    echo "Restarting systemd service $username-site.service"
+    systemctl restart $username-site    
+fi
+
+echo "Clearing Cache"
 clear-cache -u $username
 

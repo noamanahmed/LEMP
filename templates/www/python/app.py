@@ -1,6 +1,7 @@
 # Python 3 server example
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
+import sys
 
 hostName = "127.0.0.1"
 serverPort = {{port}}
@@ -13,7 +14,7 @@ class MyServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes("<html><head><title>https://pythonbasics.org</title></head>", "utf-8"))
         self.wfile.write(bytes("<p>Request: %s</p>" % self.path, "utf-8"))
         self.wfile.write(bytes("<body>", "utf-8"))
-        self.wfile.write(bytes("<p>This is an example web server.</p>", "utf-8"))
+        self.wfile.write(bytes("<p>Python Version %s</p>" % sys.version, "utf-8"))
         self.wfile.write(bytes("</body></html>", "utf-8"))
 
 if __name__ == "__main__":        

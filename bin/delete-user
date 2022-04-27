@@ -100,6 +100,7 @@ rm -rf /home/$username
 sed -i "/\/home\/$username/d" /var/www/etc/passwd      
 sed -i "/$username:/d" /var/www/etc/group
 
+## Delete service files if exists
 if [ -f "/etc/systemd/system/$username-site.service" ] 
 then
     systemctl stop $username-site

@@ -218,6 +218,7 @@ sed -i "s/{{username}}/$username/" /etc/systemd/system/$username-site.service
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/systemd/system/$username-site.service
 
 systemctl daemon-reload
+systemctl start $username-site
 
 echo "*****************************************"
 echo "*****************************************"
