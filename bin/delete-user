@@ -100,6 +100,14 @@ rm -rf /home/$username
 sed -i "/\/home\/$username/d" /var/www/etc/passwd      
 sed -i "/$username:/d" /var/www/etc/group
 
+if [ -f "/etc/systemd/system/$username-site.service" ] 
+then
+    systemctl stop $username-site
+    systemctl disable $username-site
+    rm "/etc/systemd/system/$username-site.service"
+fi
+
+
 ## Delete linux user and processes
 pkill -9 -u $username 
 userdel -r -f $username > /dev/null 2>&1
