@@ -54,9 +54,21 @@ Clone the repo at the specified path (The path is important!)
 ```sh
 sudo git clone https://gitlab.com/noamanahmed/lemp /opt/lemp
 ```
-Edit the install.sh script (Default should be good for most people)
+Edit the install.sh script.
 ```sh
 nano /opt/lemp/install.sh
+```
+Add your public key here. This step is must as in future you might loose access to your VM if you are accessing it using password based authentication as I will be soon disabling it and root login by default.
+```sh
+nano /opt/lemp/templates/ssh/.ssh/authorized_keys
+nano /opt/lemp/templates/jailed_ssh/.ssh/authorized_keys
+```
+If you don't want to add your public key then you MUST remove my public key as it is currently in this repo. Its better to empty the files using this command
+```sh
+rm /opt/lemp/templates/ssh/.ssh/authorized_keys
+rm /opt/lemp/templates/jailed_ssh/.ssh/authorized_keys
+touch /opt/lemp/templates/ssh/.ssh/authorized_keys
+touch /opt/lemp/templates/jailed_ssh/.ssh/authorized_keys
 ```
 When done with the configuration run the installer.Change the default_site and example.com according to your settings.
 ```sh
@@ -118,6 +130,10 @@ create-site-python -u your_first_name -d my_site.com --port 11010
 - Each site is created with its own jailed linux user.A jailed linux user has reduced previliges in case of possible hack
 - $username in the documentation refers to the linux user and would have one site attached to it.
 - If you ever want to delete a user, please use delete-site -u $username command to avoid any bugs
+
+## Bugs
+- /etc/passwd and /etc/group for jailed users gets misconfigured.
+- List is quite long TBH :stuck_out_tongue_winking_eye:
 
 ## Code Structure
 There are two main folders in this repository
