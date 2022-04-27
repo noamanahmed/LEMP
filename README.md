@@ -118,11 +118,11 @@ There are two main folders in this repository
 - The install.sh script is the main executable designed to be modified before running
 
 ## Work in Progress
+- NoSQL database mongodb with a web base GUI tool
 - Mail Server Setup (A complete alternative to iRedMail Setup)
 - ELK Stack (Elasticsearch Logstash Kibana)
 - Server Hardening
 - Pushing backups to offsite storage as object storage etc 
-- Working on writing usage for the utility scripts
 
 ## In Future
 - Compile nginx from source to allow brotli,redis and work on page speed

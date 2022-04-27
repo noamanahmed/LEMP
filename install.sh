@@ -82,8 +82,8 @@ echo "LEMP Stack Installation completed!"
 
 echo "Installing MERN Stack"
 ## Install MERN
-echo "Installing mongodb"
-bash $DIR/installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
+# echo "Installing mongodb"
+# bash $DIR/installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
 
 echo "Installing Node Version Manager and setting up latest node"
 bash $DIR/installers/nvm.sh > $INSTALL_DIR/nvm.sh.log 2>&1
@@ -112,8 +112,8 @@ bash $DIR/installers/java.sh > $INSTALL_DIR/java.sh.log 2>&1
 echo "Installing MeiliSearch"
 bash $DIR/installers/meilisearch.sh > $INSTALL_DIR/meilisearch.sh.log 2>&1
 
-echo "Installing Jenkins"
-bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
+# echo "Installing Jenkins"
+# bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
 
 ## Install Jailkit
 echo "Installing jailkit"
@@ -139,8 +139,8 @@ echo "Installing postgres"
 bash $DIR/installers/postgres.sh > $INSTALL_DIR/postgres.sh.log 2>&1
 
 ## Optional ELK Stack
-echo "Installing ELK Stack at $hostname"
-bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+# echo "Installing ELK Stack at $hostname"
+# bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
 
 ## Optional Kafka
 # echo "Installing Kafka at $hostname"
@@ -164,7 +164,7 @@ bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
 ##bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/glitchtip.sh.log 2>&1
 
 echo "Kernel Optimizations"
-## Setting up SSH
+## Basic Level Kernel Optimizations
 bash $DIR/installers/kernel.sh > $INSTALL_DIR/kernel.sh.log 2>&1
 
 echo "apt autoremove"
@@ -173,8 +173,8 @@ apt autoremove -y > $INSTALL_DIR/apt_autoremove.log 2>&1
 
 ## Tools for Local Development Experience
 ## Optional Mailhog
-echo "Installing Mailhog at $hostname"
-ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
+# echo "Installing Mailhog at $hostname"
+# ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
 
 
 
