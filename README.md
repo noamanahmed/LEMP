@@ -73,3 +73,143 @@ Now exit out of screen using Ctr/Cmd A + D. The script would install silently in
 - Puppet
 
 ## Utility Scripts
+```sh
+backup-site
+```
+Backups your site to /backups
+```sh
+clear-cache
+```
+Clears fastcgi cache for nginx.
+```sh
+create-app-user
+```
+W.I.P Ignore this
+```sh
+create-jail-user
+```
+Jails a user 
+```sh
+create-linux-user
+```
+Helper script to create mysql user
+```sh
+create-mysql-db
+```
+Helper script to create mysql database with user
+```sh
+create-site-node
+```
+creates a node application with reverse proxy using nginx proxy pass. 
+```sh
+create-site-php
+```
+creates a PHP application using php-fpm and mysql
+```sh
+create-site-python
+```
+creates a python application with reverse proxy using nginx proxy pass
+```sh
+create-site-react
+```
+creates a react front end site with node installed with nvm. It comes with a basic react to get going.
+```sh
+create-site-svelte
+```
+(W.I.P) Creates a svelete front end site with node installed with nvm
+```sh
+create-site-vue
+```
+(W.I.P) Creates a vue front end site with node installed with nvm
+```sh
+create-user-angular
+```
+(W.I.P) Creates a vue front end site with node installed with nvm
+```sh
+create-user-mysql-db
+```
+(Ignore this)
+```sh
+create-wp-user
+```
+(W.I.P) Resets wp user by deleting accounta and creating new.
+```sh
+delete-backup
+```
+Delete a backup for a site
+```sh
+delete-mysql-db
+```
+Drop MySQL database
+```sh
+delete-site
+```
+Removes a site completely from system.
+```sh
+delete-wp-plugin
+```
+Removes wordpress plugin
+```sh
+disable-site
+```
+Disables nginx vhost by removing symlinks
+```sh
+enable-site
+```
+Enables nginx vhost by removing symlinks
+```sh
+fix-permissions
+```
+Fixes permissions for sites to remove any permission related issues
+```sh
+install-nvm
+```
+Installes Node Version Manager(N.V.M) for a site 
+```sh
+install-wp
+```
+Installs wordpress in a site
+```sh
+install-wp-plugin
+```
+Installs wordpress plugins in a site
+```sh
+jail-binary
+```
+Helper script to allow a binary to all jailed user.
+```sh
+jail-user
+```
+Move user to a jail
+```sh
+logrotate-site
+```
+Enable/Disable log rotation for a site specific logs 
+```sh
+nvm-user
+```
+Run shell commands for a specific user with NVM already bootstrapped.You can use this to run npm install and other commands.
+```sh
+restore-site
+```
+Restores a site from a backup
+```sh
+toggle-node
+```
+(W.I.P) Change node version for a user
+```sh
+toggle-php
+```
+Changes php version for web and CLI for a site
+```sh
+toggle-python
+```
+Changes php version for CLI and auto restarts systemd script
+```sh
+update-jail
+```
+(WIP) Updates jail
+```sh
+update-lemp
+```
+A quick bash command to update to the latest version of this repo
