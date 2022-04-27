@@ -11,6 +11,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+
 while [ $# -gt 0 ]; do
   case "$1" in
     -u|--username)
@@ -21,15 +22,15 @@ while [ $# -gt 0 ]; do
       domain="$2"
       shift
       ;;
-    --php)
-      php="$2"
+    --mysql)
+      mysql=yes
+      ;;
+    --mongodb)
+      mongodb=yes
+      ;;
+    --port)
+      port="$2"
       shift
-      ;;
-    --wordpress)
-      wordpress=yes
-      ;;
-    --laravel)
-      laravel=yes
       ;;    
     *)
       printf "***************************\n"
@@ -53,19 +54,21 @@ then
     exit
 fi
 
-
 if id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-user -u $username"
+    echo "The $username already exists!. Please run delete-site -u $username"
     exit
 fi
 
+if [ -z "$port" ] || [ $port -lt 1025 ] || [ $port -gt 65535 ]
+then
+  echo "Please specify a a valid port between 1025-65535 using --port for nginx to reverse proxy"
+  exit
+fi
 
-php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
-
-if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
-    echo "This is not a valid PHP Version"
-    exit 1;
+if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
+then
+  echo "This port is currently in use! Please select another port"
 fi
 
 
@@ -73,17 +76,18 @@ fi
 user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
 
+
 ## Jail User for a php site
 bash jail-user -u $username -p yes
-
 
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
-usermod -a -G nginx $username
+usermod -a -G $username nginx
 usermod -a -G $username nginx
 
 ## Create user directories
+
 chroot_path=/var/www
 user_root=/home/$username
 chroot_home=$chroot_path/$user_root
@@ -91,66 +95,69 @@ chroot_home=$chroot_path/$user_root
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
 mkdir -p $chroot_home/logs/nginx
-mkdir -p $chroot_home/logs/php
-mkdir -p $chroot_home/logs/mail
+mkdir -p $chroot_home/logs/node
 mkdir -p $chroot_home/cache
 mkdir -p $chroot_home/cache/nginx
 mkdir -p $chroot_home/www/
 
-www_path=$chroot_home/www 
+www_path=$chroot_home/www
+mkdir -p $www_path
 
-if [ -n "$laravel" ]
+## Fixing Permissions for nginx cache
+chown -R nginx:nginx $chroot_home/cache/nginx
+
+if [ -d "$mysql" ]
 then
-  www_path=$chroot_home/www/public
+  ## Creating MYSQL user and database
+  database_name="$(echo $username | head -c 12)"
+  database_user="$(echo $username | head -c 12)"
+  database_password="$(openssl rand -hex 8)"
+
+  mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+  mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+  mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+  mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+  mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+  mysql -e "FLUSH PRIVILEGES;"
 fi
 
 
-#mkdir -p "$user_root/cache/php"
+## Setup a static HTML site for LetsEncrypt First
 
-## Fixing Permissions for nginx cache and php logs
-chown -R $username:$username $chroot_home/logs/php
-chown -R nginx:nginx $chroot_home/cache/nginx
-
-## Setting up default static HTML site
-mkdir -p $www_path
-cp $template_path/www/*.php $www_path
-cp $template_path/www/*.html $www_path
-
-## Setup PHP
-sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
-sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
-sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
-systemctl restart php$php-fpm
-
-## Creating MYSQL user and database
-database_name="$(echo $username | head -c 12)"
-database_user="$(echo $username | head -c 12)"
-database_password="$(openssl rand -hex 8)"
-
-mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
-mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
-mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
-mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
-mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
-mysql -e "FLUSH PRIVILEGES;"
-
-## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
-cp "$template_path/nginx/php/vhost.conf" $nginx_vhost_file
+cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
-sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
-
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
 ## Generate SSL
 certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+
+## Removing Static site
+rm -rf $nginx_vhost_enabled
+rm -rf $nginx_vhost_file
+
+
+
+## Creating nginx settings with reverse proxy
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+cp "$template_path/nginx/node/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{port}}/$port/" $nginx_vhost_file
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
 
 ## Enabling SSL in nginx settings
 sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
@@ -167,28 +174,33 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
+## Installing nvm
+bash install-nvm -u $username
+
+
+##(TODO) Switch node version to the one specified 
+##bash toggle-node -u $username -p 
+
+##Copying demo app for simple proxy server
+cp $template_path/www/node/* $www_path/
+sed -i "s/{{port}}/$port/" $www_path/app.js
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Switch php version to the one specified 
-bash toggle-php -u $username -p $php
+## Install demo app packages
+nvm-user -u $username -c 'cd www && npm install'
 
 ## Setting up Logrotation
-bash logrotate-user -u $username -e yes
+bash logrotate-site -u $username -e yes
 
+## Finaly Start the systemd script to run the demo app
+cp $template_path/systemd/node-site.service /etc/systemd/system/$username-site.service
+sed -i "s/{{username}}/$username/" /etc/systemd/system/$username-site.service
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/systemd/system/$username-site.service
 
-if [ -n "$wordpress" ]
-then
-
-    wp_password="$(openssl rand -hex 8)"
-    wp --allow-root --path=$www_path core download
-    wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
-    wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com
-    # runuser -l $username -c "cd /home/$username/www && wp option update siteurl $(wp option get siteurl | sed  's/http:\/\//https:\/\//')"
-    # runuser -l $username -c "cd /home/$username/www && wp option update home $(wp option get home | sed  's/http:\/\//https:\/\//')"
-
-
-fi
+systemctl daemon-reload
+systemctl start $username-site
 
 
 echo "*****************************************"
@@ -199,18 +211,14 @@ echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
 echo "Complete Path : /home/$username/www"
 echo ""
-if [ -n "$wordpress" ]
+if [ -d "$mysql" ]
 then
-echo ""
-echo "WordPress user: $username"
-echo "WordPress password: $wp_password"
-echo ""
-fi
 echo ""
 echo "MySQL Database Credentials"
 echo "Database name: $database_name"
 echo "Database user: $database_user"
 echo "Database password: $database_password"
+fi
 echo ""
 echo "SFTP/SSH Details"
 echo "Host: $domain"

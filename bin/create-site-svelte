@@ -36,7 +36,7 @@ fi
 
 if id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-user -u $username"
+    echo "The $username already exists!. Please run delete-site -u $username"
     exit
 fi
 
@@ -68,15 +68,16 @@ mkdir -p $chroot_home/www/
 www_path=$chroot_home/www
 
 
-## Setting up default react app
+## Setting up default static HTML site for a svelte site
 mkdir -p $www_path
-cp -rf $template_path/www/react/* $www_path/
+mkdir -p $www_path/build/
+cp -rf $template_path/www/svelte/* $www_path/build/
 
 
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
-cp "$template_path/nginx/react/vhost.conf" $nginx_vhost_file
+cp "$template_path/nginx/svelte/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path/build/ | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
@@ -121,7 +122,7 @@ bash install-nvm -u $username
 
 
 ## Setting up Logrotation
-bash logrotate-user -u $username
+bash logrotate-site -u $username
 
 
 echo "*****************************************"
@@ -130,7 +131,7 @@ echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
 echo "URL(SSL) : https://$domain"
-echo "Complete WWW Path : /home/$username/www"
+echo "Complete WWW Path : /home/$username"
 echo ""
 
 echo ""
