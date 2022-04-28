@@ -1,0 +1,52 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while getopts a: flag
+do
+    case "${flag}" in
+        a) app=${OPTARG};;        
+    esac
+done
+
+if [ -z "$app" ]
+then
+    echo "Please provide the name of app using -a "
+    exit
+fi
+
+if [ ! -f "/etc/nginx/sites-available/$app.conf" ]
+then
+    echo "No Vhost found for this user"    
+    exit;
+fi
+
+
+if [ -L "/etc/nginx/sites-enabled/$app.conf" ]
+then
+    echo "This app is already enabled"    
+    exit;
+fi
+
+
+if [ -f "/etc/nginx/sites-available/$app.conf" ]
+then
+    nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
+    nginx_vhost_enabled="/etc/nginx/sites-enabled/$app.conf"
+    ln -s $nginx_vhost_file $nginx_vhost_enabled
+fi
+
+
+nginx -t && service nginx reload
+
+echo "App: $app is enabled now"
