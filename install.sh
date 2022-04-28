@@ -216,12 +216,12 @@ then
 fi
 echo "MEAN Stack Installation completed!"
 
-if [ -z "$without_proftpd" ]
-then
-    ## Install Misc
-    # echo "Installing Proftpd" (SFTP Preferred)
-    # bash $DIR/installers/proftpd.sh > $INSTALL_DIR/proftpd.sh.log 2>&1
-fi
+# if [ -z "$without_proftpd" ]
+# then
+#     ## Install Misc
+#     # echo "Installing Proftpd" (SFTP Preferred)
+#     # bash $DIR/installers/proftpd.sh > $INSTALL_DIR/proftpd.sh.log 2>&1
+# fi
 
 if [ -z "$without_letsencrypt" ]
 then
