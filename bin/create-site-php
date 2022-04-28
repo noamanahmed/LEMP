@@ -204,7 +204,7 @@ then
 fi
 
 
-site_details=(
+site_details={
 echo "*****************************************"
 echo "*****************************************"
 echo ""
@@ -234,7 +234,7 @@ echo "Host: $domain"
 echo "Port: 22"
 echo "Username: $username"
 echo "Password: $user_password"
-)
+}
 
 bash slack-notification -u $username -d $domain -m "$site_details" --success
 
