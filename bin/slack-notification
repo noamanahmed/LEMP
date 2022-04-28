@@ -94,8 +94,8 @@ PAYLOAD="{
       \"color\": \"$COLOR\",
       \"mrkdwn_in\": [\"text\"],
       \"fields\": [
-        { \"title\": \"Date\", \"value\": \"$MONIT_DATE\", \"short\": true },
-        { \"title\": \"Host\", \"value\": \"$MONIT_HOST\", \"short\": true }
+        { \"title\": \"Date\", \"value\": \"$(date)\", \"short\": true },
+        { \"title\": \"Host\", \"value\": \"$domain\", \"short\": true }
       ]
     }
   ]
