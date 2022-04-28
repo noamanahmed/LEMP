@@ -104,10 +104,13 @@ while [ $# -gt 0 ]; do
             with_mailhog=yes
         ;;
         --slack_notification_webhook)
-            slack_notification_webhook=yes
+            slack_notification_webhook="$2"
+            shift
         ;;
         --uptime_robot_key)
-            uptime_robot_key=yes
+            uptime_robot_key="$2"
+            slack_notification_webhook
+            shift
         ;;
         *)
             printf "***************************\n"
