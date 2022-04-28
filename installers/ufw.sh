@@ -27,6 +27,8 @@ ufw allow 6140/tcp
 ufw allow 6150/tcp
 ##For Sentry
 ufw allow 6160/tcp 
+##For Monit
+ufw allow 6170/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp

@@ -155,7 +155,7 @@
 ## commands to a running Monit daemon. See the Monit Wiki if you want to
 ## enable SSL for the HTTP interface.
 #
-set httpd port 7160 and
+set httpd port 7170 and
     use address 127.0.0.1  # only accept connection from localhost (drop if you use M/Monit)
     allow 127.0.0.1        # allow localhost to connect to the server and
     allow {{username}}:{{password}}      # require user 'admin' with password 'monit'
