@@ -286,7 +286,7 @@ source ~/.profile
 if [ -z "$without_hostname_site" ]
 then
     echo "Creating $hostname site with username $username"
-    bash $DIR/installers/create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+    create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
 fi
 
 if [ -z "$without_phpmyadmin" ]
