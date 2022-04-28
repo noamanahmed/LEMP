@@ -17,10 +17,6 @@ while [ $# -gt 0 ]; do
       username="$2"
       shift
       ;;
-    -d|--domain)
-      domain="$2"
-      shift
-      ;;        
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
@@ -37,12 +33,6 @@ then
     exit
 fi
 
-
-if [ -z "$domain" ]
-then
-    echo "Please provide a domain using -d "
-    exit
-fi
 
 
 if ! id "$username" &>/dev/null
