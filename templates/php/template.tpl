@@ -25,6 +25,17 @@ php_admin_value[upload_max_filesize] = 256M
 php_admin_value[post_max_size] = 258M
 php_admin_value[session.save_path] = {{user_root}}/tmp/
 
+;Opcache Settings
+php_admin_flag[opcache.enable]=1
+php_admin_value[opcache.memory_consumption]=64
+php_admin_value[opcache.interned_strings_buffer]=16
+php_admin_value[opcache.max_accelerated_files]=65536
+php_admin_flag[opcache.use_cwd]=1
+php_admin_flag[opcache.validate_timestamps]=1
+php_admin_value[opcache.revalidate_freq]=2
+php_admin_flag[opcache.save_comments]=0
+php_admin_value[opcache.fast_shutdown]=1
+php_admin_value[opcache.force_restart_timeout]=30
 
 [global]
 emergency_restart_threshold = 10

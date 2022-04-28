@@ -9,14 +9,25 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-
-while getopts h:u: flag
-do
-    case "${flag}" in
-        h) hostname=${OPTARG};;        
-        u) username=${OPTARG};;
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
+
 
 if [ -z "$username" ]
 then
@@ -162,6 +173,12 @@ bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
 ## Optional glitchtip (Consumes too much resources and W.I.P)
 ##echo "Installing Glitchtip at $hostname"
 ##bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/glitchtip.sh.log 2>&1
+
+
+
+echo "Installing monit"
+## Setup monit to auto restart services
+bash $DIR/installers/monit.sh > $INSTALL_DIR/monit.sh.log 2>&1
 
 echo "Kernel Optimizations"
 ## Basic Level Kernel Optimizations
