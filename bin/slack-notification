@@ -101,4 +101,6 @@ PAYLOAD="{
   ]
 }"
 
+echo $PAYLOAD
+
 curl -s -X POST --data-urlencode "payload=$PAYLOAD" $URL
