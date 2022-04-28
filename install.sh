@@ -178,7 +178,7 @@ bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
 
 echo "Installing monit"
 ## Setup monit to auto restart services
-bash $DIR/installers/monit.sh > $INSTALL_DIR/monit.sh.log 2>&1
+bash $DIR/installers/monit.sh -u $username -p $username > $INSTALL_DIR/monit.sh.log 2>&1
 
 echo "Kernel Optimizations"
 ## Basic Level Kernel Optimizations

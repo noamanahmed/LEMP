@@ -47,7 +47,7 @@ for php_version in ${php_versions_array[@]}; do
     then
         rm -rf /etc/monit/conf-enabled/php-$php_version
     fi
-    cp $template_path/monit/php/$php_version.conf /etc/monit/conf-available/php-$php_version
+    cp $template_path/monit/php-fpm/$php_version.conf /etc/monit/conf-available/php-$php_version
     ln -s /etc/monit/conf-available/php-$php_version /etc/monit/conf-enabled/    
 done
 
