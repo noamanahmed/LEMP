@@ -55,14 +55,6 @@ then
 fi
 
 
-if ! id "$username" &>/dev/null
-then
-    echo "The $username already exists!. Please run delete-site -u $username"
-    exit
-fi
-
-
-
 URL=$(cat /etc/monit/slack-url)
 
 if [ -z "$URL" ]
