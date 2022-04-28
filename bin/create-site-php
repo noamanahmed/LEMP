@@ -33,6 +33,9 @@ while [ $# -gt 0 ]; do
       ;;
     --nossl)
       nossl=yes
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
       ;;        
     *)
       printf "***************************\n"
@@ -182,6 +185,10 @@ bash toggle-php -u $username -p $php
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes
 
+if [ -z "$no_monitoring" ]
+then
+  bash enable-monitor -u $username -d $domain
+fi
 
 if [ -n "$wordpress" ]
 then

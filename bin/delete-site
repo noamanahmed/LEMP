@@ -92,7 +92,8 @@ mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 ## Delete Logrotation
 bash logrotate-site -u $username -d yes
 
-
+## Disable monitoring
+bash disable-monitor -u $username
 
 ## Delete Chroot Directory
 rm -rf /var/www/home/$username
