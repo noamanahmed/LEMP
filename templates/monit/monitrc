@@ -158,7 +158,7 @@
 set httpd port 7170 and
     use address 127.0.0.1  # only accept connection from localhost (drop if you use M/Monit)
     allow 127.0.0.1        # allow localhost to connect to the server and
-    allow {{username}}:{{password}}      # require user 'admin' with password 'monit'
+#    allow {{username}}:{{password}}      # require user 'admin' with password 'monit'
 #     #with ssl {            # enable SSL/TLS and set path to server certificate
 #     #    pemfile: /etc/ssl/certs/monit.pem
 #     #}
