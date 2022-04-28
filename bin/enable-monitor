@@ -10,13 +10,54 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
-
-while getopts u: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;      
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift        
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
 
 
-#TODO
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username already exists!. Please run delete-site -u $username"
+    exit
+fi
+
+
+uptime_robot_api_key=$(cat /opt/uptime_robot.key)
+
+if [ -z "$uptime_robot_api_key" ]
+then    
+  echo "Please set your main uptime robot key at /opt/uptime_robot.key to enable monitors"
+fi
+
+curl -X POST \
+-H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" \
+-d "api_key=$uptime_robot_api_key&format=json&type=1&url=$domain&friendly_name=$(hostname)_$username_monitor" \
+"https://api.uptimerobot.com/v2/newMonitor"

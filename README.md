@@ -37,6 +37,7 @@ This is my first bash script for automation. This is not built for pro level sys
 - Mailhog
 - Fail2Ban
 - UFW
+- Monit
 - Kernel Tuning
 
 
@@ -76,7 +77,13 @@ When done with the configuration run the installer.Change the default_site and e
 ```sh
 /opt/lemp/install.sh -u default_site -h hostname.example.com
 ```
+(Optional) Slack Integeration
+Enter your slack incoming webhook url in this file to enable notification from monit
+```sh
+/opt/lemp/templates/monit/slack-url
+```
 Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the background. It generally took a 60 minute installation time with a 1GB Virmach VPS 
+
 
 ## Read Me First!
 - Make sure the installer has completed to avoid any hiccups.
