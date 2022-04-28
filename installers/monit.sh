@@ -34,8 +34,8 @@ fi
 
 apt install monit -qqy
 cp $template_path/monit/monitrc /etc/monit/monitrc
-sed -i "s/{{username}}/$username/" $nginx_vhost_file
-sed -i "s/{{password}}/$password/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/" /etc/monit/monitrc
+sed -i "s/{{password}}/$password/" /etc/monit/monitrc
 ln -s /etc/monit/conf-available/nginx /etc/monit/conf-enabled/
 ln -s /etc/monit/conf-available/mysql /etc/monit/conf-enabled/
 ln -s /etc/monit/conf-available/openssh-server /etc/monit/conf-enabled/
