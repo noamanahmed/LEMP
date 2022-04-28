@@ -103,6 +103,12 @@ while [ $# -gt 0 ]; do
         --with_mailhog)
             with_mailhog=yes
         ;;
+        --slack_notification_webhook)
+            slack_notification_webhook=yes
+        ;;
+        --uptime_robot_key)
+            uptime_robot_key=yes
+        ;;
         *)
             printf "***************************\n"
             printf "* Error: Invalid argument. $1 *\n"
@@ -361,6 +367,20 @@ then
     echo "Installing Mailhog at $hostname"
     ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
 fi
+
+if [ ! -z "$slack_notification_webhook" ]
+then
+    echo $slack_notification_webhook > /etc/monit/slack-url
+fi
+
+
+if [ ! -z "$uptime_robot_key" ]
+then
+    touch /opt/uptime_robot.key
+    echo $uptime_robot_key > /opt/uptime_robot.key
+fi
+
+
 
 end=$(date +%s)
 seconds=$(echo "$end - $start" | bc)
