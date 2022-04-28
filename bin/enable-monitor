@@ -59,10 +59,10 @@ done
 #   echo "Please set your main uptime robot key at /opt/uptime_robot.key to enable monitors"
 # fi
 
-
+monitor_name=$(hostname)_${username}_monitor
 # api_request=$(curl -X POST \
 # -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" \
-# -d "api_key=$uptime_robot_api_key&format=json&type=1&url=https://$domain&friendly_name=$(hostname)_${username}_monitor" \
+# -d "api_key=$uptime_robot_api_key&format=json&type=1&url=https://$domain&friendly_name=$(monitor_name)" \
 # "https://api.uptimerobot.com/v2/newMonitor")
 api_request='{"stat":"ok","monitor":{"status":1,"id":791584464}}'
 
@@ -79,4 +79,6 @@ fi
 monitor_id=$(echo $api_request | jq -r '.monitor.id')
 
 echo monitor_id > /var/www/home/$username/uptime_robot
+
+echo "Monitor created successfully with ID : $monitor_id with name $monitor_name"
 
