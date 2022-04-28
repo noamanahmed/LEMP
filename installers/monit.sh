@@ -54,8 +54,8 @@ done
 cp $template_path/monit/slack-url /etc/monit/slack-url
 cp $template_path/monit/slack.sh /usr/local/bin/slack.sh
 chmod +x /usr/local/bin/slack.sh
-cp $template_path/monit/diskspace /etc/monit/conf-available/
-cp $template_path/monit/system /etc/monit/conf-available/
+cp $template_path/monit/diskspace.conf /etc/monit/conf-available/
+cp $template_path/monit/system.conf /etc/monit/conf-available/
 ln -s /etc/monit/conf-available/diskspace /etc/monit/conf-enabled/  
 ln -s /etc/monit/conf-available/system /etc/monit/conf-enabled/  
 
