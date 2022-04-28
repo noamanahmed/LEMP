@@ -50,8 +50,7 @@ fi
 
 if [ -z "$domain" ]
 then
-    echo "Please provide a domain using -d "
-    exit
+    domain=$username
 fi
 
 
