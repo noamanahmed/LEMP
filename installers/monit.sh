@@ -56,8 +56,8 @@ cp $template_path/monit/slack.sh /usr/local/bin/slack.sh
 chmod +x /usr/local/bin/slack.sh
 cp $template_path/monit/diskspace.conf /etc/monit/conf-available/
 cp $template_path/monit/system.conf /etc/monit/conf-available/
-ln -s /etc/monit/conf-available/diskspace /etc/monit/conf-enabled/  
-ln -s /etc/monit/conf-available/system /etc/monit/conf-enabled/  
+ln -s /etc/monit/conf-available/diskspace.conf /etc/monit/conf-enabled/  
+ln -s /etc/monit/conf-available/system.conf /etc/monit/conf-enabled/  
 
 systemctl restart monit
 
