@@ -15,6 +15,8 @@ This is my first bash script for automation. This is not built for pro level sys
 ## Features
 - PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1
 - Python Versions 2.7,3.5,3.6,3.7,3.8,3.9,3.10
+- Uptime Monitoring with Uptime Robot
+- Slack Notification (using Webhook)
 - MYSQL Version 8.0
 - Postgres Version 14
 - MongoDB
