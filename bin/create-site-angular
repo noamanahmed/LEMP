@@ -49,7 +49,7 @@ fi
 
 if id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-user -u $username"
+    echo "The $username already exists!. Please run delete-site -u $username"
     exit
 fi
 
