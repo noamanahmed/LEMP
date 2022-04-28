@@ -390,4 +390,5 @@ seconds=$(echo "$end - $start" | bc)
 echo "Time Taken to install: "
 awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}'
 
+bash slack-notification -u $username -d $domain -m "Installation completed: $hostname Time Taken: $seconds " --success
 
