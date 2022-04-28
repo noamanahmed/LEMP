@@ -57,12 +57,14 @@ uptime_robot_api_key=$(cat /opt/uptime_robot.key)
 if [ -z "$uptime_robot_api_key" ]
 then    
   echo "Please set your main uptime robot key at /opt/uptime_robot.key to enable monitors"
+  exit 1
 fi
 
 
 if [ -f "/var/www/home/$username/uptime_robot" ]
 then    
   echo "There is already a monitor with ID: $(cat /var/www/home/$username/uptime_robot)"
+  exit 1
 fi
 
 monitor_name=$(hostname)_${username}_monitor
