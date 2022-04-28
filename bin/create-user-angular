@@ -92,7 +92,7 @@ nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
 cp "$template_path/nginx/angular/vhost.conf" $nginx_vhost_file
 
-sed -i "s/{{www_path}}/$(echo $www_path/build/ | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $www_path/dist/ | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
@@ -101,12 +101,16 @@ sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/build/
 
-## Enabling SSL in nginx settings
-sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+if [ ! -z "$nossl" ]
+then  
+  ## Generate SSL
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/dist/
 
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx    
+fi
 ## Enable SSL configured vhost and reload nginx
 nginx -t && systemctl reload nginx
 

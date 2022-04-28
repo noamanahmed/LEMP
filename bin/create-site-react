@@ -101,11 +101,15 @@ sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/build/
+if [ ! -z "$nossl" ]
+then  
+  ## Generate SSL
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/build/
 
-## Enabling SSL in nginx settings
-sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx    
+fi
 
 ## Enable SSL configured vhost and reload nginx
 nginx -t && systemctl reload nginx
