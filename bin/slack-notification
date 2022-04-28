@@ -28,8 +28,8 @@ while [ $# -gt 0 ]; do
     --warning)     
       warning=yes  
       ;;
-    --sucess)     
-      sucess=yes  
+    --success)     
+      success=yes  
       ;;
     *)
       printf "***************************\n"
