@@ -1,8 +1,8 @@
 # LEMP Stack
-This script will setup LEMP stack with additional utilites. There are alot of scripts already outthere which do this but this has been designed from the scratch to do minimal configuration and only do the basic installation,configuration which are sometimes done on daily basis.
+This script will setup LEMP stack with additional utilites. There are alot of scripts already out there which do this but this has been designed from the scratch to do minimal configuration and only do the basic installation,configuration which are sometimes done on daily basis.
 
 ## Who is this for?
-This script is for the PHP,Python,NodeJS developers who don't want to use docker and want to setup VPS quickly. The whole code in repository is written by me to reducue the amount taken for daily tasks.
+This script is for the PHP,Python,NodeJS developers who don't want to use docker and want to setup VPS quickly. The whole code in repository is written by me to reduce the amount taken for daily tasks.
 
 ## Who is this NOT for?
 This is my first bash script for automation. This is not built for pro level system admins as I am pretty sure they already have something for this.
@@ -294,7 +294,7 @@ Changes php version for web and CLI for a site
 ```sh
 toggle-python -u $username -p $python_version
 ```
-Changes php version for CLI and auto restarts systemd script
+Changes python version for CLI and auto restarts systemd script
 ```sh
 update-jail
 ```

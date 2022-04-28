@@ -39,6 +39,9 @@ while [ $# -gt 0 ]; do
       python="$2"
       shift
       ;;    
+     --nossl)
+      nossl=yes
+      ;;
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
@@ -157,8 +160,6 @@ sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
 
 ## Removing Static site
 rm -rf $nginx_vhost_enabled
@@ -180,13 +181,16 @@ sed -i "s/{{port}}/$port/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-## Enabling SSL in nginx settings
-sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-nginx -t && systemctl reload nginx
+if [ ! -z "$nossl" ]
+then
+  ## Generate SSL
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
 
-## Setup Log rotation
-# cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
-# sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx    
+fi
+
 
 ## Restart nginx as we added our user to nginx group and for some reason nginx reload doesn't work
 systemctl restart nginx
@@ -225,7 +229,10 @@ echo "*****************************************"
 echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
+if [ ! -z "$nossl" ]
+then
 echo "URL(SSL) : https://$domain"
+fi
 echo "Complete Path : /home/$username/www"
 echo ""
 if [ -d "$mysql" ]

@@ -30,7 +30,10 @@ while [ $# -gt 0 ]; do
       ;;
     --laravel)
       laravel=yes
-      ;;    
+      ;;
+    --nossl)
+      nossl=yes
+      ;;        
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
@@ -149,12 +152,15 @@ sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+if [ ! -z "$nossl" ]
+then
+  ## Generate SSL
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
 
-## Enabling SSL in nginx settings
-sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-nginx -t && systemctl reload nginx
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx    
+fi
 
 ## Setup Log rotation
 # cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
@@ -196,7 +202,10 @@ echo "*****************************************"
 echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
+if [ ! -z "$nossl" ]
+then
 echo "URL(SSL) : https://$domain"
+fi
 echo "Complete Path : /home/$username/www"
 echo ""
 if [ -n "$wordpress" ]

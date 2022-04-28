@@ -10,13 +10,26 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
-
-while getopts u:d: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-        d) domain=${OPTARG};;
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --nossl)
+      nossl=yes
+      ;;        
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
 
 if [ -z "$username" ]
@@ -70,8 +83,7 @@ www_path=$chroot_home/www
 
 ## Setting up default static HTML site for a vue site
 mkdir -p $www_path
-mkdir -p $www_path/build/
-cp -rf $template_path/www/vue/* $www_path/build/
+cp -rf $template_path/www/vue/* $www_path/
 
 
 ## Creating nginx settings
@@ -79,7 +91,7 @@ nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
 cp "$template_path/nginx/vue/vhost.conf" $nginx_vhost_file
 
-sed -i "s/{{www_path}}/$(echo $www_path/build/ | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $www_path/dist/ | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
@@ -125,13 +137,17 @@ bash install-nvm -u $username
 bash logrotate-site -u $username
 
 
+
 echo "*****************************************"
 echo "*****************************************"
 echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
+if [ ! -z "$nossl" ]
+then
 echo "URL(SSL) : https://$domain"
-echo "Complete WWW Path : /home/$username"
+fi
+echo "Complete WWW Path : /home/$username/www"
 echo ""
 
 echo ""
@@ -140,8 +156,6 @@ echo "Host: $domain"
 echo "Port: 22"
 echo "Username: $username"
 echo "Password: $user_password"
-
-
 
 
 

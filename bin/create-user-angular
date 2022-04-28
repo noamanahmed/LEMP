@@ -10,13 +10,26 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
-
-while getopts u:d: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-        d) domain=${OPTARG};;
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --nossl)
+      nossl=yes
+      ;;        
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
 
 if [ -z "$username" ]
@@ -130,8 +143,11 @@ echo "*****************************************"
 echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
+if [ ! -z "$nossl" ]
+then
 echo "URL(SSL) : https://$domain"
-echo "Complete WWW Path : /home/$username"
+fi
+echo "Complete WWW Path : /home/$username/www"
 echo ""
 
 echo ""
@@ -140,8 +156,6 @@ echo "Host: $domain"
 echo "Port: 22"
 echo "Username: $username"
 echo "Password: $user_password"
-
-
 
 
 
