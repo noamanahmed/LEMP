@@ -90,7 +90,7 @@ TEXT=$message
 PAYLOAD="{
   \"attachments\": [
     {
-      \"text\": "$TEXT",
+      \"text\": \"$TEXT\",
       \"color\": \"$COLOR\",
       \"mrkdwn_in\": [\"text\"],
       \"fields\": [
