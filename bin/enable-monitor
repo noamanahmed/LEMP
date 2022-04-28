@@ -10,6 +10,7 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
+
 while [ $# -gt 0 ]; do
   case "$1" in
     -u|--username)
@@ -18,7 +19,8 @@ while [ $# -gt 0 ]; do
       ;;
     -d|--domain)
       domain="$2"
-      shift        
+      shift
+      ;;        
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
