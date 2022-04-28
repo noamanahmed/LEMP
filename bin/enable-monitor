@@ -62,7 +62,7 @@ fi
 echo ""
 curl -X POST \
 -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" \
--d "api_key=$uptime_robot_api_key&format=json&type=1&url=https://$domain&friendly_name=$(hostname)_$username_monitor" \
+-d "api_key=$uptime_robot_api_key&format=json&type=1&url=https://$domain&friendly_name=$(hostname)_${username}_monitor" \
 "https://api.uptimerobot.com/v2/newMonitor"
 
 echo ""
