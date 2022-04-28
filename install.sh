@@ -58,8 +58,8 @@ while [ $# -gt 0 ]; do
         --without_meilisearch)
             without_meilisearch=yes
         ;;
-        --without_jenkins)
-            without_jenkins=yes
+     !    --with_jenkins)
+       !      with_jenkins=yes
         ;;
         --without_jailkit)
             without_jailkit=yes
@@ -259,7 +259,7 @@ then
     bash $DIR/installers/meilisearch.sh > $INSTALL_DIR/meilisearch.sh.log 2>&1
 fi
 
-if [ -z "$without_jenkins" ]
+if [ ! -z "$with_jenkins" ]
 then
     echo "Installing Jenkins"
     bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
