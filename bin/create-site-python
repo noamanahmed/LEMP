@@ -181,7 +181,7 @@ sed -i "s/{{port}}/$port/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-if [ ! -z "$nossl" ]
+if [ -z "$nossl" ]
 then
   ## Generate SSL
   certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
@@ -229,7 +229,7 @@ echo "*****************************************"
 echo ""
 echo "Site Setup succssfull"
 echo "URL : http://$domain"
-if [ ! -z "$nossl" ]
+if [ -z "$nossl" ]
 then
 echo "URL(SSL) : https://$domain"
 fi
