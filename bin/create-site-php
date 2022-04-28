@@ -236,7 +236,8 @@ echo "Username: $username"
 echo "Password: $user_password"
 )
 
-bash slack-notificaiton -u $username -d $domain -m "$site_details" --success
+bash slack-notification -u $username -d $domain -m "$site_details" --success
 
+echo $site_details
 
 
