@@ -15,8 +15,8 @@ while [ $# -gt 0 ]; do
       username="$2"
       shift
       ;;
-    -d|--domain)
-      domain="$2"
+    -h|--hostname)
+      hostname="$2"
       shift
       ;;
     *)
@@ -68,134 +68,217 @@ echo "Setting up SSH"
 ## Setting up SSH
 bash $DIR/installers/ssh.sh > $INSTALL_DIR/ssh.sh.log 2>&1
 
-
+if [ -z "$without_nvm" ]
+then
 echo "Installing Python"
 ## Install python
 bash $DIR/installers/python.sh > $INSTALL_DIR/python.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 echo "Installing Fail2Ban,UFW and etc"
 ## Install Security related packages
 bash $DIR/installers/fail2ban.sh > $INSTALL_DIR/fail2ban.sh.log 2>&1
 bash $DIR/installers/ufw.sh > $INSTALL_DIR/ufw.sh.log 2>&1
+fi
 
 echo "Installing LEMP Stack"
 ## Install LEMP
+if [ -z "$without_nginx" ]
+then  
 echo "Installing nginx"
 bash $DIR/installers/nginx.sh > $INSTALL_DIR/nginx.sh.log 2>&1
+fi
+
 ##echo "Installing OpenResty(LuaJit on Steroids) Not Working properly"
 ##bash $DIR/installers/openresty.sh > $INSTALL_DIR/openresty.sh.log 2>&1
+if [ -z "$without_mysql" ]
+then  
 echo "Installing mysql"
 bash $DIR/installers/mysql.sh > $INSTALL_DIR/mysql.sh.log 2>&1
+fi
+
+if [ -z "$without_php" ]
+then  
 echo "Installing php"
 bash $DIR/installers/php.sh > $INSTALL_DIR/php.sh.log 2>&1
+fi
+
 echo "LEMP Stack Installation completed!"
 
 
 echo "Installing MERN Stack"
 ## Install MERN
-# echo "Installing mongodb"
-# bash $DIR/installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
+if [ -z "$without_mongodb" ]
+then  
+echo "Installing mongodb"
+bash $DIR/installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then  
 echo "Installing Node Version Manager and setting up latest node"
 bash $DIR/installers/nvm.sh > $INSTALL_DIR/nvm.sh.log 2>&1
+fi
+echo "MEAN Stack Installation completed!"
 
-echo "LEMP Stack Installation completed!"
-
+if [ -z "$without_nvm" ]
+then
 ## Install Misc
 # echo "Installing Proftpd" (SFTP Preferred)
 # bash $DIR/installers/proftpd.sh > $INSTALL_DIR/proftpd.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then  
 echo "Installing LetsEncrypt SSL"
 bash $DIR/installers/ssl.sh > $INSTALL_DIR/ssl.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then  
 echo "Installing Redis"
 bash $DIR/installers/redis.sh > $INSTALL_DIR/redis.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then  
 echo "Installing Docker"
 bash $DIR/installers/docker.sh > $INSTALL_DIR/docker.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then  
 echo "Installing Composer"
 bash $DIR/installers/composer.sh > $INSTALL_DIR/composer.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 echo "Installing Java"
 bash $DIR/installers/java.sh > $INSTALL_DIR/java.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 echo "Installing MeiliSearch"
 bash $DIR/installers/meilisearch.sh > $INSTALL_DIR/meilisearch.sh.log 2>&1
+fi
 
-# echo "Installing Jenkins"
-# bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
+if [ -z "$without_nvm" ]
+then
+echo "Installing Jenkins"
+bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Install Jailkit
 echo "Installing jailkit"
 bash $DIR/installers/jailkit.sh > $INSTALL_DIR/jail.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Install misc scripts
 echo "Installing wpcli,laravel installer and other misc tasks"
 bash $DIR/installers/scripts.sh > $INSTALL_DIR/scripts.sh.log 2>&1
+fi
 
 ## Load new .profile
 source ~/.profile
 
 ## Setup hostname site for phpmyadmin and other stuff
+if [ -z "$without_hostname_site" ]
+then
 echo "Creating $hostname site with username $username"
 bash $DIR/installers/create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Install phpmyadmin
 echo "Installing phpmyadmin at $hostname"
 bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Optional Postgres
 echo "Installing postgres"
 bash $DIR/installers/postgres.sh > $INSTALL_DIR/postgres.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Optional ELK Stack
-# echo "Installing ELK Stack at $hostname"
-# bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+echo "Installing ELK Stack at $hostname"
+bash $DIR/installers/elk.sh -h $hostname > $INSTALL_DIR/$hostname.sh.log 2>&1
+fi
 
-## Optional Kafka
-# echo "Installing Kafka at $hostname"
-# bash $DIR/installers/kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
+if [ -z "$without_nvm" ]
+then
+# Optional Kafka
+echo "Installing Kafka at $hostname"
+bash $DIR/installers/kafka.sh > $INSTALL_DIR/kafka.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Optional RabbitMQ
-# echo "Installing RabbitMQ at $hostname"
-# bash $DIR/installers/rabbitmq.sh -h $hostname > $INSTALL_DIR/rabbitmq.sh.log 2>&1
+echo "Installing RabbitMQ at $hostname"
+bash $DIR/installers/rabbitmq.sh -h $hostname > $INSTALL_DIR/rabbitmq.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Optional Netdata
 echo "Installing NetData at $hostname"
 bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
+fi
 
+if [ -z "$without_nvm" ]
+then
 ## Optional Sentry(Consumes too much resources and W.I.P)
-# echo "Installing sentry at $hostname"
-# bash $DIR/installers/sentry.sh -h $hostname > $INSTALL_DIR/sentry.sh.log 2>&1
+echo "Installing sentry at $hostname"
+bash $DIR/installers/sentry.sh -h $hostname > $INSTALL_DIR/sentry.sh.log 2>&1
+fi
 
-
+if [ -z "$without_nvm" ]
+then
 ## Optional glitchtip (Consumes too much resources and W.I.P)
-##echo "Installing Glitchtip at $hostname"
-##bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/glitchtip.sh.log 2>&1
+echo "Installing Glitchtip at $hostname"
+bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/glitchtip.sh.log 2>&1
+fi
 
-
-
+if [ -z "$without_nvm" ]
+then
+## Setup monit to auto restart services and send notifications
 echo "Installing monit"
-## Setup monit to auto restart services
 bash $DIR/installers/monit.sh -u $username -p $username > $INSTALL_DIR/monit.sh.log 2>&1
+fi
 
-echo "Kernel Optimizations"
+if [ -z "$without_nvm" ]
+then
 ## Basic Level Kernel Optimizations
+echo "Kernel Optimizations"
 bash $DIR/installers/kernel.sh > $INSTALL_DIR/kernel.sh.log 2>&1
-
+fi
 echo "apt autoremove"
 ## Removing any Extra Packages
 apt autoremove -y > $INSTALL_DIR/apt_autoremove.log 2>&1
 
 ## Tools for Local Development Experience
 ## Optional Mailhog
-# echo "Installing Mailhog at $hostname"
-# ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
-
-
+if [ -z "$without_nvm" ]
+then
+echo "Installing Mailhog at $hostname"
+ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
+fi
 
 end=$(date +%s)
+seconds=$(echo "$end - $start" | bc)
 echo "Time Taken to install: "
 awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}'
 

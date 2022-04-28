@@ -23,7 +23,10 @@ while [ $# -gt 0 ]; do
       ;;
     --nossl)
       nossl=yes
-      ;;        
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;  
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
@@ -141,6 +144,11 @@ nvm-user -u $username -c 'cd www && npm install && npm run build'
 
 ## Setting up Logrotation
 bash logrotate-site -u $username
+
+if [ -z "$no_monitoring" ]
+then
+  bash enable-monitor -u $username -d $domain
+fi
 
 
 echo "*****************************************"

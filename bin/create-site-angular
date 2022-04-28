@@ -22,7 +22,10 @@ while [ $# -gt 0 ]; do
       ;;
     --nossl)
       nossl=yes
-      ;;        
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;       
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
@@ -136,9 +139,16 @@ bash fix-permissions -u $username
 bash install-nvm -u $username
 
 
+if [ -z "$no_monitoring" ]
+then
+  bash enable-monitor -u $username -d $domain
+fi
+
+
 
 ## Setting up Logrotation
 bash logrotate-user -u $username
+
 
 
 echo "*****************************************"
