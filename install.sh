@@ -97,8 +97,8 @@ while [ $# -gt 0 ]; do
         --with_monit)
             with_monit=yes
         ;;
-        --with_kernel)
-            with_kernel=yes
+        --without_kernel)
+            without_kernel=yes
         ;;
         --with_mailhog)
             with_mailhog=yes
@@ -352,7 +352,7 @@ then
     bash $DIR/installers/monit.sh -u $username -p $username > $INSTALL_DIR/monit.sh.log 2>&1
 fi
 
-if [ ! -z "$with_kernel" ]
+if [ -z "$without_kernel" ]
 then
     ## Basic Level Kernel Optimizations
     echo "Kernel Optimizations"
