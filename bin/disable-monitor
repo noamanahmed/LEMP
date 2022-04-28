@@ -80,6 +80,6 @@ then
   exit 1
 fi
 
-
 rm -rf /var/www/home/$username/uptime_robot
 
+echo "Monitor delete successfully with ID : $monitor_id"
