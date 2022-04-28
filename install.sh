@@ -94,8 +94,8 @@ while [ $# -gt 0 ]; do
         --with_glitchtip)
             with_glitchtip=yes
         ;;
-        --with_monit)
-            with_monit=yes
+        --without_monit)
+            without_monit=yes
         ;;
         --without_kernel)
             without_kernel=yes
@@ -345,7 +345,7 @@ then
     bash $DIR/installers/glitchtip.sh -h $hostname > $INSTALL_DIR/glitchtip.sh.log 2>&1
 fi
 
-if [ ! -z "$with_monit" ]
+if [ -z "$without_monit" ]
 then
     ## Setup monit to auto restart services and send notifications
     echo "Installing monit"
