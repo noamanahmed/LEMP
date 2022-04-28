@@ -238,6 +238,4 @@ echo "Password: $user_password"
 
 bash slack-notification -u $username -d $domain -m "Site created: Domain: $domain Username: $username" --success
 
-echo $site_details
-
 

@@ -166,6 +166,7 @@ echo "Port: 22"
 echo "Username: $username"
 echo "Password: $user_password"
 
+bash slack-notification -u $username -d $domain -m "Site created: Domain: $domain Username: $username" --success
 
 
 
