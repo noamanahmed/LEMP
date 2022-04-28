@@ -58,7 +58,7 @@ URL=$(cat /etc/monit/slack-url)
 
 if [ -z "$URL" ]
 then    
-    echo "No slack webhook notification URL definted"
+    echo "No slack webhook notification URL defined at /etc/monit/slack-url"
     exit
 fi
 
