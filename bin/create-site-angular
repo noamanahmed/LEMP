@@ -83,8 +83,7 @@ www_path=$chroot_home/www
 
 ## Setting up default static HTML site for a angular site
 mkdir -p $www_path
-mkdir -p $www_path/build/
-cp -rf $template_path/www/angular/* $www_path/build/
+cp -rf $template_path/www/angular/* $www_path/
 
 
 ## Creating nginx settings
