@@ -78,7 +78,7 @@ fi
 
 monitor_id=$(echo $api_request | jq -r '.monitor.id')
 
-echo monitor_id > /var/www/home/$username/uptime_robot
+echo $monitor_id > /var/www/home/$username/uptime_robot
 
 echo "Monitor created successfully with ID : $monitor_id with name $monitor_name"
 
