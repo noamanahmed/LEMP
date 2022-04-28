@@ -25,10 +25,10 @@ while [ $# -gt 0 ]; do
       message="$2"
       shift
       ;;     
-    --warning     
+    --warning)     
       warning=yes  
       ;;
-    --sucess     
+    --sucess)     
       sucess=yes  
       ;;
     *)
