@@ -33,7 +33,7 @@ php_admin_value[opcache.max_accelerated_files]=65536
 php_admin_flag[opcache.use_cwd]=1
 php_admin_flag[opcache.validate_timestamps]=1
 php_admin_value[opcache.revalidate_freq]=2
-php_admin_flag[opcache.save_comments]=0
+php_admin_value[opcache.save_comments]=0
 php_admin_value[opcache.fast_shutdown]=1
 php_admin_value[opcache.force_restart_timeout]=30
 
