@@ -222,8 +222,11 @@ then
     bash fix-permissions -u $username
 fi
 
+site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --wp_password $wp_password"
 
-site_info="$(bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --wp_password $wp_password )"
+echo $site_info_command
+
+site_info="$($site_info_command)"
 
 echo $site_info
 
