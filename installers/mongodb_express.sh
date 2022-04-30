@@ -12,8 +12,8 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-adduser --gecos "" --disabled-password --no-create-home mongodb_express
-usermod -m -d /opt/mongodb_express mongodb_express
+adduser --gecos "" --disabled-password  --home /opt/mongodb_express  mongodb_express
+
 
 
 ## Install node for this specfic user
