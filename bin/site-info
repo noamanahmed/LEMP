@@ -21,6 +21,9 @@ while [ $# -gt 0 ]; do
       domain="$2"
       shift
       ;;
+    --ssh_password)
+      ssh_password=yes
+      ;;
     --type)
       type="$2"
       shift
@@ -33,9 +36,17 @@ while [ $# -gt 0 ]; do
       postgres="$2"
       shift
       ;;
+    --database_name)
+      database_name=yes
+      ;;
+    --database_user_name)
+      database_user_name=yes
+      ;;
+    --database_password)
+      database_password=yes
+      ;;
     --redis)
-      redis="$2"
-      shift
+      redis=yes      
       ;;
     --php)
       php="$2"
@@ -44,6 +55,9 @@ while [ $# -gt 0 ]; do
     --wordpress)
       wordpress=yes
       ;;
+    --wp_password)
+      wp_password=yes
+      ;;      
     --laravel)
       laravel=yes
       ;;
