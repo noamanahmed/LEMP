@@ -106,9 +106,9 @@ then
 output+="\n"
 output+="MySQL Database Credentials\n"
 output+="Database name: $database_name\n"
-output+="Database user: $database_user\n"
+output+="Database user: $database_user_name\n"
 output+="Database password: $database_password\n"
-output+="phpMyAdmin: https://$hostname/phpmyadmin\n"
+output+="phpMyAdmin: https://$HOSTNAME/phpmyadmin\n"
 fi
 
 
@@ -117,9 +117,9 @@ then
 output+="\n"
 output+="Postgres Database Credentials\n"
 output+="Database name: $database_name\n"
-output+="Database user: $database_user\n"
+output+="Database user: $database_user_name\n"
 output+="Database password: $database_password\n"
-output+="pgAdmin4 : https://$hostname/pgadmin4\n"
+output+="pgAdmin4 : https://$HOSTNAME/pgadmin4\n"
 fi
 
 output+="\n"
