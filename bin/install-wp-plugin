@@ -42,16 +42,16 @@ fi
 
 
 
-if [ ! -f "/home/$username/www/wp-config.php" ] 
+if [ ! -f "/var/www/home/$username/www/wp-config.php" ] 
 then
     echo "There is not a wordpress site"    
     exit;
 fi
 
-runuser -l $username -c "wp --path=/home/$username/www plugin install $plugin"
+runuser -l $username -c "wp --path=/var/www/home/$username/www plugin install $plugin"
 
 
 if [ ! -z "$activate" ]
 then
-    runuser -l $username -c "wp --path=/home/$username/www plugin activate $plugin"
+    runuser -l $username -c "wp --path=/var/www/home/$username/www plugin activate $plugin"
 fi
