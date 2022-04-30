@@ -217,8 +217,8 @@ then
     wp_password="$(openssl rand -hex 8)"
     wp --allow-root --path=$www_path core download
     wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
-    wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com
-    echo "Fix permissions as we installed wordpress files using root user"
+    wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com    
+    bash install-wp-plugin -u $username -p classic-editor --activate
     bash fix-permissions -u $username
 fi
 
