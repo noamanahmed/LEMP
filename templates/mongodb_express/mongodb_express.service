@@ -1,5 +1,6 @@
 [Unit]
 Description=Mongodb Express A GUI Tool for mongodb
+Requires=mongodb.service
 After=network.target
 
 [Service]

@@ -13,7 +13,8 @@ fi
 
 
 adduser --gecos "" --disabled-password --no-create-home mongodb_express
-mkdir -p /opt/mongodb_express
+usermod -m -d /opt/mongodb_express mongodb_express
+
 
 ## Install node for this specfic user
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /opt/mongodb_express/install.sh
