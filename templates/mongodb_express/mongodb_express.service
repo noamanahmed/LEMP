@@ -5,7 +5,9 @@ After=network.target
 
 [Service]
 Type=simple
-Environment=NVM_DIR=/opt/mongodb_express/.nvm process.env.VCAP_APP_PORT=7180 process.env.VCAP_APP_HOST=127.0.0.1
+Environment=NVM_DIR=/opt/mongodb_express/.nvm 
+Environment=VCAP_APP_PORT=7180
+Environment=VCAP_APP_HOST=127.0.0.1
 User=mongodb_express
 WorkingDirectory=/opt/mongodb_express/node_modules/mongo-express
 ExecStart=/bin/bash -l -c 'exec "$@"' _ node app.js
