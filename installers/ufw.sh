@@ -42,6 +42,8 @@ ufw allow 6170/tcp
 ufw allow 6180/tcp
 ##For Postfixadmin
 ufw allow 6190/tcp 
+##For Roundcube
+ufw allow 6200/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp

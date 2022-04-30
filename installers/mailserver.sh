@@ -19,4 +19,5 @@ systemctl stop postfix
 bash dovecot.sh
 systemctl stop dovecot
 bash postfixadmin.sh
+bash roundcube.sh
 
