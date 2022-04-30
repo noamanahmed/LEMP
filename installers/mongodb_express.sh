@@ -29,8 +29,8 @@ systemctl start mongodb_express
 
 
 # Nginx Vhost configuration for reverse proxy with SSL
-nginx_vhost_file="/etc/nginx/app-available/mongodb_express.conf"
-nginx_vhost_enabled="/etc/nginx/app-enabled/mongodb_express.conf"
+nginx_vhost_file="/etc/nginx/apps-available/mongodb_express.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/mongodb_express.conf"
 cp $template_path/mongodb_express/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
