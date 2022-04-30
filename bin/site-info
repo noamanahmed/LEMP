@@ -82,51 +82,53 @@ then
     exit
 fi
 
-
-echo "*****************************************"
-echo "*****************************************"
-echo ""
-echo "Site Setup succssfull"
-echo "URL : http://$domain"
+output=""
+output+="*****************************************\n"
+output+="*****************************************\n"
+output+="\n"
+output+="Site Setup succssfull\n"
+output+="URL : http://$domain\n"
 if [ -z "$nossl" ]
 then
-echo "URL(SSL) : https://$domain"
+output+="URL(SSL) : https://$domain\n"
 fi
-echo "Complete Path : /home/$username/www"
-echo ""
+output+="Complete Path : /home/$username/www\n"
+output+="\n"
 if [ -n "$wordpress" ]
 then
-echo ""
-echo "WordPress user: $username"
-echo "WordPress password: $wp_password"
-echo ""
+output+="\n"
+output+="WordPress user: $username\n"
+output+="WordPress password: $wp_password\n"
+output+="\n"
 
 fi
 
 if [ -n "$mysql" ]
 then
-echo ""
-echo "MySQL Database Credentials"
-echo "Database name: $database_name"
-echo "Database user: $database_user"
-echo "Database password: $database_password"
-echo "phpMyAdmin: https://$hostname/phpmyadmin"
+output+="\n"
+output+="MySQL Database Credentials\n"
+output+="Database name: $database_name\n"
+output+="Database user: $database_user\n"
+output+="Database password: $database_password\n"
+output+="phpMyAdmin: https://$hostname/phpmyadmin\n"
 fi
 
 
 if [ -n "$postgres" ]
 then
-echo ""
-echo "Postgres Database Credentials"
-echo "Database name: $database_name"
-echo "Database user: $database_user"
-echo "Database password: $database_password"
-echo "pgAdmin4 : https://$hostname/pgadmin4"
+output+="\n"
+output+="Postgres Database Credentials\n"
+output+="Database name: $database_name\n"
+output+="Database user: $database_user\n"
+output+="Database password: $database_password\n"
+output+="pgAdmin4 : https://$hostname/pgadmin4\n"
 fi
 
-echo ""
-echo "SFTP/SSH Details"
-echo "Host: $domain"
-echo "Port: 22"
-echo "Username: $username"
-echo "Password: $user_password"
+output+="\n"
+output+="SFTP/SSH Details\n"
+output+="Host: $domain\n"
+output+="Port: 22\n"
+output+="Username: $username\n"
+output+="Password: $user_password\n"
+
+printf $output
