@@ -33,7 +33,7 @@ then
     exit;
 fi
 
-domain=$(cat  /etc/nginx/sites-available/angular1.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
 ## Create system user if doesnt't exists
 
 # $system_root="/home/$username";
