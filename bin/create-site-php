@@ -12,13 +12,6 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-if [ $(systemctl is-active --quiet nginx) -ne 0 ]
-  then 
-  echo "Nginx is not running!"
-  exit
-fi
-
-
 while [ $# -gt 0 ]; do
   case "$1" in
     -u|--username)
@@ -80,6 +73,25 @@ php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
     echo "This is not a valid PHP Version"
     exit 1;
+fi
+
+if ! systemctl is-active --quiet nginx
+  then 
+  echo "Nginx is not running! Aborting!"
+  exit
+fi
+
+
+if ! systemctl is-active --quiet mysql
+  then 
+  echo "mysql is not running! Aborting!"
+  exit
+fi
+
+if ! host $domain
+  then
+  echo "This is not a valid domain! Aborting!"
+  exit
 fi
 
 
