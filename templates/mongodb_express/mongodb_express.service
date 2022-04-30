@@ -4,9 +4,11 @@ After=network.target
 
 [Service]
 Type=simple
+Environment=NVM_DIR=/opt/mongodb_express/.nvm
 User=mongodb_express
-WorkingDirectory=/opt/mongodb_express/node_modules/mongo-express
-ExecStart=node app.js
+RootDirectory=/opt/mongodb_express
+WorkingDirectory=/node_modules/mongodb-express
+ExecStart=/bin/bash -l -c 'exec "$@"' _ node app.js
 Restart=on-failure
 
 [Install]
