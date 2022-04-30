@@ -201,7 +201,8 @@ then
     bash fix-permissions -u $username
 fi
 
-site_info=$(site-info "$@")
+
+site_info=$(bash site-info "$@")
 
 echo $site_info
 
