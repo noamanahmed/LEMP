@@ -11,6 +11,8 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+args=$@
+
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -133,7 +135,7 @@ mkdir -p $www_path
 ## Fixing Permissions for nginx cache
 chown -R nginx:nginx $chroot_home/cache/nginx
 
-if [ -d "$mysql" ]
+if [ -n "$mysql" ]
 then
   ## Creating MYSQL user and database
   database_name="$(echo $username | head -c 12)"
@@ -233,12 +235,22 @@ then
   bash enable-monitor -u $username -d $domain
 fi
 
-site_info=$(site-info "$@")
+site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password"
 
-echo $site_info
+if [ -n "$mysql" ]
+then
+site_info_command+=" --mysql $mysql"
+fi
+
+
+if [ -n "$postgres" ]
+then
+site_info_command+=" --postgres $postgres"
+fi
+
+ 
+site_info="$($site_info_command)"
+
+$site_info_command
 
 bash slack-notification -u $username -d $domain -m "$site_info" --success
-
-
-
-
