@@ -223,7 +223,7 @@ then
 fi
 
 
-site_info=$(bash site-info $args)
+site_info="$(bash site-info $args)"
 
 echo $site_info
 

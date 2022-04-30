@@ -131,4 +131,4 @@ output+="Port: 22\n"
 output+="Username: $username\n"
 output+="Password: $user_password\n"
 
-printf $output
+printf "$output"
