@@ -222,7 +222,18 @@ then
     bash fix-permissions -u $username
 fi
 
-site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql --wordpress $wordpress --wp_password $wp_password"
+site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql"
+
+if [ -n "$wordpress" ]
+then
+site_info_command+=" --wordpress --wp_password $wp_password "
+fi
+
+if [ -n "$laravel" ]
+then
+site_info_command+=" --laravel "
+fi
+ 
 site_info="$($site_info_command)"
 
 $site_info_command
