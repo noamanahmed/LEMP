@@ -33,6 +33,7 @@ then
     exit;
 fi
 
+domain=$(cat  /etc/nginx/sites-available/angular1.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
 ## Create system user if doesnt't exists
 
 # $system_root="/home/$username";
@@ -115,7 +116,8 @@ pkill -9 -u $username
 userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 
-bash slack-notification -u $username -m "Site deleted successfully! Username: $username" --warning
+
+bash slack-notification -u $username -m "Site deleted successfully! Username: $username Host: $domain" --warning
 
 echo "Username $username deleted successfully!"      
 
