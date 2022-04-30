@@ -24,12 +24,15 @@ chown $username:$username  /opt/mongodb_express/install.sh
 chown $username:$username  /opt/mongodb_express/.nvm
 cd /opt/mongodb_express/ 
 su $username -c "NVM_DIR=.nvm /opt/mongodb_express/install.sh"
+echo "[[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion  #adds bash completion for nvm" >> /opt/mongodb_express/.bashrc 
+
 su $username -c "NVM_DIR=/opt/mongodb_express/.nvm && . /opt/mongodb_express/.nvm/nvm.sh && . /opt/mongodb_express/.nvm/bash_completion && nvm install node && npm install mongo-express"
 
 cp $template_path/mongodb_express/config.js /opt/mongodb_express/node_modules/mongo-express/config.js
 chown -R mongodb_express:mongodb_express /opt/mongodb_express
 
 # Systemd setup
+cp -rf $template_path/jailed_ssh/.profile /opt/mongodb_express/.profile
 cp $template_path/mongodb_express/mongodb_express.service /etc/systemd/system/mongodb_express.service
 systemctl daemon-reload
 systemctl start mongodb_express
