@@ -97,8 +97,6 @@ then
 fi
 
 output=""
-output+="*****************************************\n"
-output+="*****************************************\n"
 output+="\n"
 output+="Site Setup succssfull\n"
 output+="URL : http://$domain\n"
