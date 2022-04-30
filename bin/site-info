@@ -56,9 +56,8 @@ while [ $# -gt 0 ]; do
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
-      printf "***************************\n"
-      #Allow sending site information even if invalid argument is passed!
-      #exit 1
+      printf "***************************\n"      
+      exit 1
   esac  
   shift
 done
@@ -101,6 +100,7 @@ echo ""
 echo "WordPress user: $username"
 echo "WordPress password: $wp_password"
 echo ""
+
 fi
 
 if [ -n "$mysql" ]
