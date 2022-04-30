@@ -39,7 +39,9 @@ ufw allow 6160/tcp
 ##For Monit
 ufw allow 6170/tcp
 ##For MongoDB Express
-ufw allow 6180/tcp 
+ufw allow 6180/tcp
+##For Postfixadmin
+ufw allow 6190/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp
