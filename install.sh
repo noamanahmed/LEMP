@@ -371,7 +371,7 @@ apt autoremove -y > $INSTALL_DIR/apt_autoremove.log 2>&1
 
 ## Tools for Local Development Experience
 
-if [ ! -z "$with_mailhog" ]
+if [ ! -z "$with_mailhog" ] 
 then
     ## Optional Mailhog
     echo "Installing Mailhog at $hostname"
