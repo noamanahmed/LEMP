@@ -233,42 +233,11 @@ then
   bash enable-monitor -u $username -d $domain
 fi
 
+site_info=$(site-info "$@")
 
-echo "*****************************************"
-echo "*****************************************"
-echo ""
-echo "Site Setup succssfull"
-echo "URL : http://$domain"
-if [ -z "$nossl" ]
-then
-echo "URL(SSL) : https://$domain"
-fi
-echo "Complete Path : /home/$username/www"
-echo ""
-if [ -d "$mysql" ]
-then
-echo ""
-echo "MySQL Database Credentials"
-echo "Database name: $database_name"
-echo "Database user: $database_user"
-echo "Database password: $database_password"
-fi
-if [ -d "$postgres" ]
-then
-echo ""
-echo "Postgres Database Credentials"
-echo "Database name: $database_name"
-echo "Database user: $database_user"
-echo "Database password: $database_password"
-fi
-echo ""
-echo "SFTP/SSH Details"
-echo "Host: $domain"
-echo "Port: 22"
-echo "Username: $username"
-echo "Password: $user_password"
+echo $site_info
 
-bash slack-notification -u $username -d $domain -m "Site created: Domain: $domain Username: $username" --success
+bash slack-notification -u $username -d $domain -m "$site_info" --success
 
 
 

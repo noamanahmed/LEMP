@@ -1,0 +1,132 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --type)
+      type="$2"
+      shift
+      ;;
+    --mysql)
+      mysql="$2"
+      shift
+      ;;
+    --postgres)
+      postgres="$2"
+      shift
+      ;;
+    --redis)
+      redis="$2"
+      shift
+      ;;
+    --php)
+      php="$2"
+      shift
+      ;;
+    --wordpress)
+      wordpress=yes
+      ;;
+    --laravel)
+      laravel=yes
+      ;;
+    --nossl)
+      nossl=yes
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;        
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      #Allow sending site information even if invalid argument is passed!
+      #exit 1
+  esac  
+  shift
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exists"
+    exit
+fi
+
+
+echo "*****************************************"
+echo "*****************************************"
+echo ""
+echo "Site Setup succssfull"
+echo "URL : http://$domain"
+if [ -z "$nossl" ]
+then
+echo "URL(SSL) : https://$domain"
+fi
+echo "Complete Path : /home/$username/www"
+echo ""
+if [ -n "$wordpress" ]
+then
+echo ""
+echo "WordPress user: $username"
+echo "WordPress password: $wp_password"
+echo ""
+fi
+
+if [ -n "$mysql" ]
+then
+echo ""
+echo "MySQL Database Credentials"
+echo "Database name: $database_name"
+echo "Database user: $database_user"
+echo "Database password: $database_password"
+echo "phpMyAdmin: https://$hostname/phpmyadmin"
+fi
+
+
+if [ -n "$postgres" ]
+then
+echo ""
+echo "Postgres Database Credentials"
+echo "Database name: $database_name"
+echo "Database user: $database_user"
+echo "Database password: $database_password"
+echo "pgAdmin4 : https://$hostname/pgadmin4"
+fi
+
+echo ""
+echo "SFTP/SSH Details"
+echo "Host: $domain"
+echo "Port: 22"
+echo "Username: $username"
+echo "Password: $user_password"

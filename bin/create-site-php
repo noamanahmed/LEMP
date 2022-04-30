@@ -197,45 +197,14 @@ then
     wp --allow-root --path=$www_path core download
     wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
     wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com
-    # runuser -l $username -c "cd /home/$username/www && wp option update siteurl $(wp option get siteurl | sed  's/http:\/\//https:\/\//')"
-    # runuser -l $username -c "cd /home/$username/www && wp option update home $(wp option get home | sed  's/http:\/\//https:\/\//')"
-
-
+    echo "Fix permissions as we installed wordpress files using root user"
+    bash fix-permissions -u $username
 fi
 
+site_info=$(site-info "$@")
 
+echo $site_info
 
-echo "*****************************************"
-echo "*****************************************"
-echo ""
-echo "Site Setup succssfull"
-echo "URL : http://$domain"
-if [ -z "$nossl" ]
-then
-echo "URL(SSL) : https://$domain"
-fi
-echo "Complete Path : /home/$username/www"
-echo ""
-if [ -n "$wordpress" ]
-then
-echo ""
-echo "WordPress user: $username"
-echo "WordPress password: $wp_password"
-echo ""
-fi
-echo ""
-echo "MySQL Database Credentials"
-echo "Database name: $database_name"
-echo "Database user: $database_user"
-echo "Database password: $database_password"
-echo ""
-echo "SFTP/SSH Details"
-echo "Host: $domain"
-echo "Port: 22"
-echo "Username: $username"
-echo "Password: $user_password"
-
-
-bash slack-notification -u $username -d $domain -m "Site created: Domain: $domain Username: $username" --success
+bash slack-notification -u $username -d $domain -m "$site_info" --success
 
 

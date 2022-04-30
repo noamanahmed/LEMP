@@ -17,15 +17,15 @@ database_name="$(openssl rand -hex 6)"
 database_user="$(openssl rand -hex 6)"
 database_password="$(openssl rand -hex 8)"
 
-mysql -ve "CREATE DATABASE IF NOT EXISTS $database_name"
-mysql -ve "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
-mysql -ve "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
-mysql -ve "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
-mysql -ve "FLUSH PRIVILEGES;"
+psql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+psql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+psql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+psql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+psql -e "FLUSH PRIVILEGES;"
 
 
 echo ""
-echo "MYSQL Database Credentials"
+echo "Postgres Database Credentials"
 echo "Database name: $database_name"
 echo "Database user: $database_user"
 echo "Database password: $database_password"
