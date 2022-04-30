@@ -23,15 +23,9 @@ chown $username:$username  /opt/mongodb_express/install.sh
 chown $username:$username  /opt/mongodb_express/.nvm
 cd /opt/mongodb_express/ 
 su $username -c "NVM_DIR=.nvm /opt/mongodb_express/install.sh"
-su $username -c "NVM_DIR=/opt/mongodb_express/.nvm && . /opt/mongodb_express/.nvm/nvm.sh && . /opt/mongodb_express/.nvm/bash_completion && nvm install node"
+su $username -c "NVM_DIR=/opt/mongodb_express/.nvm && . /opt/mongodb_express/.nvm/nvm.sh && . /opt/mongodb_express/.nvm/bash_completion && nvm install node && npm install mongo-express"
 
-#Get source code
-git clone https://github.com/mongo-express/mongo-express /opt/mongodb_express
-cd /opt/mongodb_express
-
-
-npm install
-cp $template_path/mongodb_express/config.js /opt/mongodb_express/node_modules/mongo-express/
+cp $template_path/mongodb_express/config.js /opt/mongodb_express/node_modules/mongo-express/config.js
 chown -R mongodb_express:mongodb_express /opt/mongodb_express
 
 # Systemd setup
