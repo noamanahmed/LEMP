@@ -112,6 +112,9 @@ while [ $# -gt 0 ]; do
         --with_mailhog)
             with_mailhog=yes
         ;;
+        --with_mailserver)
+            with_mailserver=yes
+        ;;
         --slack_notification_webhook)
             slack_notification_webhook="$2"
             shift
@@ -392,6 +395,14 @@ then
     ## Optional install postgres express gui tool for postgres
     echo "Installing pgadmin"
     bash $DIR/installers/pgadmin.sh > $INSTALL_DIR/pgadmin.sh.log 2>&1
+fi
+
+
+if [ ! -z "$with_mailserver" ]
+then
+    ## Optional install postgres express gui tool for postgres
+    echo "Installing Mail Server(Postfix,Dovecot,Postfixadmin,"
+    bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
 
 if [ ! -z "$slack_notification_webhook" ]

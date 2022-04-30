@@ -15,6 +15,13 @@ ufw allow ssh
 ufw allow 6000/tcp
 ## For mail
 ufw allow 25/tcp
+ufw allow 443/tcp
+ufw allow 587/tcp
+ufw allow 465/tcp
+ufw allow 143/tcp
+ufw allow 993/tcp
+ufw allow 110/tcp
+ufw allow 995/tcp
 ##For Kibana
 ufw allow 6100/tcp
 ##For RabbitMQ

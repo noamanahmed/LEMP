@@ -1,0 +1,6 @@
+user = {{db_username}}
+password = {{db_password}}
+hosts = 127.0.0.1
+dbname = {{db_name}}
+query = SELECT goto FROM alias WHERE address='%s' AND active = '1'
+#expansion_limit = 100

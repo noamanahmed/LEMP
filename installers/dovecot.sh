@@ -11,4 +11,8 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-apt install dovecot-imapd dovecot-pop3d -qqy
+apt install dovecot-imapd dovecot-pop3d dovecot-mysql -qqy
+
+cp $template_path/dovecot/dovecot.conf /etc/dovecot/dovecot.conf
+sed -i "s/{{domain}}/$HOSTNAME/" /etc/dovecot/dovecot.conf
+adduser dovecot mail
