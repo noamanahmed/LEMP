@@ -11,6 +11,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+args=("$@")
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -222,7 +223,7 @@ then
 fi
 
 
-site_info=$(bash site-info "$@")
+site_info=$(bash site-info $args)
 
 echo $site_info
 

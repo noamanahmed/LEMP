@@ -52,6 +52,13 @@ then
 fi
 
 
+
+if [ -f "/opt/uptime_robot.key" ]
+then    
+  echo "Please set your main uptime robot key at /opt/uptime_robot.key to enable monitors"
+  exit 1
+fi
+
 uptime_robot_api_key=$(cat /opt/uptime_robot.key)
 
 if [ -z "$uptime_robot_api_key" ]
