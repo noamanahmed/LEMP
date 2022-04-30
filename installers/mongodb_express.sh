@@ -13,11 +13,23 @@ fi
 
 
 adduser --gecos "" --disabled-password --no-create-home mongodb_express
+mkdir -p /opt/mongodb_express
+
+## Install node for this specfic user
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /opt/mongodb_express/install.sh
+mkdir /opt/mongodb_express/.nvm
+chmod +x /opt/mongodb_express/install.sh
+chown $username:$username  /opt/mongodb_express/install.sh
+chown $username:$username  /opt/mongodb_express/.nvm
+cd /opt/mongodb_express/ 
+su $username -c "NVM_DIR=.nvm /opt/mongodb_express/install.sh"
+su $username -c "NVM_DIR=/opt/mongodb_express/.nvm && . /opt/mongodb_express/.nvm/nvm.sh && . /opt/mongodb_express/.nvm/bash_completion && nvm install node"
 
 #Get source code
-mkdir -p /opt/mongodb_express
 git clone https://github.com/mongo-express/mongo-express /opt/mongodb_express
 cd /opt/mongodb_express
+
+
 npm install
 cp $template_path/mongodb_express/config.js /opt/mongodb_express/node_modules/mongo-express/
 chown -R mongodb_express:mongodb_express /opt/mongodb_express
