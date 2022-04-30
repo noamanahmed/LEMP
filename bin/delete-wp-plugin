@@ -18,8 +18,8 @@ while [ $# -gt 0 ]; do
       username="$2"
       shift
       ;;
-    -p|--pluguin)
-      pluguin="$2"
+    -p|--plugin)
+      plugin="$2"
       shift
       ;;
     *)
