@@ -22,7 +22,7 @@ adduser --gecos "" --disabled-password  --home $user_root  $username
 wget https://github.com/postfixadmin/postfixadmin/archive/postfixadmin-3.3.11.tar.gz
 tar xvf postfixadmin-3.3.11.tar.gz -C /tmp/
 rm -rf $user_root
-mv /var/www/postfixadmin-postfixadmin-3.3.11 $user_root
+mv /tmp/postfixadmin-3.3.11 $user_root
 chown -R $username:$username $user_root
 
 # Setup PHP
@@ -49,6 +49,7 @@ nginx_vhost_enabled="/etc/nginx/app-enabled/postfixadmin.conf"
 cp $template_path/postfixadmin/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx

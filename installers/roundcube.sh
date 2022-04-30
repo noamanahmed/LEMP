@@ -30,10 +30,10 @@ user_root=/opt/roundcube
 adduser --gecos "" --disabled-password  --home $user_root  $username
 
 # Get Source Code
-wget https://github.com/postfixadmin/postfixadmin/archive/postfixadmin-3.3.11.tar.gz
-tar xvf postfixadmin-3.3.11.tar.gz -C /tmp/
+wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcubemail-1.5.2-complete.tar.gz
+tar xvf roundcubemail-1.5.2-complete.tar.gz -C /tmp/
 rm -rf $user_root
-mv /var/www/postfixadmin-postfixadmin-3.3.11 $user_root
+mv /tmp/roundcubemail-1.5.2-complete $user_root
 chown -R $username:$username $user_root
 
 # Setup PHP
@@ -54,12 +54,13 @@ mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhos
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
 
-## Setting up postfix admin
+## Setting up roundcube
 nginx_vhost_file="/etc/nginx/app-available/roundcube.conf"
 nginx_vhost_enabled="/etc/nginx/app-enabled/roundcube.conf"
 cp $template_path/roundcube/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx

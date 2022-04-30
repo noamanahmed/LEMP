@@ -153,6 +153,19 @@ mkdir -p $INSTALL_DIR
 echo ""
 echo "Installing Directory in $INSTALL_DIR"
 
+# Setup notification and monitor uptop so that we can also set monitoring for the hostdomain itself
+if [ ! -z "$slack_notification_webhook" ]
+then
+    echo $slack_notification_webhook > /etc/monit/slack-url
+fi
+
+
+if [ ! -z "$uptime_robot_key" ]
+then
+    touch /opt/uptime_robot.key
+    echo $uptime_robot_key > /opt/uptime_robot.key
+fi
+
 echo "Updating Packages"
 apt-get update -qqy > $INSTALL_DIR/apt_update.log 2>&1
 apt-get upgrade -qqy > $INSTALL_DIR/apt_upgrade.log 2>&1
@@ -405,17 +418,6 @@ then
     bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
 
-if [ ! -z "$slack_notification_webhook" ]
-then
-    echo $slack_notification_webhook > /etc/monit/slack-url
-fi
-
-
-if [ ! -z "$uptime_robot_key" ]
-then
-    touch /opt/uptime_robot.key
-    echo $uptime_robot_key > /opt/uptime_robot.key
-fi
 
 
 
