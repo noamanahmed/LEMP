@@ -48,10 +48,12 @@ then
     exit;
 fi
 
-runuser -l $username -c "wp --path=/home/$username/www plugin install $plugin"
+wp --path=/var/www/home/$username/www plugin install $plugin
 
 
 if [ ! -z "$activate" ]
 then
-    runuser -l $username -c "wp --path=/home/$username/www plugin activate $plugin"
+    wp --path=/var/www/home/$username/www plugin activate $plugin
 fi
+
+bash fix-permissions -u $username
