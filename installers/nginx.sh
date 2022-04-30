@@ -39,6 +39,10 @@ cp $template_path/nginx/htpasswd /etc/nginx/htpasswd
 cp $template_path/nginx/performance.conf /etc/nginx/performance.conf
 cp $template_path/nginx/proxypass.conf /etc/nginx/proxypass.conf
 
+mkdir -p /etc/nginx/apps-enabled/
+mkdir -p /etc/nginx/apps-available/
+chown -R nginx:nginx /etc/nginx/apps-enabled/
+chown -R nginx:nginx /etc/nginx/apps-available/
 # mkdir -p /var/cache/nginx
 # chown -R nginx:nginx /etc/nginx/*
 # chown -R nginx:nginx /var/cache/nginx*

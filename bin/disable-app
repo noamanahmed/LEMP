@@ -26,23 +26,23 @@ fi
 
 
 
-if [ ! -f "/etc/nginx/sites-available/$app.conf" ]
+if [ ! -f "/etc/nginx/apps-available/$app.conf" ]
 then
     echo "No Vhost found for this app"    
     exit;
 fi
 
 
-if [ ! -L "/etc/nginx/sites-enabled/$app.conf" ]
+if [ ! -L "/etc/nginx/apps-enabled/$app.conf" ]
 then
     echo "This site is already disabled!"    
     exit;
 fi
 
 
-if [ -f "/etc/nginx/sites-available/$app.conf" ] 
+if [ -f "/etc/nginx/apps-available/$app.conf" ] 
 then    
-    nginx_vhost_enabled="/etc/nginx/sites-enabled/$app.conf"
+    nginx_vhost_enabled="/etc/nginx/apps-enabled/$app.conf"
     rm $nginx_vhost_enabled
 fi
 

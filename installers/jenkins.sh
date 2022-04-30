@@ -54,8 +54,8 @@ rm -rf /var/lib/jenkins/init.groovy.d/basic-security.groovy
 systemctl enable jenkins
 
 
-nginx_vhost_file="/etc/nginx/sites-available/jenkins.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/jenkins.conf"
+nginx_vhost_file="/etc/nginx/app-available/jenkins.conf"
+nginx_vhost_enabled="/etc/nginx/app-enabled/jenkins.conf"
 cp $template_path/jenkins/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

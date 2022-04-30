@@ -53,8 +53,8 @@ systemctl enable mailhog
 
 
 
-nginx_vhost_file="/etc/nginx/sites-available/mailhog.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/mailhog.conf"
+nginx_vhost_file="/etc/nginx/app-available/mailhog.conf"
+nginx_vhost_enabled="/etc/nginx/app-enabled/mailhog.conf"
 cp $template_path/mailhog/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

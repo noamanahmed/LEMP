@@ -38,8 +38,8 @@ systemctl enable netdata
 
 
 
-nginx_vhost_file="/etc/nginx/sites-available/netdata.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/netdata.conf"
+nginx_vhost_file="/etc/nginx/app-available/netdata.conf"
+nginx_vhost_enabled="/etc/nginx/app-enabled/netdata.conf"
 cp $template_path/netdata/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

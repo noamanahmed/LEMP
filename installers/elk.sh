@@ -46,8 +46,8 @@ apt install kibana -y
 systemctl enable kibana
 systemctl start kibana
 
-nginx_vhost_file="/etc/nginx/sites-available/kibana.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/kibana.conf"
+nginx_vhost_file="/etc/nginx/apps-available/kibana.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/kibana.conf"
 cp $template_path/kibana/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

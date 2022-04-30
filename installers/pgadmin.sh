@@ -28,4 +28,4 @@ if [[ ! -d "$PGADMIN_SETUP_EMAIL" ]]; then
     echo 'export PGADMIN_SETUP_PASSWORD="${password}"' >> ~/.bashrc
 fi
 
-. /usr/pgadmin4/bin/setup-web.sh --yes
+#. /usr/pgadmin4/bin/setup-web.sh --yes

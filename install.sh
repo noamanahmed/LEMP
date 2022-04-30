@@ -34,6 +34,9 @@ while [ $# -gt 0 ]; do
         --without_mongodb)
             without_mongodb=yes
         ;;
+        --without_mongodb_express)
+            without_mongodb_express=yes
+        ;;
         --without_nvm)
             without_nvm=yes
         ;;
@@ -75,6 +78,9 @@ while [ $# -gt 0 ]; do
         ;;
         --without_postgres)
             without_postgres=yes
+        ;;
+        --without_pgadmin)
+            without_pgadmin=yes
         ;;
         --with_elk)
             with_elk=yes
@@ -364,11 +370,26 @@ echo "Running apt autoremove to remove extra packages"
 apt autoremove -y > $INSTALL_DIR/apt_autoremove.log 2>&1
 
 ## Tools for Local Development Experience
-## Optional Mailhog
+
 if [ ! -z "$with_mailhog" ]
 then
+    ## Optional Mailhog
     echo "Installing Mailhog at $hostname"
     ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
+fi
+
+if [ -z "$without_mongodb" ] && [ -z "$without_mongodb_express" ]
+then
+    ## Optional install mongodb express gui tool for mongodb
+    echo "Installing mongodb express"
+    bash $DIR/installers/mongodb_express.sh > $INSTALL_DIR/mongodb_express.sh.log 2>&1
+fi
+
+if [ -z "$without_postgres" ] && [ -z "$without_pgadmin" ]
+then
+    ## Optional install postgres express gui tool for postgres
+    echo "Installing pgadmin"
+    bash $DIR/installers/pgadmin.sh > $INSTALL_DIR/pgadmin.sh.log 2>&1
 fi
 
 if [ ! -z "$slack_notification_webhook" ]

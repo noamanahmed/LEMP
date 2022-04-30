@@ -62,8 +62,8 @@ ln -s /etc/monit/conf-available/system.conf /etc/monit/conf-enabled/
 systemctl restart monit
 
 
-nginx_vhost_file="/etc/nginx/sites-available/monit.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/monit.conf"
+nginx_vhost_file="/etc/nginx/app-available/monit.conf"
+nginx_vhost_enabled="/etc/nginx/app-enabled/monit.conf"
 cp $template_path/monit/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

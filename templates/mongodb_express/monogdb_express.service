@@ -1,0 +1,13 @@
+[Unit]
+Description=Mongodb Express A GUI Tool for mongodb
+After=network.target
+
+[Service]
+Type=simple
+User=mongodb_express
+WorkingDirectory=/opt/mongodb_express/node_modules/mongo-express
+ExecStart=node app.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
