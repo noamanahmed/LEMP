@@ -22,6 +22,9 @@ while [ $# -gt 0 ]; do
         --without_security)
             without_security=yes
         ;;
+        --without_python)
+            without_python=yes
+        ;;
         --without_nginx)
             without_nginx=yes
         ;;
@@ -61,8 +64,8 @@ while [ $# -gt 0 ]; do
         --without_meilisearch)
             without_meilisearch=yes
         ;;
-     !    --with_jenkins)
-       !      with_jenkins=yes
+        --with_jenkins)
+            with_jenkins=yes
         ;;
         --without_jailkit)
             without_jailkit=yes
@@ -115,7 +118,6 @@ while [ $# -gt 0 ]; do
         ;;
         --uptime_robot_key)
             uptime_robot_key="$2"
-            slack_notification_webhook
             shift
         ;;
         *)
@@ -167,7 +169,7 @@ echo "Setting up SSH"
 ## Setting up SSH
 bash $DIR/installers/ssh.sh > $INSTALL_DIR/ssh.sh.log 2>&1
 
-if [ -z "$without_nvm" ]
+if [ -z "$without_python" ]
 then
     echo "Installing Python"
     ## Install python

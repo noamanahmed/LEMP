@@ -13,6 +13,8 @@ ufw default allow outgoing
 ## For SSH
 ufw allow ssh
 ufw allow 6000/tcp
+## For mail
+ufw allow 25/tcp
 ##For Kibana
 ufw allow 6100/tcp
 ##For RabbitMQ
