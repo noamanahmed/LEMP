@@ -12,7 +12,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-if [ systemctl is-active --quiet nginx -ne 0 ]
+if [ $(systemctl is-active --quiet nginx) -ne 0 ]
   then 
   echo "Nginx is not running!"
   exit
