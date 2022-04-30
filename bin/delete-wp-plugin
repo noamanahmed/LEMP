@@ -11,13 +11,26 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:p: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-        p) plugin=${OPTARG};;        
-    esac
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -p|--pluguin)
+      pluguin="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
+
 
 if [ -z "$username" ]
 then
@@ -48,6 +61,9 @@ then
     exit;
 fi
 
-runuser -l $username -c "wp --path=/var/www/home/$username/www plugin delete $plugin"
+wp --allow-root --path=/var/www/home/$username/www plugin delete $plugin
+
+bash fix-permissions -u $username
+
 
 
