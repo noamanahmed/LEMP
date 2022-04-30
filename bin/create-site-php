@@ -223,12 +223,9 @@ then
 fi
 
 site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql --wordpress $wordpress --wp_password $wp_password"
-
-echo $site_info_command
-
 site_info="$($site_info_command)"
 
-echo $site_info
+$site_info_command
 
 bash slack-notification -u $username -d $domain -m "$site_info" --success
 
