@@ -57,7 +57,7 @@ screen -S installer
 ```
 Clone the repo at the specified path (The path is important!)
 ```sh
-sudo git clone https://gitlab.com/noamanahmed/lemp /opt/lemp
+sudo git clone https://github.com/noamanahmed/lemp /opt/lemp
 ```
 Edit the install.sh script.
 ```sh
