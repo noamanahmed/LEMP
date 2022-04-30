@@ -48,12 +48,12 @@ then
     exit;
 fi
 
-wp --path=/var/www/home/$username/www plugin install $plugin
+wp --allow-root --path=/var/www/home/$username/www plugin install $plugin
 
 
 if [ ! -z "$activate" ]
 then
-    wp --path=/var/www/home/$username/www plugin activate $plugin
+    wp --allow-root --path=/var/www/home/$username/www plugin activate $plugin
 fi
 
 bash fix-permissions -u $username
