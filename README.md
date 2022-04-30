@@ -81,7 +81,7 @@ When done with the configuration run the installer.Change the default_site and e
 ```
 Here is the full command if your are interested. I highly recommend using uptime robot
 ```sh
-/opt/lemp/install.sh -u default_site -h hostname.example.com --without_nginx --without_mysql --without_php --without_mongodb --without_nvm --without_proftpd --without_letsencrypt --without_redis --without_docker --without_composer --without_java --without_meilisearch --without_jenkins --without_jailkit --without_scripts --without_hostname_site --without_phpmyadmin --without_postgres --with_elk --with_kafka --with_rabbitmq --with_netdata --with_sentry --with_glitchtip --without_monit --without_kernel --with_mailhog --slack_notification_webhook https://hooks.slack.com/services/XXXXXXX/XXXXXX/XXXXXXXXXX --uptime_robot_key YOUR_MAIN_API_KEY              
+/opt/lemp/install.sh -u default_site -h hostname.example.com --without_nginx --without_mysql --without_php --without_mongodb --without_nvm --without_proftpd --without_letsencrypt --without_redis --without_docker --without_composer --without_java --without_meilisearch --with_jenkins --without_jailkit --without_scripts --without_hostname_site --without_phpmyadmin --without_postgres --with_elk --with_kafka --with_rabbitmq --with_netdata --with_sentry --with_glitchtip --without_monit --without_kernel --with_mailhog --slack_notification_webhook https://hooks.slack.com/services/XXXXXXX/XXXXXX/XXXXXXXXXX --uptime_robot_key YOUR_MAIN_API_KEY              
 ```
 
 Now exit out of screen using Ctr/Cmd A + D. The script would install silently in the background. It generally took a 60 minute installation time with a 1GB Virmach VPS 
