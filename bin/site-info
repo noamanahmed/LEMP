@@ -23,6 +23,7 @@ while [ $# -gt 0 ]; do
       ;;
     --ssh_password)
       ssh_password="$2"
+      shift
       ;;
     --type)
       type="$2"
@@ -38,12 +39,15 @@ while [ $# -gt 0 ]; do
       ;;
     --database_name)
       database_name="$2"
+      shift
       ;;
     --database_user_name)
       database_user_name="$2"
+      shift
       ;;
     --database_password)
       database_password="$2"
+      shift
       ;;
     --redis)
       redis=yes      
