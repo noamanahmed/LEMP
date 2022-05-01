@@ -59,10 +59,9 @@ mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhos
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
 
-# echo "Password $password"
-# hash_password=$(php  -r "echo password_hash('$password', PASSWORD_ARGON2I);")
-echo "Hash Password $hash_password"
-echo "s/{{password}}/$(echo $hash_password | sed 's/\//\\\//g')/"
+
+hash_password=$(php  -r "echo password_hash('$password', PASSWORD_ARGON2I);")
+
 cp $template_path/postfixadmin/mysql.sql /tmp/mysql-postfixadmin.sql
 sed -i "s/{{domain}}/$HOSTNAME/g" /tmp/mysql-postfixadmin.sql
 sed -i "s/{{username}}/$username/g" /tmp/mysql-postfixadmin.sql
