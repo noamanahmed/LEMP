@@ -22,7 +22,7 @@ wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcub
 tar xvf /tmp/roundcubemail-1.5.2-complete.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/roundcubemail-1.5.2 $user_root
-cp $template_path/roundcube/config.inc.php $user_root/
+cp $template_path/roundcube/config.inc.php $user_root/config/
 mkdir -p $user_root/logs/
 mkdir -p $user_root/logs/nginx
 mkdir -p $user_root/logs/php
