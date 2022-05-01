@@ -10,19 +10,6 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};; 
-    esac
-done
-
-if [ -z "$username" ]
-then
-    echo "Please provide a username using -u "
-    exit
-fi
-
 php=8.1
 username=roundcube
 user_root=/opt/roundcube

@@ -79,6 +79,6 @@ sed -i "s/{{db_password}}/$database_password/" /etc/postfix/main.cf
 
 postconf -e "mydestination = \$myhostname, localhost.\$mydomain, localhost"
 
-adduser vmail --system --group --uid 2000 --disabled-login --no-create-home --gecos 
+adduser --gecos --system --group --uid 2000 --disabled-login --no-create-home vmail
 mkdir /var/vmail/
 chown -R vmail:vmail /var/vmail/ 
