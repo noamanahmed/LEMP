@@ -15,6 +15,7 @@ username=roundcube
 user_root=/opt/roundcube
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
+usermod -a -G $username nginx
 
 # Get Source Code
 wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcubemail-1.5.2-complete.tar.gz -O /tmp/roundcubemail-1.5.2-complete.tar.gz

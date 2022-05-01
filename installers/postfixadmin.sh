@@ -17,6 +17,7 @@ username=postfixadmin
 user_root=/opt/postfixadmin
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
+usermod -a -G $username nginx
 
 # Get Source Code
 wget https://github.com/postfixadmin/postfixadmin/archive/postfixadmin-3.3.11.tar.gz -O /tmp/postfixadmin-3.3.11.tar.gz
@@ -24,6 +25,7 @@ tar xvf /tmp/postfixadmin-3.3.11.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/postfixadmin-postfixadmin-3.3.11 $user_root
 COMPOSER_ALLOW_SUPERUSER=1 composer install --working-dir=$user_root
+cp $template_path/postfixadmin/config.local.php $user_root/
 mkdir -p $user_root/logs/
 mkdir -p $user_root/logs/nginx
 mkdir -p $user_root/logs/php
@@ -59,7 +61,7 @@ cp $template_path/postfixadmin/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/" $nginx_vhost_file
-sed -i "s/{{www_path}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $user_root/public | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
@@ -87,6 +89,11 @@ done
 sed -i "s/{{db_name}}/$database_name/" /etc/postfix/main.cf
 sed -i "s/{{db_username}}/$database_user/" /etc/postfix/main.cf
 sed -i "s/{{db_password}}/$database_password/" /etc/postfix/main.cf
+
+
+sed -i "s/{{db_name}}/$database_name/"  /$user_root/config.local.php
+sed -i "s/{{db_username}}/$database_user/"  /$user_root/config.local.php
+sed -i "s/{{db_password}}/$database_password/"  /$user_root/config.local.php
 
 postconf -e "mydestination = \$myhostname, localhost.\$mydomain, localhost"
 
