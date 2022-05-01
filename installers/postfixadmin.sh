@@ -18,13 +18,13 @@ user_root=/opt/postfixadmin
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
-
+usermod -a -G dovecot $username
 # Get Source Code
 wget https://github.com/postfixadmin/postfixadmin/archive/postfixadmin-3.3.11.tar.gz -O /tmp/postfixadmin-3.3.11.tar.gz
 tar xvf /tmp/postfixadmin-3.3.11.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/postfixadmin-postfixadmin-3.3.11 $user_root
-COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --working-dir=$user_root
+#COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --working-dir=$user_root
 cp $template_path/postfixadmin/config.local.php $user_root/
 mkdir -p $user_root/templates_c/
 

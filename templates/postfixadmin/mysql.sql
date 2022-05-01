@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 01, 2022 at 02:53 AM
+-- Generation Time: May 01, 2022 at 03:06 AM
 -- Server version: 8.0.28-0ubuntu0.20.04.3
 -- PHP Version: 8.0.18
 
@@ -33,6 +33,13 @@ CREATE TABLE `admin` (
   `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `token_validity` datetime NOT NULL DEFAULT '2000-01-01 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Postfix Admin - Virtual Admins';
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`username`, `password`, `created`, `modified`, `active`, `superadmin`, `phone`, `email_other`, `token`, `token_validity`) VALUES
+('noamanahmed99@gmail.com', '{ARGON2I}$argon2i$v=19$m=32768,t=5,p=1$3k1Uh9Pdg87rYhDV+p4Row$Kw+jOnHHdmKlBrUdsjhXk9045gF+Os9hLUegid+OffI', '2022-05-01 03:05:23', '2022-05-01 03:05:23', 1, 1, '', '', '', '2022-05-01 03:05:22');
 
 -- --------------------------------------------------------
 
@@ -124,6 +131,13 @@ CREATE TABLE `domain_admins` (
   `id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Postfix Admin - Domain Admins';
 
+--
+-- Dumping data for table `domain_admins`
+--
+
+INSERT INTO `domain_admins` (`username`, `domain`, `created`, `active`, `id`) VALUES
+('noamanahmed99@gmail.com', 'ALL', '2022-05-01 03:05:23', 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -171,6 +185,13 @@ CREATE TABLE `log` (
   `data` text CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Postfix Admin - Log';
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`timestamp`, `username`, `domain`, `action`, `data`, `id`) VALUES
+('2022-05-01 03:05:23', 'SETUP.PHP (39.45.6.160)', '', 'create_admin', 'noamanahmed99@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -357,7 +378,7 @@ ALTER TABLE `config`
 -- AUTO_INCREMENT for table `domain_admins`
 --
 ALTER TABLE `domain_admins`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `fetchmail`
@@ -369,7 +390,7 @@ ALTER TABLE `fetchmail`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
