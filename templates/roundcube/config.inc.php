@@ -33,8 +33,8 @@ $config['db_dsnw'] = 'mysql://{{db_username}}:{{db_password}}@127.0.0.1/{{db_nam
 // For example %n = mail.domain.tld, %t = domain.tld
 // WARNING: After hostname change update of mail_host column in users table is
 //          required to match old user data records with the new host.
-$config['default_host'] = '{{domain}}';
-$config['smtp_server'] = '{{domain}}';
+$config['default_host'] = 'tls://{{domain}}';
+$config['smtp_server'] = 'tls://{{domain}}';
 
 // provide an URL where a user can get support for this Roundcube installation
 // PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!

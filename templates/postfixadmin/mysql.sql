@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 01, 2022 at 03:06 AM
+-- Generation Time: May 01, 2022 at 09:03 PM
 -- Server version: 8.0.28-0ubuntu0.20.04.3
 -- PHP Version: 8.0.18
 
@@ -38,9 +38,6 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`username`, `password`, `created`, `modified`, `active`, `superadmin`, `phone`, `email_other`, `token`, `token_validity`) VALUES
-('noamanahmed99@gmail.com', '{ARGON2I}$argon2i$v=19$m=32768,t=5,p=1$3k1Uh9Pdg87rYhDV+p4Row$Kw+jOnHHdmKlBrUdsjhXk9045gF+Os9hLUegid+OffI', '2022-05-01 03:05:23', '2022-05-01 03:05:23', 1, 1, '', '', '', '2022-05-01 03:05:22');
-
 -- --------------------------------------------------------
 
 --
@@ -55,6 +52,17 @@ CREATE TABLE `alias` (
   `modified` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
   `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Postfix Admin - Virtual Aliases';
+
+--
+-- Dumping data for table `alias`
+--
+
+INSERT INTO `alias` (`address`, `goto`, `domain`, `created`, `modified`, `active`) VALUES
+('abuse@{{domain}}', 'abuse@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1),
+('hostmaster@{{domain}}', 'hostmaster@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1),
+('noaman@{{domain}}', 'noaman@{{domain}}', '{{domain}}', '2022-05-01 19:31:05', '2022-05-01 19:31:05', 1),
+('postmaster@{{domain}}', 'postmaster@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1),
+('webmaster@{{domain}}', 'webmaster@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1);
 
 -- --------------------------------------------------------
 
@@ -115,7 +123,8 @@ CREATE TABLE `domain` (
 --
 
 INSERT INTO `domain` (`domain`, `description`, `aliases`, `mailboxes`, `maxquota`, `quota`, `transport`, `backupmx`, `created`, `modified`, `active`, `password_expiry`) VALUES
-('ALL', '', 0, 0, 0, 0, '', 0, '2022-05-01 02:50:15', '2022-05-01 02:50:15', 1, 0);
+('ALL', '', 0, 0, 0, 0, '', 0, '2022-05-01 02:50:15', '2022-05-01 02:50:15', 1, 0),
+('{{domain}}', 'Default Domain', 0, 250, 10, 2048, 'virtual', 0, '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1, 365);
 
 -- --------------------------------------------------------
 
@@ -136,7 +145,7 @@ CREATE TABLE `domain_admins` (
 --
 
 INSERT INTO `domain_admins` (`username`, `domain`, `created`, `active`, `id`) VALUES
-('noamanahmed99@gmail.com', 'ALL', '2022-05-01 03:05:23', 1, 1);
+('admin@{{domain}}', 'ALL', '2022-05-01 03:05:23', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -186,12 +195,6 @@ CREATE TABLE `log` (
   `id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Postfix Admin - Log';
 
---
--- Dumping data for table `log`
---
-
-INSERT INTO `log` (`timestamp`, `username`, `domain`, `action`, `data`, `id`) VALUES
-('2022-05-01 03:05:23', 'SETUP.PHP (39.45.6.160)', '', 'create_admin', 'noamanahmed99@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -216,6 +219,13 @@ CREATE TABLE `mailbox` (
   `token_validity` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
   `password_expiry` datetime NOT NULL DEFAULT '2000-01-01 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Postfix Admin - Virtual Mailboxes';
+
+--
+-- Dumping data for table `mailbox`
+--
+
+INSERT INTO `mailbox` (`username`, `password`, `name`, `maildir`, `quota`, `local_part`, `domain`, `created`, `modified`, `active`, `phone`, `email_other`, `token`, `token_validity`, `password_expiry`) VALUES
+('noaman@{{domain}}', '{{password}}', 'Noaman Ahmed', '{{domain}}/noaman/', 0, 'noaman', '{{domain}}', '2022-05-01 19:31:05', '2022-05-01 19:31:05', 1, '', '', '', '2022-05-01 19:31:04', '2023-05-01 19:31:00');
 
 -- --------------------------------------------------------
 
@@ -390,7 +400,7 @@ ALTER TABLE `fetchmail`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

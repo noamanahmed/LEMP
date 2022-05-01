@@ -59,7 +59,13 @@ mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'"
 mysql -e "FLUSH PRIVILEGES;"
 
 
-pv $template_path/postfixadmin/mysql.sql  | mysql -u root $username
+cp $template_path/postfixadmin/mysql.sql /tmp/mysql-postfixadmin.sql
+sed -i "s/{{domain}}/$HOSTNAME/" /tmp/mysql-postfixadmin.sql
+sed -i "s/{{password}}/$(php  -r "echo password_hash('$password', PASSWORD_ARGON2I);")/" /tmp/mysql-postfixadmin.sql
+
+pv $template_path/postfixadmin/mysql-postfixadmin.sql  | mysql -u root $username
+
+
 
 ## Setting up postfix admin
 nginx_vhost_file="/etc/nginx/apps-available/postfixadmin.conf"
