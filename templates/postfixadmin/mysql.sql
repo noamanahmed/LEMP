@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 01, 2022 at 02:42 AM
+-- Generation Time: May 01, 2022 at 02:53 AM
 -- Server version: 8.0.28-0ubuntu0.20.04.3
 -- PHP Version: 8.0.18
 
@@ -102,6 +102,13 @@ CREATE TABLE `domain` (
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `password_expiry` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Postfix Admin - Virtual Domains';
+
+--
+-- Dumping data for table `domain`
+--
+
+INSERT INTO `domain` (`domain`, `description`, `aliases`, `mailboxes`, `maxquota`, `quota`, `transport`, `backupmx`, `created`, `modified`, `active`, `password_expiry`) VALUES
+('ALL', '', 0, 0, 0, 0, '', 0, '2022-05-01 02:50:15', '2022-05-01 02:50:15', 1, 0);
 
 -- --------------------------------------------------------
 

@@ -25,6 +25,7 @@ mv /tmp/roundcubemail-1.5.2 $user_root
 cp $template_path/roundcube/config.inc.php $user_root/config/
 
 mkdir -p $user_root/logs/
+mkdir -p $user_root/tmp/
 mkdir -p $user_root/logs/nginx
 mkdir -p $user_root/logs/php
 mkdir -p $user_root/logs/mail

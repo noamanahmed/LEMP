@@ -30,6 +30,7 @@ mkdir -p $user_root/templates_c/
 
 
 mkdir -p $user_root/logs/
+mkdir -p $user_root/tmp/
 mkdir -p $user_root/logs/nginx
 mkdir -p $user_root/logs/php
 mkdir -p $user_root/logs/mail
