@@ -51,6 +51,9 @@ mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhos
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
 
+pv $template_path/roundcube/mysql.sql  | mysql -u root $username
+
+
 sed -i "s/{{db_name}}/$database_name/"  $user_root/config/config.inc.php
 sed -i "s/{{db_username}}/$database_user/"  $user_root/config/config.inc.php
 sed -i "s/{{db_password}}/$database_password/"  $user_root/config/config.inc.php
