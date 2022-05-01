@@ -22,3 +22,4 @@ bash $DIR/postfixadmin.sh
 bash $DIR/roundcube.sh
 systemctl start postfix
 systemctl start dovecot
+systemctl restart nginx

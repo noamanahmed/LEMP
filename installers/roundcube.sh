@@ -22,6 +22,7 @@ wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcub
 tar xvf /tmp/roundcubemail-1.5.2-complete.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/roundcubemail-1.5.2 $user_root
+cp $template_path/roundcube/config.inc.php $user_root/
 mkdir -p $user_root/logs/
 mkdir -p $user_root/logs/nginx
 mkdir -p $user_root/logs/php
@@ -49,6 +50,10 @@ mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_pass
 mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
+
+sed -i "s/{{db_name}}/$database_name/"  /$user_root/config.local.php
+sed -i "s/{{db_username}}/$database_user/"  /$user_root/config.local.php
+sed -i "s/{{db_password}}/$database_password/"  /$user_root/config.local.php
 
 ## Setting up roundcube
 nginx_vhost_file="/etc/nginx/apps-available/roundcube.conf"
