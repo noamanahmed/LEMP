@@ -22,7 +22,7 @@ usermod -a -G $username nginx
 usermod -a -G dovecot $username
 # Get Source Code
 wget https://github.com/postfixadmin/postfixadmin/archive/postfixadmin-3.3.11.tar.gz -O /tmp/postfixadmin-3.3.11.tar.gz
-tar xvf /tmp/postfixadmin-3.3.11.tar.gz -C /tmp/
+tar xf /tmp/postfixadmin-3.3.11.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/postfixadmin-postfixadmin-3.3.11 $user_root
 #COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --working-dir=$user_root

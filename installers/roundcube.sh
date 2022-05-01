@@ -19,7 +19,7 @@ usermod -a -G $username nginx
 
 # Get Source Code
 wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcubemail-1.5.2-complete.tar.gz -O /tmp/roundcubemail-1.5.2-complete.tar.gz
-tar xvf /tmp/roundcubemail-1.5.2-complete.tar.gz -C /tmp/
+tar xf /tmp/roundcubemail-1.5.2-complete.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/roundcubemail-1.5.2 $user_root
 cp $template_path/roundcube/config.inc.php $user_root/config/
