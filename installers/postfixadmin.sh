@@ -24,7 +24,7 @@ wget https://github.com/postfixadmin/postfixadmin/archive/postfixadmin-3.3.11.ta
 tar xvf /tmp/postfixadmin-3.3.11.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/postfixadmin-postfixadmin-3.3.11 $user_root
-COMPOSER_ALLOW_SUPERUSER=1 composer install --working-dir=$user_root
+COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --working-dir=$user_root
 cp $template_path/postfixadmin/config.local.php $user_root/
 mkdir -p $user_root/templates_c/
 
@@ -56,6 +56,9 @@ mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_pass
 mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
+
+
+pv $template_path/postfixadmin/mysql.sql  | mysql -u root $username
 
 ## Setting up postfix admin
 nginx_vhost_file="/etc/nginx/apps-available/postfixadmin.conf"
