@@ -14,6 +14,7 @@ ufw default allow outgoing
 ufw allow ssh
 ufw allow 6000/tcp
 ## For mail
+ufw allow out 25
 ufw allow 25/tcp
 ufw allow 443/tcp
 ufw allow 587/tcp

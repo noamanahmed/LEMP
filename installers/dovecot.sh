@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-apt install dovecot-imapd dovecot-pop3d dovecot-mysql -qqy
+apt install dovecot-imapd dovecot-pop3d dovecot-mysql dovecot-lmtpd -qqy
 systemctl stop dovecot
 cp $template_path/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext
 cp $template_path/dovecot/dovecot.conf /etc/dovecot/dovecot.conf
