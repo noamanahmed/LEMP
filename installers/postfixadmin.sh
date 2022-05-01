@@ -36,6 +36,8 @@ database_name="$(echo $username | head -c 12)"
 database_user="$(echo $username | head -c 12)"
 database_password="$(openssl rand -hex 8)"
 
+mysql -e "DROP DATABASE IF EXISTS $username"
+mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
 mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
 mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
