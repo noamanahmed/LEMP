@@ -13,6 +13,7 @@ fi
 
 apt install dovecot-imapd dovecot-pop3d dovecot-mysql -qqy
 systemctl stop dovecot
+cp $template_path/dovecot/dovecot-sql.conf.ext /etc/dovecot/dovecot-sql.conf.ext
 cp $template_path/dovecot/dovecot.conf /etc/dovecot/dovecot.conf
 cp $template_path/dovecot/conf.d/* /etc/dovecot/conf.d/
 sed -i "s/{{domain}}/$HOSTNAME/" /etc/dovecot/dovecot.conf
@@ -28,4 +29,5 @@ for dovecot_file in ${dovecot_files_array[@]}; do
     sed -i "s/{{db_password}}/$database_password/" /etc/dovecot/conf.d/$dovecot_file
     sed -i "s/{{domain}}/$HOSTNAME/" /etc/dovecot/conf.d/$dovecot_file
 done
+
  

@@ -102,6 +102,12 @@ sed -i "s/{{db_name}}/$database_name/"  /$user_root/config.local.php
 sed -i "s/{{db_username}}/$database_user/"  /$user_root/config.local.php
 sed -i "s/{{db_password}}/$database_password/"  /$user_root/config.local.php
 
+
+sed -i "s/{{db_name}}/$database_name/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "s/{{db_username}}/$database_user/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "s/{{db_password}}/$database_password/" /etc/dovecot/dovecot-sql.conf.ext
+sed -i "s/{{domain}}/$HOSTNAME/" /etc/dovecot/dovecot-sql.conf.ext
+
 postconf -e "mydestination = \$myhostname, localhost.\$mydomain, localhost"
 
 adduser --gecos --system --group --uid 2000 --disabled-login --no-create-home vmail
