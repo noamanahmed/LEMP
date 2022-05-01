@@ -38,6 +38,9 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
+INSERT INTO `admin` (`username`, `password`, `created`, `modified`, `active`, `superadmin`, `phone`, `email_other`, `token`, `token_validity`) VALUES
+('admin@{{domain}}', '{{password}}', '2022-05-01 03:05:23', '2022-05-01 03:05:23', 1, 1, '', '', '', '2022-05-01 03:05:22');
+
 -- --------------------------------------------------------
 
 --
