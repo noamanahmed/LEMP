@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`username`, `password`, `created`, `modified`, `active`, `superadmin`, `phone`, `email_other`, `token`, `token_validity`) VALUES
-('admin@{{domain}}', '{{password}}', '2022-05-01 03:05:23', '2022-05-01 03:05:23', 1, 1, '', '', '', '2022-05-01 03:05:22');
+('admin@{{domain}}', '{ARGON2I}{{password}}', '2022-05-01 03:05:23', '2022-05-01 03:05:23', 1, 1, '', '', '', '2022-05-01 03:05:22');
 
 -- --------------------------------------------------------
 
@@ -63,7 +63,7 @@ CREATE TABLE `alias` (
 INSERT INTO `alias` (`address`, `goto`, `domain`, `created`, `modified`, `active`) VALUES
 ('abuse@{{domain}}', 'abuse@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1),
 ('hostmaster@{{domain}}', 'hostmaster@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1),
-('noaman@{{domain}}', 'noaman@{{domain}}', '{{domain}}', '2022-05-01 19:31:05', '2022-05-01 19:31:05', 1),
+('{{username}}@{{domain}}', '{{username}}@{{domain}}', '{{domain}}', '2022-05-01 19:31:05', '2022-05-01 19:31:05', 1),
 ('postmaster@{{domain}}', 'postmaster@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1),
 ('webmaster@{{domain}}', 'webmaster@change-this-to-your.domain.tld', '{{domain}}', '2022-05-01 19:30:38', '2022-05-01 19:30:38', 1);
 
@@ -228,7 +228,7 @@ CREATE TABLE `mailbox` (
 --
 
 INSERT INTO `mailbox` (`username`, `password`, `name`, `maildir`, `quota`, `local_part`, `domain`, `created`, `modified`, `active`, `phone`, `email_other`, `token`, `token_validity`, `password_expiry`) VALUES
-('noaman@{{domain}}', '{{password}}', 'Noaman Ahmed', '{{domain}}/noaman/', 0, 'noaman', '{{domain}}', '2022-05-01 19:31:05', '2022-05-01 19:31:05', 1, '', '', '', '2022-05-01 19:31:04', '2023-05-01 19:31:00');
+('{{username}}@{{domain}}', '{ARGON2I}{{password}}', 'Initial User', '{{domain}}/{{username}}/', 0, '{{username}}', '{{domain}}', '2022-05-01 19:31:05', '2022-05-01 19:31:05', 1, '', '', '', '2022-05-01 19:31:04', '2023-05-01 19:31:00');
 
 -- --------------------------------------------------------
 
