@@ -55,8 +55,8 @@ mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'"
 mysql -e "FLUSH PRIVILEGES;"
 
 ## Setting up roundcube
-nginx_vhost_file="/etc/nginx/app-available/roundcube.conf"
-nginx_vhost_enabled="/etc/nginx/app-enabled/roundcube.conf"
+nginx_vhost_file="/etc/nginx/apps-available/roundcube.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/roundcube.conf"
 cp $template_path/roundcube/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

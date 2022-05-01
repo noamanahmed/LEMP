@@ -44,8 +44,8 @@ mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'"
 mysql -e "FLUSH PRIVILEGES;"
 
 ## Setting up postfix admin
-nginx_vhost_file="/etc/nginx/app-available/postfixadmin.conf"
-nginx_vhost_enabled="/etc/nginx/app-enabled/postfixadmin.conf"
+nginx_vhost_file="/etc/nginx/apps-available/postfixadmin.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/postfixadmin.conf"
 cp $template_path/postfixadmin/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
@@ -79,6 +79,6 @@ sed -i "s/{{db_password}}/$database_password/" /etc/postfix/main.cf
 
 postconf -e "mydestination = \$myhostname, localhost.\$mydomain, localhost"
 
-adduser vmail --system --group --uid 2000 --disabled-login --no-create-home
+adduser vmail --system --group --uid 2000 --disabled-login --no-create-home --gecos 
 mkdir /var/vmail/
 chown -R vmail:vmail /var/vmail/ 
