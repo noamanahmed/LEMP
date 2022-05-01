@@ -64,7 +64,7 @@ hash_password=$(php  -r "echo password_hash('$password', PASSWORD_ARGON2I);")
 echo "Hash Password $hash_password"
 cp $template_path/postfixadmin/mysql.sql /tmp/mysql-postfixadmin.sql
 sed -i "s/{{domain}}/$HOSTNAME/g" /tmp/mysql-postfixadmin.sql
-sed -i "s/{{password}}/$hash_password/" /tmp/mysql-postfixadmin.sql
+sed -i "s/{{password}}/$(echo $hash_password | sed 's/\//\\\//g')/" /tmp/mysql-postfixadmin.sql
 
 pv /tmp/mysql-postfixadmin.sql  | mysql -u root $username
 
