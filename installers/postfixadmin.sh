@@ -24,6 +24,12 @@ tar xvf /tmp/postfixadmin-3.3.11.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/postfixadmin-postfixadmin-3.3.11 $user_root
 COMPOSER_ALLOW_SUPERUSER=1 composer install --working-dir=$user_root
+mkdir -p $user_root/logs/
+mkdir -p $user_root/logs/nginx
+mkdir -p $user_root/logs/php
+mkdir -p $user_root/logs/mail
+mkdir -p $user_root/cache
+mkdir -p $user_root/cache/nginx
 chown -R $username:$username $user_root
 
 # Setup PHP

@@ -21,6 +21,12 @@ wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcub
 tar xvf /tmp/roundcubemail-1.5.2-complete.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/roundcubemail-1.5.2 $user_root
+mkdir -p $user_root/logs/
+mkdir -p $user_root/logs/nginx
+mkdir -p $user_root/logs/php
+mkdir -p $user_root/logs/mail
+mkdir -p $user_root/cache
+mkdir -p $user_root/cache/nginx
 chown -R $username:$username $user_root
 
 # Setup PHP
