@@ -30,8 +30,8 @@ user_root=/opt/roundcube
 adduser --gecos "" --disabled-password  --home $user_root  $username
 
 # Get Source Code
-wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcubemail-1.5.2-complete.tar.gz
-tar xvf roundcubemail-1.5.2-complete.tar.gz -C /tmp/
+wget https://github.com/roundcube/roundcubemail/releases/download/1.5.2/roundcubemail-1.5.2-complete.tar.gz -O /tmp/roundcubemail-1.5.2-complete.tar.gz
+tar xvf /tmp/roundcubemail-1.5.2-complete.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/roundcubemail-1.5.2-complete $user_root
 chown -R $username:$username $user_root
