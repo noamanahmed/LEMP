@@ -23,7 +23,7 @@ wget https://github.com/postfixadmin/postfixadmin/archive/postfixadmin-3.3.11.ta
 tar xvf /tmp/postfixadmin-3.3.11.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/postfixadmin-postfixadmin-3.3.11 $user_root
-composer install --working-dir=$user_root
+COMPOSER_ALLOW_SUPERUSER=1 composer install --working-dir=$user_root
 chown -R $username:$username $user_root
 
 # Setup PHP
