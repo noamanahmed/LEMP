@@ -14,6 +14,7 @@ fi
 
 php=8.1
 username=postfixadmin
+password=postfixadmin
 user_root=/opt/postfixadmin
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
