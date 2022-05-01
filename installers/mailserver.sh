@@ -20,4 +20,5 @@ bash dovecot.sh
 systemctl stop dovecot
 bash postfixadmin.sh
 bash roundcube.sh
-
+systemctl start postfix
+systemctl start dovecot

@@ -54,11 +54,11 @@ sed -i "s/{{username}}/$username/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
 
-## We need to setup SQL for postfix
-
-
+## We needed to setup SQL for proper postfix configuration
+cp $template_path/postfix/master.cf /etc/postfix/master.cf
 cp $template_path/postfix/main.cf /etc/postfix/main.cf
 sed -i "s/{{domain}}/$HOSTNAME/" /etc/postfix/main.cf
+
 
 mkdir -p /etc/postfix/sql/
 cp -rf $template_path/postfix/sql/* /etc/postfix/sql/

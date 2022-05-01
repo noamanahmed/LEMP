@@ -24,8 +24,8 @@ compatibility_level = 2
 
 
 # TLS parameters
-smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
-smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_tls_cert_file=/etc/letsencrypt/live/{{domain}}/fullchain.pem
+smtpd_tls_key_file=/etc/letsencrypt/live/{{domain}}/privkey.pem
 smtpd_tls_security_level=may
 
 smtp_tls_CApath=/etc/ssl/certs
