@@ -26,6 +26,9 @@ rm -rf $user_root
 mv /tmp/postfixadmin-postfixadmin-3.3.11 $user_root
 COMPOSER_ALLOW_SUPERUSER=1 composer install --working-dir=$user_root
 cp $template_path/postfixadmin/config.local.php $user_root/
+mkdir -p $user_root/templates_c/
+
+
 mkdir -p $user_root/logs/
 mkdir -p $user_root/logs/nginx
 mkdir -p $user_root/logs/php
