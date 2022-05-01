@@ -67,6 +67,7 @@ sed -i "s/{{domain}}/$HOSTNAME/g" /tmp/mysql-postfixadmin.sql
 sed -i "s/{{username}}/$username/g" /tmp/mysql-postfixadmin.sql
 sed -i "s/{{password}}/$(echo $hash_password | sed 's/\//\\\//g')/" /tmp/mysql-postfixadmin.sql
 
+
 pv /tmp/mysql-postfixadmin.sql  | mysql -u root $username
 
 
