@@ -54,6 +54,7 @@ mysql -e "FLUSH PRIVILEGES;"
 sed -i "s/{{db_name}}/$database_name/"  $user_root/config/config.inc.php
 sed -i "s/{{db_username}}/$database_user/"  $user_root/config/config.inc.php
 sed -i "s/{{db_password}}/$database_password/"  $user_root/config/config.inc.php
+sed -i "s/{{hash_key}}/$(openssl rand -hex 16)/"  $user_root/config/config.inc.php
 
 ## Setting up roundcube
 nginx_vhost_file="/etc/nginx/apps-available/roundcube.conf"
