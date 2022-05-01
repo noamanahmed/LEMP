@@ -14,11 +14,11 @@ fi
 
 # Helper file to setup complete mailserver as this process is a little complicated
 # Install.sh would have been alot compliciated
-bash postfix.sh
+bash $DIR/postfix.sh
 systemctl stop postfix
-bash dovecot.sh
+bash $DIR/dovecot.sh
 systemctl stop dovecot
-bash postfixadmin.sh
-bash roundcube.sh
+bash $DIR/postfixadmin.sh
+bash $DIR/roundcube.sh
 systemctl start postfix
 systemctl start dovecot
