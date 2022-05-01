@@ -56,6 +56,7 @@ mysql -e "FLUSH PRIVILEGES;"
 pv $template_path/roundcube/mysql.sql  | mysql -u root $username
 
 
+sed -i "s/{{domain}}/$HOSTNAME/"  $user_root/config/config.inc.php
 sed -i "s/{{db_name}}/$database_name/"  $user_root/config/config.inc.php
 sed -i "s/{{db_username}}/$database_user/"  $user_root/config/config.inc.php
 sed -i "s/{{db_password}}/$database_password/"  $user_root/config/config.inc.php

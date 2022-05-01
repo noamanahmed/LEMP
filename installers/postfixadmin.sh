@@ -83,7 +83,7 @@ sed -i "s/{{domain}}/$HOSTNAME/" /etc/postfix/main.cf
 mkdir -p /etc/postfix/sql/
 cp -rf $template_path/postfix/sql/* /etc/postfix/sql/
 chmod -R 0640 /etc/postfix/sql/*
-
+chown -R postfix:postfix /etc/postfix/sql
 
 sql_files_array=( "mysql_virtual_alias_domain_catchall_maps.cf" "mysql_virtual_alias_domain_mailbox_maps.cf" "mysql_virtual_alias_domain_maps.cf" "mysql_virtual_alias_maps.cf" "mysql_virtual_domains_maps.cf" "mysql_virtual_mailbox_maps.cf" )
 
