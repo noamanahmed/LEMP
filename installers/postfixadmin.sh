@@ -61,7 +61,8 @@ mysql -e "FLUSH PRIVILEGES;"
 
 # echo "Password $password"
 # hash_password=$(php  -r "echo password_hash('$password', PASSWORD_ARGON2I);")
-# echo "Hash Password $hash_password"
+echo "Hash Password $hash_password"
+echo "s/{{password}}/$(echo $hash_password | sed 's/\//\\\//g')/"
 cp $template_path/postfixadmin/mysql.sql /tmp/mysql-postfixadmin.sql
 sed -i "s/{{domain}}/$HOSTNAME/g" /tmp/mysql-postfixadmin.sql
 sed -i "s/{{username}}/$username/g" /tmp/mysql-postfixadmin.sql
