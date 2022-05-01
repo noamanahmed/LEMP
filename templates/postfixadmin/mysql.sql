@@ -69,7 +69,7 @@ INSERT INTO `alias` (`address`, `goto`, `domain`, `created`, `modified`, `active
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `alias_domain`
 --
 
