@@ -64,7 +64,7 @@ cp $template_path/postfixadmin/mysql.sql /tmp/mysql-postfixadmin.sql
 sed -i "s/{{domain}}/$HOSTNAME/" /tmp/mysql-postfixadmin.sql
 sed -i "s/{{password}}/$(php  -r "echo password_hash('$password', PASSWORD_ARGON2I);")/" /tmp/mysql-postfixadmin.sql
 
-pv $template_path/postfixadmin/mysql-postfixadmin.sql  | mysql -u root $username
+pv /tmp/mysql-postfixadmin.sql  | mysql -u root $username
 
 
 
