@@ -23,6 +23,8 @@ ufw allow 143/tcp
 ufw allow 993/tcp
 ufw allow 110/tcp
 ufw allow 995/tcp
+# For Zabbix Agent
+ufw allow 10050/tcp
 ##For Kibana
 ufw allow 6100/tcp
 ##For RabbitMQ
