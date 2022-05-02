@@ -289,12 +289,6 @@ then
     bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
 fi
 
-if [ -z "$without_jailkit" ]
-then
-    ## Install Jailkit
-    echo "Installing jailkit"
-    bash $DIR/installers/jailkit.sh > $INSTALL_DIR/jail.sh.log 2>&1
-fi
 
 if [ -z "$without_scripts" ]
 then
@@ -302,6 +296,14 @@ then
     echo "Installing wpcli,laravel installer and other misc tasks"
     bash $DIR/installers/scripts.sh > $INSTALL_DIR/scripts.sh.log 2>&1
 fi
+
+if [ -z "$without_jailkit" ]
+then
+    ## Install Jailkit
+    echo "Installing jailkit"
+    bash $DIR/installers/jailkit.sh > $INSTALL_DIR/jail.sh.log 2>&1
+fi
+
 
 ## Load new .profile
 source ~/.profile

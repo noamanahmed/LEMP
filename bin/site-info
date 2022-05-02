@@ -37,6 +37,10 @@ while [ $# -gt 0 ]; do
       postgres="$2"
       shift
       ;;
+    --mongodb)
+      mongodb="$2"
+      shift
+      ;;
     --database_name)
       database_name="$2"
       shift
