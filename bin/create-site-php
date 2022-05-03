@@ -180,7 +180,12 @@ if [ -z "$nossl" ]
 then
 
   ## Test SSL Generation
-  
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  then 
+    echo "Error in certbot SSL generating. Cleaning up and aborting"
+    delete-site -u $username
+    exit 1;
+  fi
   ## Generate SSL
   certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
 
