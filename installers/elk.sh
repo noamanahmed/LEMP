@@ -37,14 +37,13 @@ echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee 
 apt update
 apt install elasticsearch -y
 cp $template_path/elasticsearch/elasticsearch.yml /etc/elasticsearch/
-systemctl start elasticsearch
-systemctl enable elasticsearch
+systemctl stop elasticsearch
 
 ## Install Kibana
 
 apt install kibana -y
-systemctl enable kibana
-systemctl start kibana
+systemctl stop kibana
+cp $template_path/kibana/kibana.yml /etc/kibana/
 
 nginx_vhost_file="/etc/nginx/apps-available/kibana.conf"
 nginx_vhost_enabled="/etc/nginx/apps-enabled/kibana.conf"
@@ -58,18 +57,27 @@ systemctl reload nginx
 
 ## Install LogStash
 apt install logstash -y
+systemctl stop logstash
 cp -rf $template_path/logstash/* /etc/logstash/
-systemctl start logstash
-systemctl enable logstash
 
 
 ## Install filebeat
 apt install filebeat -ym
 cp $template_path/filebeat/filebeat.yml /etc/filebeat/
 
+
+#Lets start all the services
+
+systemctl start kibana
+systemctl enable kibana
+systemctl start logstash
+systemctl enable logstash
+systemctl start filebeat
+systemctl enable filebeat
+
+
+#Final Filebeat configuration (requires elastic search)
 filebeat modules enable system
 filebeat setup --pipelines --modules system
 filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["localhost:9200"]'
 filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['localhost:9200'] -E setup.kibana.host=localhost:5601
-systemctl start filebeat
-systemctl enable filebeat
