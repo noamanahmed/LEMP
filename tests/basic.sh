@@ -16,6 +16,18 @@ fi
 ### This tests assumes that a wildcard DNS entry has been setup for *.HOSTNAME
 ### Otherswise there would be no site created
 
+## Lets clean up previous attempt if there was any
+delete-site -u php1
+delete-site -u php2
+delete-site -u wordpress
+delete-site -u laravel
+delete-site -u node1
+delete-site -u python1
+delete-site -u angular1
+delete-site -u react1
+delete-site -u vue1
+delete-site -u svelte1
+
 ## Lets begin with PHP
 
 create-site-php -u php1 -d php1.$HOSTNAME 
