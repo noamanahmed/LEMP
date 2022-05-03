@@ -64,7 +64,7 @@ systemctl enable logstash
 
 
 ## Install filebeat
-apt install filebeat -yml
+apt install filebeat -ym
 cp $template_path/filebeat/filebeat.yml /etc/filebeat/
 
 filebeat modules enable system
