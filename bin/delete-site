@@ -148,7 +148,7 @@ delgroup $username > /dev/null 2>&1
 
 if [ -z "$no_message" ]
 then    
-    bash slack-notification -u $username -m "Site deleted successfully! Username: $username Host: $domain" --warning    
+    bash slack-notification -u $username -d $domain -m "Site deleted successfully! Username: $username Host: $domain" --warning    
 fi
 
 if ! systemctl is-active --quiet nginx
