@@ -163,7 +163,7 @@ sed -i "s/{{port}}/$port/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-if [ ! -z "$nossl" ]
+if [ -z "$nossl" ]
 then
 
   ## Generate SSL

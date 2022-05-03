@@ -29,7 +29,7 @@ fi
 
 if ! id "$username" &>/dev/null
 then
-    echo "The $username doesn't exist"    
+    echo "The username $username doesn't exist"    
     exit;
 fi
 
