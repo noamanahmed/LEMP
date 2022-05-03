@@ -21,14 +21,14 @@ fi
 create-site-php -u php1 -d php1.$HOSTNAME 
 create-site-php -u php2 -d php2.$HOSTNAME --php 8.1 
 
-create-site-php -u wordpress -d wordpress.$HOSTNAME
+create-site-php -u wordpress -d wordpress.$HOSTNAME --wordpress
 ## By defauly laravel site should give a 404 nginx error as nginx is looking
 ## for a public dir in $CHROOT_DIR/home/$username/www
 ## We wiil further update this script in future to auto git clone to setup
 ## laravel project, composer install, php artisan key:generate , php artisan migrate fresh
 ## , npm install, npm run build
 ## But for now lets keep it plain and simple!
-create-site-php -u laravel -d laravel.$HOSTNAME
+create-site-php -u laravel -d laravel.$HOSTNAME --laravel
 
 
 ## Let switch gears to Node
