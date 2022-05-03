@@ -11,11 +11,22 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;     
+    -y|--yes)
+      yes=yes
+      ;;  
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
 
 if [ -z "$username" ]
@@ -35,15 +46,18 @@ fi
 
 domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
 
-while true; do
-    read -p "Do you wish to delete the user $username with domain $domain ? " yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
 
+if [ -z "$yes" ]
+then
+    while true; do
+        read -p "Do you wish to delete the user $username with domain $domain ? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+fi
 
 ## Create system user if doesnt't exists
 
