@@ -20,6 +20,9 @@ while [ $# -gt 0 ]; do
     -y|--yes)
       yes=yes
       ;;  
+    --no_message)
+      no_message=yes
+      
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
@@ -142,7 +145,11 @@ userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 
 
-bash slack-notification -u $username -m "Site deleted successfully! Username: $username Host: $domain" --warning
+
+if [ -z "$no_message" ]
+then    
+    bash slack-notification -u $username -m "Site deleted successfully! Username: $username Host: $domain" --warning    
+fi
 
 if ! systemctl is-active --quiet nginx
   then 
