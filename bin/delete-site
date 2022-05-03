@@ -130,6 +130,15 @@ delgroup $username > /dev/null 2>&1
 
 bash slack-notification -u $username -m "Site deleted successfully! Username: $username Host: $domain" --warning
 
+if ! systemctl is-active --quiet nginx
+  then 
+  echo "Restarting Nginx as it was not running!"
+  service nginx restart
+  exit
+fi
+
+
+
 echo "Username $username deleted successfully!"      
 
 
