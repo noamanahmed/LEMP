@@ -29,6 +29,10 @@ while [ $# -gt 0 ]; do
       type="$2"
       shift
       ;;
+    --port)
+      port="$2"
+      shift
+      ;;
     --mysql)
       mysql="$2"
       shift
