@@ -34,6 +34,17 @@ then
 fi
 
 domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+
+while true; do
+    read -p "Do you wish to delete the user $username with domain $domain ? " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+
 ## Create system user if doesnt't exists
 
 # $system_root="/home/$username";
