@@ -17,16 +17,16 @@ fi
 ### Otherswise there would be no site created
 
 ## Lets clean up previous attempt if there was any
-delete-site -u php1
-delete-site -u php2
-delete-site -u wordpress
-delete-site -u laravel
-delete-site -u node1
-delete-site -u python1
-delete-site -u angular1
-delete-site -u react1
-delete-site -u vue1
-delete-site -u svelte1
+delete-site -u php1 -y
+delete-site -u php2 -y
+delete-site -u wordpress -y
+delete-site -u laravel -y
+delete-site -u node1 -y
+delete-site -u python1 -y
+delete-site -u angular1 -y
+delete-site -u react1 -y
+delete-site -u vue1 -y
+delete-site -u svelte1 -y
 
 ## Lets begin with PHP
 
