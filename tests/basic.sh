@@ -36,7 +36,7 @@ create-site-node -u node1 -d node1.$HOSTNAME --port 11000
 
 
 ## Let switch gears to Python
-create-site-python -u python1 -d python1.$HOSTNAME 11010
+create-site-python -u python1 -d python1.$HOSTNAME --port  11010
 
 
 ## Lets setup a pure frontend app built on frameworks and libraires
