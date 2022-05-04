@@ -1,0 +1,112 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+args=$@
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --port)
+      port="$2"
+      shift
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+if id "$username" &>/dev/null
+then
+    echo "The $username already exists!. Please run delete-site -u $username"
+    exit
+fi
+
+if [ -z "$port" ] || [ $port -lt 1025 ] || [ $port -gt 65535 ]
+then
+  echo "Please specify a a valid port between 1025-65535 using --port for nginx to reverse proxy"
+  exit
+fi
+
+disallowed_ports_array=("80" "443" "8080" "2082" "8443" "22")
+
+if [[ " ${disallowed_ports_array[*]} " =~ " ${port} " ]]; then
+    echo "This port is not allowed"
+    exit 1;
+fi
+
+
+if ! lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
+then
+  echo "This port is currently NOT in use! Please ensure that app is running."
+fi
+
+
+
+##Create user
+user_password="$(openssl rand -hex 12)"
+bash create-linux-user -u $username -p $user_password
+
+
+
+
+#Set up Nginx
+nginx_vhost_file="/etc/nginx/apps-available/netdata.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/netdata.conf"
+cp $template_path/netdata/vhost.conf $nginx_vhost_file
+
+sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+systemctl reload nginx
+
+
+if [ -z "$no_monitoring" ]
+then
+  bash create-monitor -u $username -d $domain
+fi
+
+site_info_command="bash site-info $args "
+
+site_info="$($site_info_command)"
+
+$site_info_command
+
+bash slack-notification -u $username -d $domain -m "$site_info" --success
