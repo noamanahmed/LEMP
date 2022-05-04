@@ -214,10 +214,6 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
-
-##(TODO) Switch python version to the one specified 
-##bash toggle-python -u $username -p 
-
 ##Copying demo app for simple proxy server
 cp $template_path/www/python/* $www_path/
 sed -i "s/{{port}}/$port/" $www_path/app.py
