@@ -70,7 +70,7 @@ then
 else
     ln -s /bin/pip2 /var/www/home/$username/.local/bin/pip
 fi
-
+chown -h $username:$username /var/www/home/$username/.local/bin/pip
 
 if [ -f "/etc/systemd/system/$username-site.service" ] 
 then
