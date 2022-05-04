@@ -66,3 +66,9 @@ fi
 
 echo "Clearing Cache"
 clear-cache -u $username
+
+# If you have a suggestions on how to change alias of a currently running terminal session's node version
+# without terminating the session, please open an issue and suggest
+# For the timebeing lets get rid of the old session
+echo "Removing SSH sessions with old node versions"
+pkill -9 -u $username 
