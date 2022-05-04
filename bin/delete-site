@@ -159,6 +159,13 @@ if ! systemctl is-active --quiet nginx
 fi
 
 
+if ! systemctl is-active --quiet mysql
+  then 
+  echo "Restarting mysql as it was not running!"
+  service mysql restart
+  exit
+fi
+
 
 echo "Username $username deleted successfully!"      
 
