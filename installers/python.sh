@@ -25,9 +25,10 @@ for python_version in ${python_versions_array[@]}; do
   fi
 done
 
-## For Python 2.0 PIP
-curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
+## PIP Installation
+curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
 python2 /tmp/get-pip.py
+python3 /tmp/get-pip.py
 
-# For Python 3.0 PIP 
-apt install virtualenv python3-pip libpq-dev python-dev -qqy
+# For Virtualenv 
+apt install virtualenv -qqy
