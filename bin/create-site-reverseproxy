@@ -101,7 +101,7 @@ nginx -t && systemctl reload nginx
 
 
 ## Test SSL Generation  
-if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w /var/www/html
 then 
 echo "Error in certbot SSL generating. Cleaning up and aborting"
 delete-site -u $username -y --no_message
@@ -109,7 +109,7 @@ exit 1;
 fi
 
 ## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w /var/www/html
 
 
 ## Removing Static site
