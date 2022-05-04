@@ -85,14 +85,13 @@ user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
 
 
-
-
 #Set up Nginx
-nginx_vhost_file="/etc/nginx/apps-available/netdata.conf"
-nginx_vhost_enabled="/etc/nginx/apps-enabled/netdata.conf"
-cp $template_path/netdata/vhost.conf $nginx_vhost_file
+nginx_vhost_file="/etc/nginx/apps-available/reverseproxy.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/reverseproxy.conf"
+cp $template_path/reverseproxy/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
+sed -i "s/{{port}}/$port/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
