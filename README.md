@@ -45,44 +45,9 @@ This is my first bash script for automation. This is not built for pro level sys
 - Kernel Tuning
 
 
+## Installation
 
-## Creating your first PHP Site
-Before creating your sites make sure that your domain name is pointing towards you IP with an A record.
-Otherwise SSL certificate generation will fail and webserver would stop working alltogether
-
-If everything went well then you can run this command to generate a new PHP site with SSL.Please replace the placeholder my_site with you rsite and your_first_name to a username without hyphens,underscores,digits etc. The user paremeter your_first_name is also your SSH/SFTP user as well as your $username field which you can later use in the helper scripts mentioned below.
-
-```sh
-create-site-php -u your_first_name -d my_site.com --php 7.4 --wordpress
-create-site-php -u your_first_name -d my_site.com --php 7.4 --laravel
-```
-
-If everything went accordingly you should see your site running and a console message like this
-
-```sh
-Site Setup succssfull
-URL : http://my_site.com
-URL(SSL) : https://my_site.com
-Complete Path : /home/your_first_name/www
-
-
-WordPress user: your_first_name
-WordPress password: random_password
-
-
-MySQL Database Credentials
-Database name: your_first_name
-Database user: your_first_name
-Database password: random_password
-
-SFTP/SSH Details
-Host: my_site.com
-Port: 6000
-Username: your_first_name
-Password: random_password
-
-```
-
+The installation instructions have been moved to its own wiki page called [[Installation|wiki/Installation]]
 
 
 
