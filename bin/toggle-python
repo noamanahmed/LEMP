@@ -64,7 +64,7 @@ then
     rm -rf /var/www/home/$username/.local/bin/pip
 fi
 
-if [ "$python" -gt "3" ]
+if (( $(echo "$python >= 3" |bc -l) ))
 then
     ln -s /bin/pip3 /var/www/home/$username/.local/bin/pip3     
 else
