@@ -11,17 +11,24 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-## Creating mysql user and database
+
+if ! systemctl is-active --quiet postgres
+  then 
+  echo "postgres is not running! Aborting!"
+  exit
+fi
+
+## Creating postgres user and database
 
 database_name="$(openssl rand -hex 6)"
 database_user="$(openssl rand -hex 6)"
 database_password="$(openssl rand -hex 8)"
 
-psql -e "CREATE DATABASE IF NOT EXISTS $database_name"
-psql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
-psql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
-psql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
-psql -e "FLUSH PRIVILEGES;"
+psql -c "CREATE DATABASE"
+psql -c "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+psql -c "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+psql -c "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+psql -c "FLUSH PRIVILEGES;"
 
 
 echo ""
