@@ -152,16 +152,17 @@ bash fix-permissions -u $username
 bash install-nvm -u $username
 
 
-if [ -z "$no_monitoring" ]
-then
-  bash create-monitor -u $username -d $domain
-fi
-
-
+## Install demo app packages
+# Uncomment the following line if you want to rebuild
+#nvm-user -u $username -c 'cd www && npm install && npm run build'
 
 ## Setting up Logrotation
 bash logrotate-user -u $username
 
+if [ -z "$no_monitoring" ]
+then
+  bash create-monitor -u $username -d $domain
+fi
 
 site_info_command="bash site-info $args --ssh_password $user_password "
 

@@ -152,6 +152,10 @@ bash fix-permissions -u $username
 bash install-nvm -u $username
 
 
+## Install demo app packages
+# Uncomment the following line if you want to rebuild
+#nvm-user -u $username -c 'cd www && npm install && npm run build'
+
 ## Setting up Logrotation
 bash logrotate-site -u $username
 
