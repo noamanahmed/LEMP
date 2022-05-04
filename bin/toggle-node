@@ -56,7 +56,7 @@ fi
 
 su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm install $node"
 su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm use $node"
-su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm alias $node"
+su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm alias $node && nvm alias default $node"
 
 if [ -f "/etc/systemd/system/$username-site.service" ] 
 then
