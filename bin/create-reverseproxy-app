@@ -16,8 +16,8 @@ args=$@
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    -u|--username)
-      username="$2"
+    -a|--app)
+      app="$2"
       shift
       ;;
     -d|--domain)
@@ -40,9 +40,9 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-if [ -z "$username" ]
+if [ -z "$app" ]
 then
-    echo "Please provide a username using -u "
+    echo "Please provide an app name using -a "
     exit
 fi
 
@@ -53,11 +53,12 @@ then
     exit
 fi
 
-if id "$username" &>/dev/null
+if [ -f "/etc/nginx/apps-available/$app.conf" ]
 then
-    echo "The $username already exists!. Please run delete-site -u $username"
-    exit
+    echo "The app $app already exists"    
+    exit;
 fi
+
 
 if [ -z "$port" ] || [ $port -lt 1025 ] || [ $port -gt 65535 ]
 then
@@ -80,20 +81,16 @@ fi
 
 
 
-##Create user
-user_password="$(openssl rand -hex 12)"
-bash create-linux-user -u $username -p $user_password
-
 
 
 ## Setup a static HTML site for LetsEncrypt First
-nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$app.conf"
 cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
-sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{app}}/$app/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
@@ -104,7 +101,7 @@ nginx -t && systemctl reload nginx
 if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w /var/www/html
 then 
 echo "Error in certbot SSL generating. Cleaning up and aborting"
-delete-site -u $username -y --no_message
+delete-site -u $app -y --no_message
 exit 1;
 fi
 
@@ -128,11 +125,11 @@ sed -i "s/{{port}}/$port/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
 
-
-if [ -z "$no_monitoring" ]
-then
-  bash create-monitor -u $username -d $domain
-fi
+# TODO Setup monitoring for reverse proxy app
+# if [ -z "$no_monitoring" ]
+# then
+#   bash create-monitor -u $app -d $domain
+# fi
 
 site_info_command="bash site-info $args "
 
@@ -140,4 +137,4 @@ site_info="$($site_info_command)"
 
 $site_info_command
 
-bash slack-notification -u $username -d $domain -m "$site_info" --success
+bash slack-notification -u $app -d $domain -m "$site_info" --success
