@@ -50,6 +50,10 @@ This is my first bash script for automation. This is not built for pro level sys
 The installation instructions have been moved to its own wiki page called 
 [Installation](../../wiki/Installation)
 
+## Quick Start
+
+The installation instructions have been moved to its own wiki page called 
+[QuickStart](../../wiki/QuickStart)
 
 
 ## Work in Progress
