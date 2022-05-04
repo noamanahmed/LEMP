@@ -89,6 +89,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+ssh_port=$( netstat -tulnp | grep ssh  | grep -oP '0.0.0.0:\K([0-9]*)')
 
 output=""
 output+="\n"
@@ -133,7 +134,7 @@ fi
 output+="\n"
 output+="SFTP/SSH Details\n"
 output+="Host: $domain\n"
-output+="Port: 22\n"
+output+="Port: $ssh_port\n"
 output+="Username: $username\n"
 output+="Password: $ssh_password\n"
 
