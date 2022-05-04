@@ -426,7 +426,7 @@ fi
 
 if [ ! -z "$with_mailserver" ]
 then
-    ## Optional install postgres express gui tool for postgres
+    ## Optional install Mial Server
     echo "Installing Mail Server(Postfix,Dovecot,Postfixadmin)"
     bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
