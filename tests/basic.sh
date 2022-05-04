@@ -34,11 +34,13 @@ create-site-php -u php1 -d php1.$HOSTNAME
 create-site-php -u php2 -d php2.$HOSTNAME --php 8.1 
 
 create-site-php -u wordpress -d wordpress.$HOSTNAME --wordpress
-## By defauly laravel site should give a 404 nginx error as nginx is looking
-## for a public dir in $CHROOT_DIR/home/$username/www
+## By defauly laravel site will have only a public/ folder in its www 
+## with nginx vhost mapped correctly.
 ## We wiil further update this script in future to auto git clone to setup
 ## laravel project, composer install, php artisan key:generate , php artisan migrate fresh
 ## , npm install, npm run build
+## If you setup a laravel site you should remove the www folder, clone source code, run the above
+## commands and use fix-permissions -u $username to complete the deployment
 ## But for now lets keep it plain and simple!
 create-site-php -u laravel -d laravel.$HOSTNAME --laravel
 

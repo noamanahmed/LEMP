@@ -238,7 +238,7 @@ sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/systemd/
 
 systemctl daemon-reload
 systemctl start $username-site
-
+systemctl enable $username-site
 
 if [ -z "$no_monitoring" ]
 then

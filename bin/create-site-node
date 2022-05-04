@@ -208,7 +208,7 @@ sed -i "s/{{port}}/$port/" $www_path/app.js
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Install demo app packages
+## Install demo app packages(A simple express.js app)
 nvm-user -u $username -c 'cd www && npm install'
 
 ## Setting up Logrotation
@@ -221,6 +221,7 @@ sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/systemd/
 
 systemctl daemon-reload
 systemctl start $username-site
+systemctl enable $username-site
 
 
 if [ -z "$no_monitoring" ]
