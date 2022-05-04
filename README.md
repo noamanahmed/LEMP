@@ -15,6 +15,7 @@ This is my first bash script for automation. This is not built for pro level sys
 ## Features
 - PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1
 - Python Versions 2.7,3.5,3.6,3.7,3.8,3.9,3.10
+- Node Versions 4,6,8,10,12,14,16,18
 - Uptime Monitoring with Uptime Robot
 - Slack Notification (using Webhook)
 - MYSQL Version 8.0
@@ -40,6 +41,7 @@ This is my first bash script for automation. This is not built for pro level sys
 - Fail2Ban
 - UFW
 - Monit
+- Zabbix Agent Setup
 - Kernel Tuning
 
 
@@ -153,11 +155,10 @@ create-site-python -u your_first_name -d my_site.com --port 11010
 There are two main folders in this repository
 - The bin folder contains all the utilty  and helper scripts to acheive automation for creating,deleting,restoring web sites and apps of different types.   
 - The installer folder contains bash script for installing different types of linux softwares.
+- The tests scripts includes scripts to generate scaffolding of multiple type of sites. Make sure you have read the test file first before executing it.   
 - The install.sh script is the main executable designed to be modified before running
 
 ## Work in Progress
-- NoSQL database mongodb with a web base GUI tool
-- Mail Server Setup (A complete alternative to iRedMail Setup)
 - ELK Stack (Elasticsearch Logstash Kibana)
 - Server Hardening
 - Pushing backups to offsite storage as object storage etc 
@@ -165,10 +166,7 @@ There are two main folders in this repository
 ## In Future
 - Compile nginx from source to allow brotli,redis and work on page speed
 - Prometheus (Netdata can be used for the timebeing)
-- Zabbix
-- Chef
 - Ansible
-- Puppet
 
 ## Utility Scripts
 ```sh
@@ -215,15 +213,15 @@ creates a react front end site with node installed with nvm. It comes with a bas
 ```sh
 create-site-svelte -u $username -d example.com
 ```
-(W.I.P) Creates a svelete front end site with node installed with nvm
+Creates a svelete front end site with node installed with nvm
 ```sh
 create-site-vue -u $username -d example.com
 ```
-(W.I.P) Creates a vue front end site with node installed with nvm
+Creates a vue front end site with node installed with nvm
 ```sh
 create-user-angular -u $username -d example.com
 ```
-(W.I.P) Creates a vue front end site with node installed with nvm
+Creates a vue front end site with node installed with nvm
 ```sh
 create-user-mysql-db
 ```
@@ -293,9 +291,9 @@ restore-site -u $username
 ```
 Restores a site from a backup
 ```sh
-toggle-node -u $username -v $version
+toggle-node -u $username -n $version
 ```
-(W.I.P) Change node version for a user
+Change node version for a user
 ```sh
 toggle-php -u $username -p $php_version
 ```
@@ -307,7 +305,7 @@ Changes python version for CLI and auto restarts systemd script
 ```sh
 update-jail
 ```
-(WIP) Updates jail
+Updates jail
 ```sh
 update-lemp
 ```
