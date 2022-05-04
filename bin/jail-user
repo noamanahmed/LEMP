@@ -50,14 +50,15 @@ then
 fi
 
 chroot_path=/var/www/
-
-pkill -9 -u $username 
-jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
-
 chroot_home=/var/www/home/$username
 
 
-#cp -rf /root/.nvm $chroot_home/
+if [ ! -d "$chroot_home" ]
+then
+    pkill -9 -u $username
+    jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
+fi
+
 
 mkdir -p $chroot_home/.ssh
 mkdir -p $chroot_home/.wp-cli
@@ -78,7 +79,6 @@ chown -R $username:$username $chroot_home/.local
 #chown -R $username:$username $chroot_home/.config
 #chown -R $username:$username $chroot_home/.nvm
 chown -R $username:$username $chroot_home/tmp
-
 
 
 sed -i "s/$(echo $chroot_path | sed 's/\//\\\//g').\/home\/$username/\/home\/$username\//" /etc/passwd
