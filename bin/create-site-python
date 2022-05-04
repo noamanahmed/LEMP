@@ -268,7 +268,7 @@ then
 site_info_command+=" --mysql $mysql --database_name $database_name --database_user_name $database_user --database_password $database_password"
 fi
 
-site_info_command+=" --postgres $postgres --database_name $database_name --database_user_name $database_user --database_password $database_password"
+site_info_command+=" --postgres yes --database_name $database_name --database_user_name $database_user --database_password $database_password"
 
  
 site_info="$($site_info_command)"
