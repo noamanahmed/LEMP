@@ -70,7 +70,7 @@ source /var/www/home/$username/.virtualenv/bin/activate
 if (( $(echo "$python >= 3" |bc -l) ))
 then
     curl https://bootstrap.pypa.io/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
-    python2 /var/www/home/$username/tmp/get-pip.py
+    python3 /var/www/home/$username/tmp/get-pip.py
 else
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
     python2 /var/www/home/$username/tmp/get-pip.py
