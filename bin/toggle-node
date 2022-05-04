@@ -27,9 +27,9 @@ fi
 
 
 
-if [ -z "$php" ]
+if [ -z "$node" ]
 then
-    echo "Please provide a php version using -p "
+    echo "Please provide a node version using -n "
     exit
 fi
 
