@@ -135,11 +135,23 @@ mkdir -p $www_path
 ## Fixing Permissions for nginx cache
 chown -R nginx:nginx $chroot_home/cache/nginx
 
+## Generate postgres/mysql database and users. Postgres is set to default
+if [ -z "$mysql" ] || [ -n "$posgres" ]
+then
+  database_name="db_$(echo $username | head -c 12)"
+  database_user="db_$(echo $username | head -c 12)"
+  database_password="$(openssl rand -hex 8)"
+
+  psql -c "CREATE DATABASE $database_name;"
+  psql -c "CREATE USER $database_user WITH PASSWORD '$database_password';"
+  psql -c "GRANT ALL PRIVILEGES ON DATABASE "$database_name" to $database_user;"
+fi
+
 if [ -n "$mysql" ]
 then
   ## Creating MYSQL user and database
-  database_name="$(echo $username | head -c 12)"
-  database_user="$(echo $username | head -c 12)"
+  database_name="db_$(echo $username | head -c 12)"
+  database_user="db_$(echo $username | head -c 12)"
   database_password="$(openssl rand -hex 8)"
 
   mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
@@ -149,6 +161,7 @@ then
   mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
   mysql -e "FLUSH PRIVILEGES;"
 fi
+
 
 
 ## Setup a static HTML site for LetsEncrypt First
@@ -241,17 +254,17 @@ then
   bash create-monitor -u $username -d $domain
 fi
 
-site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password"
+site_info_command="bash site-info $args --ssh_password $user_password "
 
 if [ -n "$mysql" ]
 then
-site_info_command+=" --mysql $mysql"
+site_info_command+=" --mysql $mysql --database_name $database_name --database_user_name $database_user --database_password $database_password"
 fi
 
 
 if [ -n "$postgres" ]
 then
-site_info_command+=" --postgres $postgres"
+site_info_command+=" --postgres $postgres --database_name $database_name --database_user_name $database_user --database_password $database_password"
 fi
 
  
