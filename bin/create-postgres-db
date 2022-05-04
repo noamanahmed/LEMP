@@ -12,9 +12,9 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-if ! systemctl is-active --quiet postgres
+if ! systemctl is-active --quiet postgresql
   then 
-  echo "postgres is not running! Aborting!"
+  echo "postgresql is not running! Aborting!"
   exit
 fi
 
