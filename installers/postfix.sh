@@ -13,4 +13,7 @@ fi
 
 debconf-set-selections <<< "postfix postfix/mailname string ${HOSTNAME}"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
-apt-get install --assume-yes postfix 
+apt-get install --assume-yes postfix postfix-mysql
+systemctl stop postfix
+
+

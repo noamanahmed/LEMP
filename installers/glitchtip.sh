@@ -32,8 +32,8 @@ fi
 # cp $template_path/glitchtip/docker-composer.yml /opt/glitchtip/
 # cp $template_path/glitchtip/glitchtip.service /etc/systemd/systemd/
 
-# nginx_vhost_file="/etc/nginx/app-available/glitchtip.conf"
-# nginx_vhost_enabled="/etc/nginx/app-enabled/glitchtip.conf"
+# nginx_vhost_file="/etc/nginx/apps-available/glitchtip.conf"
+# nginx_vhost_enabled="/etc/nginx/apps-enabled/glitchtip.conf"
 # cp $template_path/glitchtip/vhost.conf $nginx_vhost_file
 
 # sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
@@ -91,8 +91,8 @@ fi
 # su $username -c "HOME=/home/$username NVM_DIR=/home/$username/.nvm && . /home/$username/.nvm/nvm.sh && . /home/$username/.nvm/bash_completion && cd $glitchtip_path/frontend && npm -f install && npm run build-prod"
 
 
-# nginx_vhost_file="/etc/nginx/app-available/glitchtip.conf"
-# nginx_vhost_enabled="/etc/nginx/app-enabled/glitchtip.conf"
+# nginx_vhost_file="/etc/nginx/apps-available/glitchtip.conf"
+# nginx_vhost_enabled="/etc/nginx/apps-enabled/glitchtip.conf"
 # cp $template_path/glitchtip/vhost.conf $nginx_vhost_file
 
 # sed -i "s/{{domain}}/$hostname/" $nginx_vhost_file

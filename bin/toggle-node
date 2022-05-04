@@ -11,11 +11,11 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:p: flag
+while getopts u:n: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;
-        p) php=${OPTARG};;        
+        n) node=${OPTARG};;        
     esac
 done
 
@@ -27,9 +27,9 @@ fi
 
 
 
-if [ -z "$php" ]
+if [ -z "$node" ]
 then
-    echo "Please provide a php version using -p "
+    echo "Please provide a node version using -n "
     exit
 fi
 
@@ -40,10 +40,35 @@ then
     exit;
 fi
 
-# if [ ! -L "/home/$username/bin/php" ] && [ ! -d "/opt/php-fpm/$username" ]
-# then
-#     echo "This is not a PHP site"
-#     exit;
-# fi
 
+if [ ! -d "/var/www/home/$username/.nvm" ] 
+then
+    echo "This is not a node site. Please install nvm first using install-nvm -u $username first!"
+    exit 1;
+fi
 
+node_versions_array=( "4" "6" "8" "10" "12" "14" "16" "18" )
+
+if [[ ! " ${node_versions_array[*]} " =~ " ${node} " ]]; then
+    echo "This is not a valid node Version"
+    exit 1;
+fi
+
+su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm install $node"
+su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm use $node"
+su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm alias $node && nvm alias default $node"
+
+if [ -f "/etc/systemd/system/$username-site.service" ] 
+then
+    echo "Restarting systemd service $username-site.service"
+    systemctl restart $username-site    
+fi
+
+echo "Clearing Cache"
+clear-cache -u $username
+
+# If you have a suggestions on how to change alias of a currently running terminal session's node version
+# without terminating the session, please open an issue and suggest
+# For the timebeing lets get rid of the old session
+echo "Removing SSH sessions with old node versions"
+pkill -9 -u $username 

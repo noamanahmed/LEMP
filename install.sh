@@ -112,6 +112,9 @@ while [ $# -gt 0 ]; do
         --with_mailhog)
             with_mailhog=yes
         ;;
+        --with_mailserver)
+            with_mailserver=yes
+        ;;
         --slack_notification_webhook)
             slack_notification_webhook="$2"
             shift
@@ -149,6 +152,19 @@ INSTALL_DIR=/tmp/lemp_$(openssl rand -hex 12)
 mkdir -p $INSTALL_DIR
 echo ""
 echo "Installing Directory in $INSTALL_DIR"
+
+# Setup notification and monitor uptop so that we can also set monitoring for the hostdomain itself
+if [ ! -z "$slack_notification_webhook" ]
+then
+    echo $slack_notification_webhook > /etc/monit/slack-url
+fi
+
+
+if [ ! -z "$uptime_robot_key" ]
+then
+    touch /opt/uptime_robot.key
+    echo $uptime_robot_key > /opt/uptime_robot.key
+fi
 
 echo "Updating Packages"
 apt-get update -qqy > $INSTALL_DIR/apt_update.log 2>&1
@@ -273,12 +289,6 @@ then
     bash $DIR/installers/jenkins.sh -u $username -p $username > $INSTALL_DIR/jenkins.sh.log 2>&1
 fi
 
-if [ -z "$without_jailkit" ]
-then
-    ## Install Jailkit
-    echo "Installing jailkit"
-    bash $DIR/installers/jailkit.sh > $INSTALL_DIR/jail.sh.log 2>&1
-fi
 
 if [ -z "$without_scripts" ]
 then
@@ -286,6 +296,14 @@ then
     echo "Installing wpcli,laravel installer and other misc tasks"
     bash $DIR/installers/scripts.sh > $INSTALL_DIR/scripts.sh.log 2>&1
 fi
+
+if [ -z "$without_jailkit" ]
+then
+    ## Install Jailkit
+    echo "Installing jailkit"
+    bash $DIR/installers/jailkit.sh > $INSTALL_DIR/jail.sh.log 2>&1
+fi
+
 
 ## Load new .profile
 source ~/.profile
@@ -394,17 +412,14 @@ then
     bash $DIR/installers/pgadmin.sh > $INSTALL_DIR/pgadmin.sh.log 2>&1
 fi
 
-if [ ! -z "$slack_notification_webhook" ]
+
+if [ ! -z "$with_mailserver" ]
 then
-    echo $slack_notification_webhook > /etc/monit/slack-url
+    ## Optional install postgres express gui tool for postgres
+    echo "Installing Mail Server(Postfix,Dovecot,Postfixadmin,"
+    bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
 
-
-if [ ! -z "$uptime_robot_key" ]
-then
-    touch /opt/uptime_robot.key
-    echo $uptime_robot_key > /opt/uptime_robot.key
-fi
 
 
 

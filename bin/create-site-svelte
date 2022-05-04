@@ -108,7 +108,16 @@ ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
 if [ -z "$nossl" ]
-then  
+then
+
+  ## Test SSL Generation  
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/public/
+  then 
+    echo "Error in certbot SSL generating. Cleaning up and aborting"
+    delete-site -u $username -y --no_message
+    exit 1;
+  fi
+
   ## Generate SSL
   certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/public/
 
@@ -141,37 +150,29 @@ bash fix-permissions -u $username
 ## Installing nvm
 bash install-nvm -u $username
 
+
+## Install demo app packages
+# Uncomment the following line if you want to rebuild
+#nvm-user -u $username -c 'cd www && npm install && npm run build'
+
+
 ## Setting up Logrotation
 bash logrotate-site -u $username
 
 
 if [ -z "$no_monitoring" ]
 then
-  bash enable-monitor -u $username -d $domain
+  bash create-monitor -u $username -d $domain
 fi
 
 
-echo "*****************************************"
-echo "*****************************************"
-echo ""
-echo "Site Setup succssfull"
-echo "URL : http://$domain"
-if [ -z "$nossl" ]
-then
-echo "URL(SSL) : https://$domain"
-fi
-echo "Complete WWW Path : /home/$username/www"
-echo ""
+site_info_command="bash site-info $args --ssh_password $user_password "
 
-echo ""
-echo "SFTP/SSH Details"
-echo "Host: $domain"
-echo "Port: 22"
-echo "Username: $username"
-echo "Password: $user_password"
+site_info="$($site_info_command)"
 
-bash slack-notification -u $username -d $domain -m "Site created: Domain: $domain Username: $username" --success
+$site_info_command
 
+bash slack-notification -u $username -d $domain -m "$site_info" --success
 
 
 

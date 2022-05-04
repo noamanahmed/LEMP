@@ -30,8 +30,8 @@ rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
 rabbitmq-plugins enable rabbitmq_management
 
 
-nginx_vhost_file="/etc/nginx/app-available/rabbitmq.conf"
-nginx_vhost_enabled="/etc/nginx/app-enabled/rabbitmq.conf"
+nginx_vhost_file="/etc/nginx/apps-available/rabbitmq.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/rabbitmq.conf"
 cp $template_path/rabbitmq/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

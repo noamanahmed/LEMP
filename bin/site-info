@@ -29,12 +29,20 @@ while [ $# -gt 0 ]; do
       type="$2"
       shift
       ;;
+    --port)
+      port="$2"
+      shift
+      ;;
     --mysql)
       mysql="$2"
       shift
       ;;
     --postgres)
       postgres="$2"
+      shift
+      ;;
+    --mongodb)
+      mongodb="$2"
       shift
       ;;
     --database_name)

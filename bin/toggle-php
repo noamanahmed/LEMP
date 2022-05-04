@@ -81,6 +81,7 @@ then
 fi
 
 ln -s /bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/.local/bin/php 
+chown -h $username:$username /var/www/home/$username/.local/bin/php
 
 echo "Clearing Cache"
 clear-cache -u $username

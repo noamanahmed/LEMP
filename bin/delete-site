@@ -11,11 +11,25 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;     
+    -y|--yes)
+      yes=yes
+      ;;  
+    --no_message)
+      no_message=yes
+      ;;  
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
 
 if [ -z "$username" ]
@@ -29,11 +43,25 @@ fi
 
 if ! id "$username" &>/dev/null
 then
-    echo "The $username doesn't exist"    
+    echo "The username $username doesn't exist"    
     exit;
 fi
 
 domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+
+
+if [ -z "$yes" ]
+then
+    while true; do
+        read -p "Do you wish to delete the user $username with domain $domain ? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+fi
+
 ## Create system user if doesnt't exists
 
 # $system_root="/home/$username";
@@ -94,7 +122,7 @@ mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
 bash logrotate-site -u $username -d yes
 
 ## Disable monitoring
-bash disable-monitor -u $username
+bash delete-monitor -u $username
 
 ## Delete Chroot Directory
 rm -rf /var/www/home/$username
@@ -117,7 +145,27 @@ userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 
 
-bash slack-notification -u $username -m "Site deleted successfully! Username: $username Host: $domain" --warning
+
+if [ -z "$no_message" ]
+then    
+    bash slack-notification -u $username -d $domain -m "Site deleted successfully! Username: $username Host: $domain" --warning    
+fi
+
+if ! systemctl is-active --quiet nginx
+  then 
+  echo "Restarting Nginx as it was not running!"
+  service nginx restart
+  exit
+fi
+
+
+if ! systemctl is-active --quiet mysql
+  then 
+  echo "Restarting mysql as it was not running!"
+  service mysql restart
+  exit
+fi
+
 
 echo "Username $username deleted successfully!"      
 

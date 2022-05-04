@@ -15,8 +15,8 @@ fi
 
 
 
-nginx_vhost_file="/etc/nginx/app-available/sentry.conf"
-nginx_vhost_enabled="/etc/nginx/app-enabled/sentry.conf"
+nginx_vhost_file="/etc/nginx/apps-available/sentry.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/sentry.conf"
 cp $template_path/sentry/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file

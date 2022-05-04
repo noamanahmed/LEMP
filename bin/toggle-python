@@ -54,7 +54,7 @@ then
 fi
 
 ln -s /bin/$(echo "python$python" | sed 's/\.//') /var/www/home/$username/.local/bin/python 
-
+chown -h $username:$username /var/www/home/$username/.local/bin/python
 
 if [ -f "/etc/systemd/system/$username-site.service" ] 
 then
