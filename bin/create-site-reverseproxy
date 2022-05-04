@@ -115,7 +115,7 @@ certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m n
 ## Removing Static site
 rm -rf $nginx_vhost_enabled
 rm -rf $nginx_vhost_file
-
+nginx -t && systemctl reload nginx
 
 #Set up Nginx
 nginx_vhost_file="/etc/nginx/apps-available/reverseproxy.conf"
