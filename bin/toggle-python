@@ -66,9 +66,9 @@ fi
 
 if (( $(echo "$python >= 3" |bc -l) ))
 then
-    ln -s /bin/pip3 /var/www/home/$username/.local/bin/pip3     
+    ln -s /bin/pip3 /var/www/home/$username/.local/bin/pip     
 else
-    ln -s /bin/pip2 /var/www/home/$username/.local/bin/pip2
+    ln -s /bin/pip2 /var/www/home/$username/.local/bin/pip
 fi
 
 
