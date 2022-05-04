@@ -63,3 +63,14 @@ create-site-react -u react1 -d react1.$HOSTNAME
 create-site-vue -u vue1 -d vue1.$HOSTNAME 
 create-site-svelte -u svelte1 -d svelte1.$HOSTNAME 
 
+## Lets show the newly created sites to the terminal
+echo "https://php1.$HOSTNAME\n"
+echo "https://php2.$HOSTNAME\n"
+echo "https://wordpress.$HOSTNAME\n"
+echo "https://laravel.$HOSTNAME\n"
+echo "https://node1.$HOSTNAME\n"
+echo "https://python1.$HOSTNAME\n"
+echo "https://angular1.$HOSTNAME\n"
+echo "https://react1.$HOSTNAME\n"
+echo "https://vue1.$HOSTNAME\n"
+echo "https://svelte1.$HOSTNAME\n"
