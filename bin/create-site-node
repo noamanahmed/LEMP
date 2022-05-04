@@ -143,6 +143,26 @@ sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
+
+if [ -z "$nossl" ]
+then
+
+  ## Test SSL Generation  
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  then 
+    echo "Error in certbot SSL generating. Cleaning up and aborting"
+    delete-site -u $username -y --no_message
+    exit 1;
+  fi
+
+  ## Generate SSL
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx    
+fi
+
 ## Removing Static site
 rm -rf $nginx_vhost_enabled
 rm -rf $nginx_vhost_file
@@ -163,24 +183,6 @@ sed -i "s/{{port}}/$port/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-if [ -z "$nossl" ]
-then
-
-  ## Test SSL Generation  
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
-  then 
-    echo "Error in certbot SSL generating. Cleaning up and aborting"
-    delete-site -u $username -y --no_message
-    exit 1;
-  fi
-
-  ## Generate SSL
-  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
-
-  ## Enabling SSL in nginx settings
-  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-  nginx -t && systemctl reload nginx    
-fi
 ## Setup Log rotation
 # cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
 # sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
