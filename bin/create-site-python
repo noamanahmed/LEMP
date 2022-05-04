@@ -135,11 +135,23 @@ mkdir -p $www_path
 ## Fixing Permissions for nginx cache
 chown -R nginx:nginx $chroot_home/cache/nginx
 
+## Generate postgres/mysql database and users. Postgres is set to default
+if [ -z "$mysql" ] || [ -n "$posgres" ]
+then
+  database_name="db_$(echo $username | head -c 12)"
+  database_user="db_$(echo $username | head -c 12)"
+  database_password="$(openssl rand -hex 8)"
+
+  psql -c "CREATE DATABASE $database_name;"
+  psql -c "CREATE USER $database_user WITH PASSWORD '$database_password';"
+  psql -c "GRANT ALL PRIVILEGES ON DATABASE "$database_name" to $database_user;"
+fi
+
 if [ -n "$mysql" ]
 then
   ## Creating MYSQL user and database
-  database_name="$(echo $username | head -c 12)"
-  database_user="$(echo $username | head -c 12)"
+  database_name="db_$(echo $username | head -c 12)"
+  database_user="db_$(echo $username | head -c 12)"
   database_password="$(openssl rand -hex 8)"
 
   mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
@@ -151,23 +163,24 @@ then
 fi
 
 
-## Setup a static HTML site for LetsEncrypt First
-
-nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
-cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
-
-sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
-sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
-sed -i "s/{{username}}/$username/g" $nginx_vhost_file
-sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
-
-ln -s $nginx_vhost_file $nginx_vhost_enabled
-nginx -t && systemctl reload nginx
 
 
 if [ -z "$nossl" ]
 then
+
+  ## Setup a static HTML site for LetsEncrypt First
+  nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+  nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+  cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
+
+  sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+  sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+  sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+  sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+
+  ln -s $nginx_vhost_file $nginx_vhost_enabled
+  nginx -t && systemctl reload nginx
+
 
   ## Test SSL Generation  
   if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
@@ -180,15 +193,13 @@ then
   ## Generate SSL
   certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
 
-  ## Enabling SSL in nginx settings
-  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-  nginx -t && systemctl reload nginx    
+
+  ## Removing Static site
+  rm -rf $nginx_vhost_enabled
+  rm -rf $nginx_vhost_file
+
 fi
 
-
-## Removing Static site
-rm -rf $nginx_vhost_enabled
-rm -rf $nginx_vhost_file
 
 
 
@@ -203,6 +214,15 @@ sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{port}}/$port/" $nginx_vhost_file
 
+## Enable SSL nginx configurations
+if [ -z "$nossl" ]
+then
+
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  
+fi
+
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
@@ -213,10 +233,6 @@ systemctl restart nginx
 ## Setting up backup folder
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
-
-
-##(TODO) Switch python version to the one specified 
-##bash toggle-python -u $username -p 
 
 ##Copying demo app for simple proxy server
 cp $template_path/www/python/* $www_path/
@@ -245,18 +261,14 @@ then
   bash create-monitor -u $username -d $domain
 fi
 
-site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password"
+site_info_command="bash site-info $args --ssh_password $user_password "
 
 if [ -n "$mysql" ]
 then
-site_info_command+=" --mysql $mysql"
+site_info_command+=" --mysql $mysql --database_name $database_name --database_user_name $database_user --database_password $database_password"
 fi
 
-
-if [ -n "$postgres" ]
-then
-site_info_command+=" --postgres $postgres"
-fi
+site_info_command+=" --postgres yes --database_name $database_name --database_user_name $database_user --database_password $database_password"
 
  
 site_info="$($site_info_command)"

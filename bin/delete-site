@@ -114,10 +114,16 @@ fi
 systemctl reload nginx
 
 ## Delete Database and users
-mysql -e "DROP DATABASE IF EXISTS $username"
-mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
-
-
+if command -v mysql &> /dev/null
+then
+  mysql -e "DROP DATABASE IF EXISTS $username"
+  mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
+fi
+if command -v psql &> /dev/null
+then
+  psql -c "DROP DATABASE db_$username;"
+  psql -c "DROP USER db_$username;"
+fi
 ## Delete Logrotation
 bash logrotate-site -u $username -d yes
 

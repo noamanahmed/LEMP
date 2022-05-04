@@ -1,0 +1,140 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+args=$@
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -a|--app)
+      app="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --port)
+      port="$2"
+      shift
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$app" ]
+then
+    echo "Please provide an app name using -a "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+if [ -f "/etc/nginx/apps-available/$app.conf" ]
+then
+    echo "The app $app already exists"    
+    exit;
+fi
+
+
+if [ -z "$port" ] || [ $port -lt 1025 ] || [ $port -gt 65535 ]
+then
+  echo "Please specify a a valid port between 1025-65535 using --port for nginx to reverse proxy"
+  exit
+fi
+
+disallowed_ports_array=("80" "443" "8080" "2082" "8443" "22")
+
+if [[ " ${disallowed_ports_array[*]} " =~ " ${port} " ]]; then
+    echo "This port is not allowed"
+    exit 1;
+fi
+
+
+if ! lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
+then
+  echo "This port is currently NOT in use! Please ensure that app is running."
+fi
+
+
+
+
+
+## Setup a static HTML site for LetsEncrypt First
+nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$app.conf"
+cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{app}}/$app/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+
+## Test SSL Generation  
+if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w /var/www/html
+then 
+echo "Error in certbot SSL generating. Cleaning up and aborting"
+delete-site -u $app -y --no_message
+exit 1;
+fi
+
+## Generate SSL
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w /var/www/html
+
+
+## Removing Static site
+rm -rf $nginx_vhost_enabled
+rm -rf $nginx_vhost_file
+nginx -t && systemctl reload nginx
+
+#Set up Nginx
+nginx_vhost_file="/etc/nginx/apps-available/reverseproxy.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/reverseproxy.conf"
+cp $template_path/reverseproxy/vhost.conf $nginx_vhost_file
+
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{port}}/$port/" $nginx_vhost_file
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+systemctl reload nginx
+
+# TODO Setup monitoring for reverse proxy app
+# if [ -z "$no_monitoring" ]
+# then
+#   bash create-monitor -u $app -d $domain
+# fi
+
+site_info_command="bash site-info $args "
+
+site_info="$($site_info_command)"
+
+$site_info_command
+
+bash slack-notification -u $app -d $domain -m "$site_info" --success

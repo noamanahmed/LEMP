@@ -1,0 +1,123 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--app)
+      app="$2"
+      shift
+      ;;     
+    -y|--yes)
+      yes=yes
+      ;;  
+    --no_message)
+      no_message=yes
+      ;;  
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$app" ]
+then
+    echo "Please provide a app using -u "
+    exit
+fi
+
+
+
+if [ ! -f "/etc/nginx/apps-available/$app.conf" ]
+then
+    echo "The app $app doesn't exists"    
+    exit;
+fi
+
+domain=$(cat  /etc/nginx/app-available/$app.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+
+
+if [ -z "$yes" ]
+then
+    while true; do
+        read -p "Do you wish to delete the app $app with domain $domain ? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+fi
+
+## Create system user if doesnt't exists
+
+# $system_root="/home/$app";
+# mkdir -p $system_root
+# mkdir -p "$system_root/php/$php_version"
+
+
+if [ -d "/opt/php-fpm/$app" ] 
+then
+    ## Delete PHP FPM .sock file directory
+    rm -rf /opt/php-fpm/$app    
+fi
+
+## Reset PHP FPM Pool
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+for php_v in ${php_versions_array[@]}; do    
+    if [ -f "/etc/php/$php_v/fpm/pool.d/$app.conf" ] 
+    then
+        rm /etc/php/$php_v/fpm/pool.d/$app.conf
+        systemctl restart php$php_v-fpm
+    fi    
+done
+
+
+
+## Deleting nginx settings
+
+if [ -L "/etc/nginx/app-enabled/$app.conf" ] 
+then
+    rm "/etc/nginx/app-enabled/$app.conf"
+fi
+
+
+if [ -f "/etc/nginx/app-available/$app.conf" ] 
+then
+    rm "/etc/nginx/app-available/$app.conf"
+fi
+
+
+systemctl reload nginx
+
+# ## Disable monitoring
+# bash delete-monitor -u $app
+
+if [ -z "$no_message" ]
+then    
+    bash slack-notification -u $app -d $domain -m "Site deleted successfully! app: $app Host: $domain" --warning    
+fi
+
+if ! systemctl is-active --quiet nginx
+  then 
+  echo "Restarting Nginx as it was not running!"
+  service nginx restart
+  exit
+fi
+
+echo "App $app deleted successfully!"      
+
+

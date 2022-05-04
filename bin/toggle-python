@@ -53,8 +53,30 @@ then
     rm -rf /var/www/home/$username/.local/bin/python
 fi
 
+
 ln -s /bin/$(echo "python$python" | sed 's/\.//') /var/www/home/$username/.local/bin/python 
 chown -h $username:$username /var/www/home/$username/.local/bin/python
+
+echo "Changing PIP"
+
+if [  ! -d "/var/www/home/$username/.virtualenv" ]
+then
+    virtualenv /var/www/home/$username/.virtualenv
+    
+fi
+
+source /var/www/home/$username/.virtualenv/bin/activate
+
+if (( $(echo "$python >= 3" |bc -l) ))
+then
+    curl https://bootstrap.pypa.io/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
+    python3 /var/www/home/$username/tmp/get-pip.py
+else
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
+    python2 /var/www/home/$username/tmp/get-pip.py
+fi
+
+rm /var/www/home/$username/tmp/get-pip.py
 
 if [ -f "/etc/systemd/system/$username-site.service" ] 
 then

@@ -426,7 +426,7 @@ fi
 
 if [ ! -z "$with_mailserver" ]
 then
-    ## Optional install postgres express gui tool for postgres
+    ## Optional install Mial Server
     echo "Installing Mail Server(Postfix,Dovecot,Postfixadmin)"
     bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
@@ -437,7 +437,7 @@ fi
 end=$(date +%s)
 seconds=$(echo "$end - $start" | bc)
 echo "Time Taken to install: "
-awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}'
+seconds=$(awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}')
 
 bash slack-notification -u $username -d $domain -m "Installation completed: $hostname Time Taken: $seconds " --success
 

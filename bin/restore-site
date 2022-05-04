@@ -75,3 +75,7 @@ then
     pv /backups/$username/$backup_name/db.sql.gz | gunzip | mysql -u root $username
 
 fi
+
+echo "Clearing Cache"
+clear-cache -u $username
+

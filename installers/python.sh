@@ -5,6 +5,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+add-apt-repository universe -y
 
 the_ppa="deadsnakes/ppa"
 
@@ -23,3 +24,12 @@ for python_version in ${python_versions_array[@]}; do
     ln -s $(which python$python_version) /usr/bin/$(echo "python$python_version" | sed 's/\.//')
   fi
 done
+
+## PIP Installation
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
+python2 /tmp/get-pip.py
+curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
+python3 /tmp/get-pip.py
+
+# For Virtualenv 
+apt install virtualenv -qqy
