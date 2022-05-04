@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u:p: flag
+while getopts u:n: flag
 do
     case "${flag}" in
         u) username=${OPTARG};;
