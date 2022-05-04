@@ -25,7 +25,7 @@ database_user="db_$(openssl rand -hex 6)"
 database_password="$(openssl rand -hex 8)"
 
 psql -c "CREATE DATABASE $database_name;"
-psql -c "CREATE USER $database_name WITH PASSWORD '$database_password';"
+psql -c "CREATE USER $database_user WITH PASSWORD '$database_password';"
 psql -c "GRANT ALL PRIVILEGES ON DATABASE "$database_name" to $database_user;"
 
 
