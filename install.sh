@@ -115,6 +115,9 @@ while [ $# -gt 0 ]; do
         --with_mailserver)
             with_mailserver=yes
         ;;
+        --with_zabbix)
+            with_zabbix=yes
+        ;;
         --slack_notification_webhook)
             slack_notification_webhook="$2"
             shift
@@ -378,6 +381,14 @@ then
     bash $DIR/installers/monit.sh -u $username -p $username > $INSTALL_DIR/monit.sh.log 2>&1
 fi
 
+
+if [ -z "$with_zabbix" ]
+then
+    ## Setup zabbix for monitoring
+    echo "Installing zabbix"
+    bash $DIR/installers/zabbix.sh -u $username -p $username > $INSTALL_DIR/zabbix.sh.log 2>&1
+fi
+
 if [ -z "$without_kernel" ]
 then
     ## Basic Level Kernel Optimizations
@@ -416,7 +427,7 @@ fi
 if [ ! -z "$with_mailserver" ]
 then
     ## Optional install postgres express gui tool for postgres
-    echo "Installing Mail Server(Postfix,Dovecot,Postfixadmin,"
+    echo "Installing Mail Server(Postfix,Dovecot,Postfixadmin)"
     bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
 
