@@ -20,8 +20,8 @@ fi
 
 ## Creating postgres user and database
 
-database_name="$(openssl rand -hex 6)"
-database_user="$(openssl rand -hex 6)"
+database_name="db_$(openssl rand -hex 6)"
+database_user="db_$(openssl rand -hex 6)"
 database_password="$(openssl rand -hex 8)"
 
 psql -c "CREATE DATABASE $database_name;"
