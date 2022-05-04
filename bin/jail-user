@@ -50,6 +50,8 @@ then
 fi
 
 chroot_path=/var/www/
+
+pkill -9 -u $username 
 jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 
 chroot_home=/var/www/home/$username
