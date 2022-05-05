@@ -23,7 +23,7 @@ usermod -a -G $username nginx
 wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/source/pgadmin4-6.8.tar.gz -O /tmp/pgadmin.tar.gz
 tar xf /tmp/pgadmin.tar.gz -C /tmp/
 rm -rf $user_root
-mv /tmp/pgadmin4-6.8/ $user_root 
+mv /tmp/pgadmin4-6.8 $user_root 
 # curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
 # sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
 
@@ -40,4 +40,4 @@ mv /tmp/pgadmin4-6.8/ $user_root
 #     echo 'export PGADMIN_SETUP_PASSWORD="${password}"' >> ~/.bashrc
 # fi
 
-. /usr/pgadmin4/bin/setup-web.sh --yes
+# . /usr/pgadmin4/bin/setup-web.sh --yes
