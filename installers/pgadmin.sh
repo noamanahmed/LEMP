@@ -15,6 +15,8 @@ fi
 
 python=3.9
 username=pgadmin
+email=noamanahmed99@gmail.com
+password=pgadmin
 user_root=/opt/pgadmin
 
 rm -rf /opt/pgadmin
@@ -61,3 +63,5 @@ sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/"  $nginx_vhost_f
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
 
+#Salt select value from keys where name = 'SECURITY_PASSWORD_SALT';
+#Insert into user (username,email,password,active,fs_uniquifier) values ('test','test@gmail.com','password',1,123);

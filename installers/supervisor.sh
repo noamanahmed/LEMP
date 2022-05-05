@@ -7,4 +7,4 @@ if [ "$EUID" -ne 0 ]
 fi
 
 # Install supervisor
-apt-get install supervisor -y
+apt-get install supervisor -qqy

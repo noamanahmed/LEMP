@@ -73,6 +73,9 @@ while [ $# -gt 0 ]; do
         --without_scripts)
             without_scripts=yes
         ;;
+        --without_supervisor)
+            without_supervisor=yes
+        ;;
         --without_hostname_site)
             without_hostname_site=yes
         ;;
@@ -302,6 +305,15 @@ then
     echo "Installing wpcli,laravel installer and other misc tasks"
     bash $DIR/installers/scripts.sh > $INSTALL_DIR/scripts.sh.log 2>&1
 fi
+
+
+if [ -z "$without_supervisor" ]
+then
+    ## Install misc supervisor
+    echo "Installing supervisor"
+    bash $DIR/installers/supervisor.sh > $INSTALL_DIR/supervisor.sh.log 2>&1
+fi
+
 
 if [ -z "$without_jailkit" ]
 then
