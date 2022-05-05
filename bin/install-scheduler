@@ -51,3 +51,4 @@ then
     exit;
 fi
 
+echo "* * * * * $user_root/.local/bin/php $www_root/artisan scheduler:run" >> /var/spool/cron/$username
