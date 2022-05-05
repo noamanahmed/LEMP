@@ -33,3 +33,4 @@ python3 /tmp/get-pip.py
 
 # For Virtualenv 
 apt install virtualenv -qqy
+apt install python3-venv -qqy

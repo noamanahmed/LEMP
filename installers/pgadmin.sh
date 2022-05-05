@@ -25,9 +25,10 @@ usermod -a -G $username nginx
 wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/source/pgadmin4-6.8.tar.gz -O /tmp/pgadmin.tar.gz
 tar xf /tmp/pgadmin.tar.gz -C /tmp/
 rm -rf $user_root
-mv /tmp/pgadmin4-6.8 $user_root 
-virtualenv --python=python$python /opt/$username/.virtualenv
-source /opt/$username/.virtualenv/bin/activate
+mv /tmp/pgadmin4-6.8 $user_root
+python$python -m venv /opt/$username/.venv
+#virtualenv --python=python$python /opt/$username/.virtualenv
+s ource /opt/$username/.venv/bin/activate
 curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
 python$python /tmp/get-pip.py
 
