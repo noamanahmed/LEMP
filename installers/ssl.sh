@@ -11,10 +11,16 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-# Install python3
-sudo apt install python3 python3-pip -y
+# # Install python3
+# sudo apt install python3 python3-pip -y
 
 
 # Install Certbot
-sudo apt install certbot python3-certbot-nginx -y
+#sudo apt install certbot python3-certbot-nginx -y
+mkdir -p /opt/certbot
+virtualenv /opt/certbot
+/opt/certbot/bin/pip install --upgrade pip
+/opt/certbot/bin/pip install certbot
+ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+mkdir -p /etc/letsencrypt/
 cp -rf $template_path/letsencrypt/* /etc/letsencrypt/
