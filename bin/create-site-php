@@ -211,6 +211,10 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
+## Create SSH Key Pair for git
+bash create-ssh-key -u $username
+
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
@@ -235,6 +239,8 @@ then
     bash install-wp-plugin -u $username -p classic-editor --activate
     bash fix-permissions -u $username
 fi
+
+
 
 site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql"
 
