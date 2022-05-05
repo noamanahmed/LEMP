@@ -27,6 +27,8 @@ database_password="$(openssl rand -hex 8)"
 psql -c "CREATE DATABASE $database_name;"
 psql -c "CREATE USER $database_user WITH PASSWORD '$database_password';"
 psql -c "GRANT ALL PRIVILEGES ON DATABASE "$database_name" to $database_user;"
+psql -c "REVOKE connect ON DATABASE $database_name FROM PUBLIC;"
+
 
 
 
