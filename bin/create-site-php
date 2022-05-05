@@ -33,6 +33,9 @@ while [ $# -gt 0 ]; do
     --laravel)
       laravel=yes
       ;;
+    --horizon)
+      horizon=yes
+      ;;
     --nossl)
       nossl=yes
       ;;       
@@ -240,7 +243,10 @@ then
     bash fix-permissions -u $username
 fi
 
-
+if [ -n "$horizon" ]
+then
+  bash install-horizon -u indeedscraper
+fi
 
 site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql"
 

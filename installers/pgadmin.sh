@@ -39,6 +39,14 @@ python$python -m pip install wheel
 python$python -m pip install /tmp/pgadmin4-6.8-py3-none-any.whl
 python$python -m pip install gunicorn
 cp $template_path/pgadmin/config_local.py /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/config_local.py
+
+if [[ ! -d "$PGADMIN_SETUP_EMAIL" ]]; then 
+    export PGADMIN_SETUP_EMAIL="${email}"
+    export PGADMIN_SETUP_PASSWORD="${password}"
+    echo 'export PGADMIN_SETUP_EMAIL="${email}"' >> ~/.bashrc
+    echo 'export PGADMIN_SETUP_PASSWORD="${password}"' >> ~/.bashrc
+fi
+
 python$python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/setup.py
 #gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
 
