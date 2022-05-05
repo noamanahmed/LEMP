@@ -128,7 +128,7 @@ output+="Postgres Database Credentials\n"
 output+="Database name: $database_name\n"
 output+="Database user: $database_user_name\n"
 output+="Database password: $database_password\n"
-output+="pgAdmin4 : https://$HOSTNAME/pgadmin4\n"
+output+="phppgadmin : https://$HOSTNAME/phppgadmin\n"
 fi
 
 output+="\n"

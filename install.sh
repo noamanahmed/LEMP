@@ -79,6 +79,9 @@ while [ $# -gt 0 ]; do
         --without_phpmyadmin)
             without_phpmyadmin=yes
         ;;
+        --without_phppgadmin)
+            without_phppgadmin=yes
+        ;;        
         --without_postgres)
             without_postgres=yes
         ;;
@@ -323,6 +326,13 @@ then
     ## Install phpmyadmin
     echo "Installing phpmyadmin at $hostname"
     bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+fi
+
+if [ -z "$without_phppgadmin" ]
+then
+    ## Install phppgadmin
+    echo "Installing phppgadmin at $hostname"
+    bash $DIR/installers/phppgadmin.sh -u $username > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
 fi
 
 if [ -z "$without_postgres" ]
