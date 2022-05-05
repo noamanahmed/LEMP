@@ -25,21 +25,20 @@ usermod -a -G $username nginx
 wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/source/pgadmin4-6.8.tar.gz -O /tmp/pgadmin.tar.gz
 tar xf /tmp/pgadmin.tar.gz -C /tmp/
 rm -rf $user_root
-mv /tmp/pgadmin4-6.8 $user_root
-python$python -m venv /opt/$username/.venv
-#virtualenv --python=python$python /opt/$username/.virtualenv
-source /opt/$username/.venv/bin/activate
-# curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
-# python$python /tmp/get-pip.py
+mv /tmp/pgadmin4-6.8 $user_root 
+virtualenv --python=python$python /opt/$username/.virtualenv
+source /opt/$username/.virtualenv/bin/activate
+curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
+python$python /tmp/get-pip.py
 
 wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/pip/pgadmin4-6.8-py3-none-any.whl -O /tmp/pgadmin4-6.8-py3-none-any.whl
 python$python -m pip install -U pip
 python$python -m pip install wheel
 python$python -m pip install /tmp/pgadmin4-6.8-py3-none-any.whl
 python$python -m pip install gunicorn
-cp $template_path/pgadmin/config_local.py /opt/$username/.venv/lib/python$python/site-packages/pgadmin4/config_local.py
-python$python /opt/$username/.venv/lib/python$python/site-packages/pgadmin4/setup.py
-#gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.venv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
+cp $template_path/pgadmin/config_local.py /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/config_local.py
+python$python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/setup.py
+#gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
 
 chown -R $username:$username /var/lib/pgadmin4
 chown -R $username:$username /var/log/pgadmin4
