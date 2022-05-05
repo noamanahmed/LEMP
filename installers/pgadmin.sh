@@ -16,6 +16,8 @@ fi
 python=3.9
 username=pgadmin
 user_root=/opt/pgadmin
+
+rm -rf /opt/pgadmin
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
