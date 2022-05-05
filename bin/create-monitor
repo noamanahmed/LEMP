@@ -47,15 +47,14 @@ fi
 
 if ! id "$username" &>/dev/null
 then
-    echo "The $username already exists!. Please run delete-site -u $username"
+    echo "The $username doesn't exist."
     exit
 fi
 
 
 
-if [ -f "/opt/uptime_robot.key" ]
-then    
-  echo "Please set your main uptime robot key at /opt/uptime_robot.key to create monitors"
+if [ ! -f "/opt/uptime_robot.key" ]
+then      
   exit 1
 fi
 

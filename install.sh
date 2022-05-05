@@ -162,18 +162,6 @@ mkdir -p $INSTALL_DIR
 echo ""
 echo "Installing Directory in $INSTALL_DIR"
 
-# Setup notification and monitor uptop so that we can also set monitoring for the hostdomain itself
-if [ ! -z "$slack_notification_webhook" ]
-then
-    echo $slack_notification_webhook > /etc/monit/slack-url
-fi
-
-
-if [ ! -z "$uptime_robot_key" ]
-then
-    touch /opt/uptime_robot.key
-    echo $uptime_robot_key > /opt/uptime_robot.key
-fi
 
 echo "Updating Packages"
 apt-get update -qqy > $INSTALL_DIR/apt_update.log 2>&1
@@ -323,29 +311,19 @@ then
 fi
 
 
-## Load new .profile
-source ~/.profile
-
-## Setup hostname site for phpmyadmin and other stuff
-if [ -z "$without_hostname_site" ]
+# Setup notification and monitor uptop so that we can also set monitoring for the hostdomain itself
+if [ ! -z "$slack_notification_webhook" ]
 then
-    echo "Creating $hostname site with username $username"
-    create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+    echo $slack_notification_webhook > /opt/slack_webhook_url
 fi
 
-if [ -z "$without_phpmyadmin" ]
+
+if [ ! -z "$uptime_robot_key" ]
 then
-    ## Install phpmyadmin
-    echo "Installing phpmyadmin at $hostname"
-    bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+    touch /opt/uptime_robot.key
+    echo $uptime_robot_key > /opt/uptime_robot.key
 fi
 
-if [ -z "$without_phppgadmin" ]
-then
-    ## Install phppgadmin
-    echo "Installing phppgadmin at $hostname"
-    bash $DIR/installers/phppgadmin.sh -u $username > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
-fi
 
 if [ -z "$without_postgres" ]
 then
@@ -451,6 +429,30 @@ then
     ## Optional install Mial Server
     echo "Installing Mail Server(Postfix,Dovecot,Postfixadmin)"
     bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
+fi
+
+## Load new .profile
+source ~/.profile
+
+## Setup hostname site for phpmyadmin and other stuff
+if [ -z "$without_hostname_site" ]
+then
+    echo "Creating $hostname site with username $username"
+    create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+fi
+
+if [ -z "$without_phpmyadmin" ]
+then
+    ## Install phpmyadmin
+    echo "Installing phpmyadmin at $hostname"
+    bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+fi
+
+if [ -z "$without_phppgadmin" ]
+then
+    ## Install phppgadmin
+    echo "Installing phppgadmin at $hostname"
+    bash $DIR/installers/phppgadmin.sh -u $username > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
 fi
 
 

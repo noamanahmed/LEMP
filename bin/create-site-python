@@ -238,6 +238,9 @@ chown -R $username:$username /backups/$username
 cp $template_path/www/python/* $www_path/
 sed -i "s/{{port}}/$port/" $www_path/app.py
 
+## Create SSH Key Pair for git
+bash create-ssh-key -u $username
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
@@ -260,6 +263,8 @@ if [ -z "$no_monitoring" ]
 then
   bash create-monitor -u $username -d $domain
 fi
+
+
 
 site_info_command="bash site-info $args --ssh_password $user_password "
 

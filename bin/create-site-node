@@ -205,6 +205,9 @@ bash install-nvm -u $username
 cp $template_path/www/node/* $www_path/
 sed -i "s/{{port}}/$port/" $www_path/app.js
 
+## Create SSH Key Pair for git
+bash create-ssh-key -u $username
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
@@ -228,6 +231,7 @@ if [ -z "$no_monitoring" ]
 then
   bash create-monitor -u $username -d $domain
 fi
+
 
 site_info_command="bash site-info $args --ssh_password $user_password "
 

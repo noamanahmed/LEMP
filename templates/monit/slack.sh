@@ -1,6 +1,6 @@
 #!/bin/bash
 
-URL=$(cat /etc/monit/slack-url)
+URL=$(cat /opt/slack_webhook_url)
 
 if [ -z "$URL" ]
 then    
