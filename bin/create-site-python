@@ -139,7 +139,7 @@ chown -R nginx:nginx $chroot_home/cache/nginx
 if [ -z "$mysql" ] || [ -n "$posgres" ]
 then
   database_name="db_$(echo $username | head -c 12)"
-  database_user="db_$(echo $username | head -c 12)"
+  database_user=$database_name
   database_password="$(openssl rand -hex 8)"
 
   psql -c "CREATE DATABASE $database_name;"
@@ -151,7 +151,7 @@ if [ -n "$mysql" ]
 then
   ## Creating MYSQL user and database
   database_name="db_$(echo $username | head -c 12)"
-  database_user="db_$(echo $username | head -c 12)"
+  database_user=$database_name
   database_password="$(openssl rand -hex 8)"
 
   mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
