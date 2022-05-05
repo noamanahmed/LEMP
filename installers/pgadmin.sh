@@ -21,8 +21,6 @@ user_root=/opt/pgadmin
 
 # Debuggin
 rm -rf /opt/pgadmin
-rm -rf /var/lib/pgadmin4
-rm -rf /var/log/pgadmin4
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
