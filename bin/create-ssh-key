@@ -31,5 +31,12 @@ while [ $# -gt 0 ]; do
 done
 
 
+
+if [ -f "$chroot_home/.ssh/$username" ] 
+then
+    echo "SSH key already exists!"
+    exit 1;
+fi
+
 ssh-keygen -t dsa -N "" -C $username@$HOSTNAME -f $chroot_home/.ssh/$username
 chown -R $username:$username $chroot_home/.ssh
