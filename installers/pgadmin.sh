@@ -31,7 +31,7 @@ source /opt/$username/.virtualenv/bin/activate
 wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/pip/pgadmin4-6.8-py3-none-any.whl
 python$python -m pip install wheel
 python$python -m pip install pgadmin4-6.8-py3-none-any.whl
-
+python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/setup.py
 # curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
 # sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
 
