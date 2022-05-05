@@ -80,7 +80,7 @@ then
     rm -rf /var/www/home/$username/.local/bin/php
 fi
 
-ln -s ../../bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/.local/bin/php 
+ln -s ../../../../bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/.local/bin/php 
 chown -h $username:$username /var/www/home/$username/.local/bin/php
 
 echo "Clearing Cache"
