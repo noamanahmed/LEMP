@@ -37,9 +37,9 @@ python$python -m pip install -U pip
 python$python -m pip install wheel
 python$python -m pip install /tmp/pgadmin4-6.8-py3-none-any.whl
 python$python -m pip install gunicorn
-cp $template_path/pgadmin/config_local.py /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/config_local.py
-python$python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/setup.py
-#gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
+cp $template_path/pgadmin/config_local.py /opt/$username/.venv/lib/python$python/site-packages/pgadmin4/config_local.py
+python$python /opt/$username/.venv/lib/python$python/site-packages/pgadmin4/setup.py
+#gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.venv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
 
 chown -R $username:$username /var/lib/pgadmin4
 chown -R $username:$username /var/log/pgadmin4
