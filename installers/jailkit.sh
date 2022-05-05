@@ -62,3 +62,26 @@ cp /usr/local/bin/pip2 $chroot_bin_path
 echo "Copying Python libraries"
 cp -rf /usr/lib/python* /var/www/usr/lib
 cp -rf /usr/share/python* /var/www/usr/share
+
+echo "Copying PHP Libraries"
+cp -rf /usr/share/php /var/www/usr/share
+cp -rf /usr/lib/php/ /var/www/usr/lib
+cp -rf /etc/php/ /var/www/etc
+
+echo "Copying PHP Binaries (This might take a while)"
+php_binaries_array=("php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81"  )
+
+for binary in ${php_binaries_array[@]}; do    
+    extension_dir=$($binary -r 'echo ini_get("extension_dir");' 2>/dev/null)
+    extension_files=`ls $extension_dir | grep .so`
+
+    for so_file in $extension_files    
+    do  
+        echo "Copying $so_file Libraries"  
+        for lib in `ldd $extension_dir/$so_file | cut -d'>' -f2 | awk '{print $1}'` ; do
+        if [ -f "$lib" ] ; then
+                cp --parents "$lib" "$chroot_path"
+        fi  
+        done
+    done
+done

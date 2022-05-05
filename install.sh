@@ -73,12 +73,18 @@ while [ $# -gt 0 ]; do
         --without_scripts)
             without_scripts=yes
         ;;
+        --without_supervisor)
+            without_supervisor=yes
+        ;;
         --without_hostname_site)
             without_hostname_site=yes
         ;;
         --without_phpmyadmin)
             without_phpmyadmin=yes
         ;;
+        --without_phppgadmin)
+            without_phppgadmin=yes
+        ;;        
         --without_postgres)
             without_postgres=yes
         ;;
@@ -300,6 +306,15 @@ then
     bash $DIR/installers/scripts.sh > $INSTALL_DIR/scripts.sh.log 2>&1
 fi
 
+
+if [ -z "$without_supervisor" ]
+then
+    ## Install misc supervisor
+    echo "Installing supervisor"
+    bash $DIR/installers/supervisor.sh > $INSTALL_DIR/supervisor.sh.log 2>&1
+fi
+
+
 if [ -z "$without_jailkit" ]
 then
     ## Install Jailkit
@@ -323,6 +338,13 @@ then
     ## Install phpmyadmin
     echo "Installing phpmyadmin at $hostname"
     bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+fi
+
+if [ -z "$without_phppgadmin" ]
+then
+    ## Install phppgadmin
+    echo "Installing phppgadmin at $hostname"
+    bash $DIR/installers/phppgadmin.sh -u $username > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
 fi
 
 if [ -z "$without_postgres" ]

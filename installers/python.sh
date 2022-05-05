@@ -18,6 +18,7 @@ python_versions_array=( "2.7" "3.5" "3.6" "3.7" "3.8" "3.9" "3.10")
 
 for python_version in ${python_versions_array[@]}; do
   apt install python$python_version -qqy
+  apt install python$python_version-venv -qqy
   
   if [ ! -L "/usr/bin/$(echo "python$python_version" | sed 's/\.//')" ] 
   then
