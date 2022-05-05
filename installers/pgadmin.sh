@@ -26,7 +26,7 @@ wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/source/pgadmin4-6.8.ta
 tar xf /tmp/pgadmin.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/pgadmin4-6.8 $user_root
-python3 -m venv /opt/$username/.venv
+python$python -m venv /opt/$username/.venv
 #virtualenv --python=python$python /opt/$username/.virtualenv
 source /opt/$username/.venv/bin/activate
 # curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
