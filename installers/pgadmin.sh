@@ -41,7 +41,7 @@ python$python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin
 #gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
 cp $template_path/pgadmin/pgadmin.service /etc/systemd/system/
 sed -i "s/{{python}}/$python/" /etc/systemd/system/pgadmin.service
-sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/"  /etc/systemd/system/pgadmin.service
+sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/g"  /etc/systemd/system/pgadmin.service
 systemctl daemon-reload
 systemctl restart pgadmin
 
