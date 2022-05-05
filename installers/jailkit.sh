@@ -76,7 +76,8 @@ for binary in ${php_binaries_array[@]}; do
     extension_files=`ls $extension_dir | grep .so`
 
     for so_file in $extension_files    
-    do    
+    do  
+        echo "Copying $so_file Libraries"  
         for lib in `ldd $extension_dir/$so_file | cut -d'>' -f2 | awk '{print $1}'` ; do
         if [ -f "$lib" ] ; then
                 cp --parents "$lib" "$chroot_path"
