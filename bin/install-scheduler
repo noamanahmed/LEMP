@@ -51,6 +51,6 @@ then
     exit;
 fi
 
-echo "* * * * * $user_root/.local/bin/php $www_root/artisan scheduler:run" >> /var/spool/cron/$username
+echo "* * * * * $user_root/.local/bin/php $www_root/artisan schedule:run" >> /var/spool/cron/$username
 crontab -u $username /var/spool/cron/$username
 rm /var/spool/cron/$username
