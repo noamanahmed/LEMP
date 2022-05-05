@@ -38,21 +38,20 @@ python$python -m pip install /tmp/pgadmin4-6.8-py3-none-any.whl
 python$python -m pip install gunicorn
 cp $template_path/pgadmin/config_local.py /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/config_local.py
 python$python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/setup.py
-gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
-# curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
-# sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+#gunicorn --bind 127.0.0.1:7210 --chdir /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/  wsgi:pgAdmin4.wsgi
+cp $template_path/pgadmin/pgadmin.service /etc/systemd/system/
+sed -i "s/{{python}}/$python/" /etc/systemd/system/pgadmin.service
+sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/"  /etc/systemd/system/pgadmin.service
+systemctl daemon-reload
+systemctl restart pgadmin
 
-# apt install pgadmin4 pgadmin4-web -qqy
-# apt update
+nginx_vhost_file="/etc/nginx/apps-available/pgadmin.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/pgadmin.conf"
+cp $template_path/pgadmin/vhost.conf $nginx_vhost_file
 
-# email="noamanahmed99@gmail.com"
-# password="noaman"
+sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/"  $nginx_vhost_file
 
-# if [[ ! -d "$PGADMIN_SETUP_EMAIL" ]]; then 
-#     export PGADMIN_SETUP_EMAIL="${email}"
-#     export PGADMIN_SETUP_PASSWORD="${password}"
-#     echo 'export PGADMIN_SETUP_EMAIL="${email}"' >> ~/.bashrc
-#     echo 'export PGADMIN_SETUP_PASSWORD="${password}"' >> ~/.bashrc
-# fi
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+systemctl reload nginx
 
-# . /usr/pgadmin4/bin/setup-web.sh --yes
