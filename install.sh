@@ -314,7 +314,7 @@ fi
 # Setup notification and monitor uptop so that we can also set monitoring for the hostdomain itself
 if [ ! -z "$slack_notification_webhook" ]
 then
-    echo $slack_notification_webhook > /etc/monit/slack-url
+    echo $slack_notification_webhook > /opt/slack_webhook_url
 fi
 
 

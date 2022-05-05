@@ -51,7 +51,7 @@ for php_version in ${php_versions_array[@]}; do
     ln -s /etc/monit/conf-available/php-$php_version /etc/monit/conf-enabled/    
 done
 
-cp $template_path/monit/slack-url /etc/monit/slack-url
+
 cp $template_path/monit/slack.sh /usr/local/bin/slack.sh
 chmod +x /usr/local/bin/slack.sh
 cp $template_path/monit/diskspace.conf /etc/monit/conf-available/
