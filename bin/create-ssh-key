@@ -38,5 +38,5 @@ then
     exit 1;
 fi
 
-ssh-keygen -t dsa -N "" -C $username@$HOSTNAME -f $chroot_home/.ssh/$username
+ssh-keygen -t rsa -N "" -C $username@$HOSTNAME -f $chroot_home/.ssh/$username
 chown -R $username:$username $chroot_home/.ssh
