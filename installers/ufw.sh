@@ -47,6 +47,8 @@ ufw allow 6180/tcp
 ufw allow 6190/tcp 
 ##For Roundcube
 ufw allow 6200/tcp 
+##For PgAdmin
+ufw allow 6210/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp
