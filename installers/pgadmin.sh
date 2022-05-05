@@ -26,7 +26,7 @@ wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/source/pgadmin4-6.8.ta
 tar xf /tmp/pgadmin.tar.gz -C /tmp/
 rm -rf $user_root
 mv /tmp/pgadmin4-6.8 $user_root 
-virtualenv /opt/$username/.virtualenv
+virtualenv --python=python$python /opt/$username/.virtualenv
 source /opt/$username/.virtualenv/bin/activate
 curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
 python$python /tmp/get-pip.py
@@ -34,7 +34,7 @@ wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/pip/pgadmin4-6.8-py3-n
 python$python -m pip install -U pip
 python$python -m pip install wheel
 python$python -m pip install /tmp/pgadmin4-6.8-py3-none-any.whl
-python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/setup.py
+python$python /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/setup.py
 # curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
 # sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
 
