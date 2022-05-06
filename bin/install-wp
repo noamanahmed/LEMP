@@ -40,6 +40,7 @@ then
     exit;
 fi
 
+email=admin@$HOSTNAME
 
 ## Creating mysql user and database
 
@@ -55,7 +56,9 @@ mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhos
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
 
-runuser -l $username -c "cd /home/$username/www && wp core download"
-runuser -l $username -c "cd /home/$username/www && wp core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password"
-runuser -l $username -c "cd /home/$username/www && wp core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com"
-
+wp_password="$(openssl rand -hex 8)"
+wp --allow-root --path=$www_path core download
+wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
+wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=$email    
+bash install-wp-plugin -u $username -p classic-editor --activate
+bash fix-permissions -u $username

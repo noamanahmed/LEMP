@@ -15,7 +15,7 @@ fi
 
 python=3.9
 username=pgadmin
-email=noamanahmed99@gmail.com
+email=admin@$HOSTNAME
 password=pgadmin
 user_root=/opt/pgadmin
 

@@ -107,6 +107,7 @@ if ! host $domain
   exit
 fi
 
+email=admin@$HOSTNAME
 
 ##Create user
 user_password="$(openssl rand -hex 12)"
@@ -192,14 +193,14 @@ if [ -z "$nossl" ]
 then
 
   ## Test SSL Generation
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
   then 
     echo "Error in certbot SSL generating. Cleaning up and aborting"
     delete-site -u $username -y --no_message
     exit 1;
   fi
   ## Generate SSL
-  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
 
   ## Enabling SSL in nginx settings
   sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
@@ -241,7 +242,7 @@ then
     wp_password="$(openssl rand -hex 8)"
     wp --allow-root --path=$www_path core download
     wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
-    wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=noamanahmed99@gmail.com    
+    wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=$email    
     bash install-wp-plugin -u $username -p classic-editor --activate
     bash fix-permissions -u $username
 fi

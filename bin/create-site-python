@@ -101,6 +101,8 @@ if [[ ! " ${python_versions_array[*]} " =~ " ${python} " ]]; then
     exit 1;
 fi
 
+email=admin@$HOSTNAME
+
 ##Create user
 user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
@@ -184,7 +186,7 @@ then
 
 
   ## Test SSL Generation  
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
   then 
     echo "Error in certbot SSL generating. Cleaning up and aborting"
     delete-site -u $username -y --no_message
@@ -192,7 +194,7 @@ then
   fi
 
   ## Generate SSL
-  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
 
 
   ## Removing Static site

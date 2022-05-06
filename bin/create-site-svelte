@@ -60,6 +60,8 @@ then
     exit
 fi
 
+email=admin@$HOSTNAME
+
 
 ##Create user
 user_password="$(openssl rand -hex 12)"
@@ -111,7 +113,7 @@ if [ -z "$nossl" ]
 then
 
   ## Test SSL Generation  
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/public/
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/public/
   then 
     echo "Error in certbot SSL generating. Cleaning up and aborting"
     delete-site -u $username -y --no_message
@@ -119,7 +121,7 @@ then
   fi
 
   ## Generate SSL
-  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path/public/
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/public/
 
   ## Enabling SSL in nginx settings
   sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
