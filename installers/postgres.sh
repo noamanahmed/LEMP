@@ -18,3 +18,5 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-
 apt update
 apt install postgresql-14 -qqy
 sudo -u postgres createuser -s $(whoami); createdb $(whoami)
+psql -c 'REVOKE connect ON DATABASE root FROM PUBLIC'
+psql -c 'REVOKE connect ON DATABASE postgres FROM PUBLIC'

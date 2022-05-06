@@ -26,7 +26,6 @@ then
 fi
 
 
-
 ##Create user
 user_password="$(openssl rand -hex 12)"
 

@@ -101,6 +101,8 @@ if [[ ! " ${python_versions_array[*]} " =~ " ${python} " ]]; then
     exit 1;
 fi
 
+email=admin@$HOSTNAME
+
 ##Create user
 user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
@@ -139,19 +141,20 @@ chown -R nginx:nginx $chroot_home/cache/nginx
 if [ -z "$mysql" ] || [ -n "$posgres" ]
 then
   database_name="db_$(echo $username | head -c 12)"
-  database_user="db_$(echo $username | head -c 12)"
+  database_user=$database_name
   database_password="$(openssl rand -hex 8)"
 
   psql -c "CREATE DATABASE $database_name;"
   psql -c "CREATE USER $database_user WITH PASSWORD '$database_password';"
   psql -c "GRANT ALL PRIVILEGES ON DATABASE "$database_name" to $database_user;"
+  psql -c "REVOKE connect ON DATABASE $database_name FROM PUBLIC;"
 fi
 
 if [ -n "$mysql" ]
 then
   ## Creating MYSQL user and database
   database_name="db_$(echo $username | head -c 12)"
-  database_user="db_$(echo $username | head -c 12)"
+  database_user=$database_name
   database_password="$(openssl rand -hex 8)"
 
   mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
@@ -183,7 +186,7 @@ then
 
 
   ## Test SSL Generation  
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
   then 
     echo "Error in certbot SSL generating. Cleaning up and aborting"
     delete-site -u $username -y --no_message
@@ -191,7 +194,7 @@ then
   fi
 
   ## Generate SSL
-  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w $www_path
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
 
 
   ## Removing Static site

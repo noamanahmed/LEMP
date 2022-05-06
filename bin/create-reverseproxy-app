@@ -80,8 +80,7 @@ then
 fi
 
 
-
-
+email=$app@$HOSTNAME
 
 ## Setup a static HTML site for LetsEncrypt First
 nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
@@ -98,7 +97,7 @@ nginx -t && systemctl reload nginx
 
 
 ## Test SSL Generation  
-if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w /var/www/html
+if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w /var/www/html
 then 
 echo "Error in certbot SSL generating. Cleaning up and aborting"
 delete-site -u $app -y --no_message
@@ -106,7 +105,7 @@ exit 1;
 fi
 
 ## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m noamanahmed99@gmail.com -w /var/www/html
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w /var/www/html
 
 
 ## Removing Static site

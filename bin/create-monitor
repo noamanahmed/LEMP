@@ -73,11 +73,27 @@ then
   exit 1
 fi
 
+alerts=''
+api_request_alerts=$(curl -X POST \
+-H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" \
+-d "api_key=$uptime_robot_api_key&format=json" "https://api.uptimerobot.com/v2/getAlertContacts")
+
+api_status=$(echo $api_request_alerts | jq -r '.stat')
+
+
+if [ $api_status == "ok" ]
+then
+    alerts=$(echo $api_request_alerts | jq -r '.alert_contacts | map(.id)  | join("-")')
+    
+fi
+
+
+
 monitor_name=$(hostname)_${username}_monitor
 
 api_request=$(curl -X POST \
 -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" \
--d "api_key=$uptime_robot_api_key&format=json&type=1&url=https://$domain&friendly_name=$monitor_name" \
+-d "api_key=$uptime_robot_api_key&alert_contacts=$alerts&format=json&type=1&url=https://$domain&friendly_name=$monitor_name" \
 "https://api.uptimerobot.com/v2/newMonitor")
 
 api_status=$(echo $api_request | jq -r '.stat')

@@ -15,10 +15,11 @@ fi
 
 python=3.9
 username=pgadmin
-email=noamanahmed99@gmail.com
+email=admin@$HOSTNAME
 password=pgadmin
 user_root=/opt/pgadmin
 
+# Debuggin
 rm -rf /opt/pgadmin
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
@@ -34,10 +35,10 @@ curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
 python$python /tmp/get-pip.py
 
 wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v6.8/pip/pgadmin4-6.8-py3-none-any.whl -O /tmp/pgadmin4-6.8-py3-none-any.whl
-python$python -m pip install -U pip
-python$python -m pip install wheel
-python$python -m pip install /tmp/pgadmin4-6.8-py3-none-any.whl
-python$python -m pip install gunicorn
+python$python -m pip --no-cache-dir install -U pip
+python$python -m pip --no-cache-dir install wheel
+python$python -m pip --no-cache-dir install /tmp/pgadmin4-6.8-py3-none-any.whl
+python$python -m pip --no-cache-dir install gunicorn
 cp $template_path/pgadmin/config_local.py /opt/$username/.virtualenv/lib/python$python/site-packages/pgadmin4/config_local.py
 
 if [[ ! -d "$PGADMIN_SETUP_EMAIL" ]]; then 
