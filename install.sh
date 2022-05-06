@@ -103,9 +103,6 @@ while [ $# -gt 0 ]; do
         --with_netdata)
             with_netdata=yes
         ;;
-        --with_sentry)
-            with_sentry=yes
-        ;;
         --with_glitchtip)
             with_glitchtip=yes
         ;;
@@ -360,12 +357,6 @@ then
     bash $DIR/installers/netdata.sh -h $hostname > $INSTALL_DIR/netdata.sh.log 2>&1
 fi
 
-if [ ! -z "$with_sentry" ]
-then
-    ## Optional Sentry(Consumes too much resources and W.I.P)
-    echo "Installing sentry at $hostname"
-    bash $DIR/installers/sentry.sh -h $hostname > $INSTALL_DIR/sentry.sh.log 2>&1
-fi
 
 if [ ! -z "$with_glitchtip" ]
 then
