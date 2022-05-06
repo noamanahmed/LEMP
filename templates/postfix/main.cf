@@ -69,3 +69,9 @@ virtual_alias_maps =
    proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_domain_maps.cf,
    proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_domain_catchall_maps.cf
 virtual_transport = lmtp:unix:private/dovecot-lmtp
+
+
+virtual_mailbox_base = /var/vmail
+virtual_minimum_uid = 2000
+virtual_uid_maps = static:2000
+virtual_gid_maps = static:2000

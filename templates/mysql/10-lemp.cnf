@@ -1,7 +1,7 @@
 [mysqld]
 max_connections=24
-connect_timeout=10
-wait_timeout=10
+connect_timeout=30
+wait_timeout=30
 thread_cache_size=24
 sort_buffer_size=1M
 join_buffer_size=1M

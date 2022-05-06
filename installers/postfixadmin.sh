@@ -121,6 +121,7 @@ sed -i "s/{{domain}}/$HOSTNAME/" /etc/dovecot/dovecot-sql.conf.ext
 
 postconf -e "mydestination = \$myhostname, localhost.\$mydomain, localhost"
 
-adduser --gecos --system --group --uid 2000 --disabled-login --no-create-home vmail
-mkdir /var/vmail/
+adduser vmail --gecos --system --group --uid 2000 --disabled-login --no-create-home
+
+mkdir -p /var/vmail/
 chown -R vmail:vmail /var/vmail/ 
