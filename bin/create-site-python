@@ -86,6 +86,12 @@ then
   echo "This port is currently in use! Please select another port"
 fi
 
+if ! host $domain
+  then
+  echo "This is not a valid domain! Aborting!"
+  exit
+fi
+
 
 if [ -z "$python" ]
 then
