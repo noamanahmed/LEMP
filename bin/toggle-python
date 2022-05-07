@@ -59,24 +59,31 @@ chown -h $username:$username /var/www/home/$username/.local/bin/python
 
 echo "Changing PIP"
 
-if [  ! -d "/var/www/home/$username/.virtualenv" ]
+if [ -L "/var/www/home/$username/.local/bin/pip" ]
 then
-    virtualenv /var/www/home/$username/.virtualenv
-    
+    rm -rf /var/www/home/$username/.local/bin/pip
 fi
 
-source /var/www/home/$username/.virtualenv/bin/activate
+# if [  ! -d "/var/www/home/$username/.virtualenv" ]
+# then
+#     virtualenv /var/www/home/$username/.virtualenv
+    
+# fi
+
+# source /var/www/home/$username/.virtualenv/bin/activate
 
 if (( $(echo "$python >= 3" |bc -l) ))
 then
-    curl https://bootstrap.pypa.io/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
-    python3 /var/www/home/$username/tmp/get-pip.py
+    # curl https://bootstrap.pypa.io/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
+    # python3 /var/www/home/$username/tmp/get-pip.py
+    ln -s ../../../../bin/pip3 /var/www/home/$username/.local/bin/pip 
 else
-    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
-    python2 /var/www/home/$username/tmp/get-pip.py
+    # curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
+    # python2 /var/www/home/$username/tmp/get-pip.py
+    ln -s ../../../../bin/pip2 /var/www/home/$username/.local/bin/pip 
 fi
 
-rm /var/www/home/$username/tmp/get-pip.py
+# rm /var/www/home/$username/tmp/get-pip.py
 
 if [ -f "/etc/systemd/system/$username-site.service" ] 
 then
