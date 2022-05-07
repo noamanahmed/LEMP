@@ -258,7 +258,7 @@ then
 fi
 
 
-site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql"
+site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql yes "
 
 if [ -n "$wordpress" ]
 then
