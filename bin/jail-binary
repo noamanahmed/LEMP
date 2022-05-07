@@ -21,7 +21,7 @@ done
 
 if [ -z "$binary" ]
 then
-    echo "Please provide a binary using -n "
+    echo "Please provide a binary using -b "
     exit
 fi
 

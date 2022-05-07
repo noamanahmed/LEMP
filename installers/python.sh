@@ -26,11 +26,18 @@ for python_version in ${python_versions_array[@]}; do
   fi
 done
 
+## Quick Python 2 Fix
+if [ ! -f "/usr/bin/python2" ] && [ ! -L "/usr/bin/python2" ]
+then
+  ln -s /usr/bin/python2.7 /usr/bin/python2
+fi
+
 ## PIP Installation
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
 python2 /tmp/get-pip.py
 curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
 python3 /tmp/get-pip.py
+ 
 
 # For Virtualenv 
 apt install virtualenv -qqy
