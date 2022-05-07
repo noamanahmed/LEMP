@@ -222,6 +222,9 @@ chown -R $username:$username /backups/$username
 bash create-ssh-key -u $username
 
 
+## Installing nvm (NPM is required for Vue)
+bash install-nvm -u $username
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
