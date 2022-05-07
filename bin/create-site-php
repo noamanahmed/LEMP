@@ -249,12 +249,12 @@ fi
 
 if [ -n "$horizon" ]
 then
-  bash install-horizon -u indeedscraper
+  bash install-horizon -u $username
 fi
 
 if [ -n "$scheduler" ]
 then
-  bash install-scheduler -u indeedscraper
+  bash install-scheduler -u $username
 fi
 
 
