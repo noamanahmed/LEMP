@@ -68,13 +68,15 @@ then
 fi
 
 echo "Copying Python libraries"
-cp -rf /usr/lib/python* /var/www/usr/lib
-cp -rf /usr/share/python* /var/www/usr/share
+cp -rf /usr/lib/python* $chroot_path/usr/lib
+mkdir -p $chroot_path/usr/local/lib
+cp -rf /usr/local/lib/python* $chroot_path/usr/local/lib
+cp -rf /usr/share/python* $chroot_path/usr/share
 
 echo "Copying PHP Libraries"
-cp -rf /usr/share/php /var/www/usr/share
-cp -rf /usr/lib/php/ /var/www/usr/lib
-cp -rf /etc/php/ /var/www/etc
+cp -rf /usr/share/php $chroot_path/usr/share
+cp -rf /usr/lib/php/ $chroot_path/usr/lib
+cp -rf /etc/php/ $chroot_path/etc
 
 echo "Copying PHP Binaries (This might take a while)"
 php_binaries_array=("php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81"  )
