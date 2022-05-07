@@ -82,6 +82,7 @@ else
     # python2 /var/www/home/$username/tmp/get-pip.py
     ln -s ../../../../bin/pip2 /var/www/home/$username/.local/bin/pip 
 fi
+chown -h $username:$username /var/www/home/$username/.local/bin/pip
 
 # rm /var/www/home/$username/tmp/get-pip.py
 

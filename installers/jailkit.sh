@@ -56,8 +56,16 @@ ln -s /bin/env $chroot_path/usr/bin/env
 echo "Copying PIP"
 cp /usr/local/bin/pip3 $chroot_bin_path
 cp /usr/local/bin/pip2 $chroot_bin_path
-# ln -s /bin/python2 $chroot_path/usr/bin/python2
-# ln -s /bin/python3 $chroot_path/usr/bin/python3
+
+if [ ! -f "$chroot_path/usr/bin/python2" ]
+then
+    ln -s ../../bin/python2 $chroot_path/usr/bin/python2
+fi
+
+if [ ! -f "$chroot_path/usr/bin/python3" ]
+then
+    ln -s ../../bin/python3 $chroot_path/usr/bin/python3
+fi
 
 echo "Copying Python libraries"
 cp -rf /usr/lib/python* /var/www/usr/lib
