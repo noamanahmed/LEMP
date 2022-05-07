@@ -67,6 +67,8 @@ cp $template_path/filebeat/filebeat.yml /etc/filebeat/
 
 
 #Lets start all the services
+systemctl start elasticsearch
+systemctl enable elasticsearch
 
 systemctl start kibana
 systemctl enable kibana
