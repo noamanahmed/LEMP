@@ -221,9 +221,15 @@ chown -R $username:$username /backups/$username
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
 
+if [ -z "$wordpress" ]
+then
+  ## WordPress websites rarely required Vue 
+  ## Open an issue if you want me to enable nvm for
+  ## all kinds of PHP sites by default.    
+  ## Installing nvm (NPM is required for Vue)
+  bash install-nvm -u $username
+fi
 
-## Installing nvm (NPM is required for Vue)
-bash install-nvm -u $username
 
 ## Fixing permissions
 bash fix-permissions -u $username
