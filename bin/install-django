@@ -39,8 +39,8 @@ then
     exit;
 fi
 
-chroot --userspec=$username:$username /var/www/
-export HOME=/home/python2
-export USER=python2
-source ~/.profile
-pip install django
+chroot --userspec=$username:$username /var/www/ /bin/bash -c "\
+export HOME=/home/python2 && \
+export USER=python2 && \
+source ~/.profile && \
+pip install django"
