@@ -54,8 +54,8 @@ cp /usr/bin/wp $chroot_bin_path
 ln -s /bin/env $chroot_path/usr/bin/env
 
 echo "Copying PIP"
-cp /usr/local/bin/pip3 $chroot_bin_path
-cp /usr/local/bin/pip2 $chroot_bin_path
+cp /usr/local/bin/pip3* $chroot_bin_path
+cp /usr/local/bin/pip2* $chroot_bin_path
 
 if [ ! -f "$chroot_path/usr/bin/python2" ]
 then

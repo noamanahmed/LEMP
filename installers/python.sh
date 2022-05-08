@@ -24,6 +24,16 @@ for python_version in ${python_versions_array[@]}; do
   then
     ln -s $(which python$python_version) /usr/bin/$(echo "python$python_version" | sed 's/\.//')
   fi
+
+  if (( $(echo "$python_version >= 3" |bc -l) ))
+  then
+    curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
+    python$python_version /tmp/get-pip.py
+  else
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
+    python$python_version /tmp/get-pip.py  
+  fi
+  
 done
 
 ## Quick Python 2 Fix
@@ -32,11 +42,11 @@ then
   ln -s /usr/bin/python2.7 /usr/bin/python2
 fi
 
-## PIP Installation
-curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
-python2 /tmp/get-pip.py
-curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
-python3 /tmp/get-pip.py
+# ## PIP Installation
+# curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
+# python2 /tmp/get-pip.py
+# curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
+# python3 /tmp/get-pip.py
  
 
 # For Virtualenv 
