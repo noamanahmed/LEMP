@@ -63,6 +63,8 @@ if [ -L "/var/www/home/$username/.local/bin/pip" ]
 then
     rm -rf /var/www/home/$username/.local/bin/pip
 fi
+ln -s ../../../../bin/pip$python /var/www/home/$username/.local/bin/pip 
+chown -h $username:$username /var/www/home/$username/.local/bin/pip
 
 # if [  ! -d "/var/www/home/$username/.virtualenv" ]
 # then
@@ -72,17 +74,16 @@ fi
 
 # source /var/www/home/$username/.virtualenv/bin/activate
 
-if (( $(echo "$python >= 3" |bc -l) ))
-then
+# if (( $(echo "$python >= 3" |bc -l) ))
+# then
     # curl https://bootstrap.pypa.io/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
     # python3 /var/www/home/$username/tmp/get-pip.py
-    ln -s ../../../../bin/pip3 /var/www/home/$username/.local/bin/pip 
-else
+    # ln -s ../../../../bin/pip$python /var/www/home/$username/.local/bin/pip 
+# else
     # curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /var/www/home/$username/tmp/get-pip.py
     # python2 /var/www/home/$username/tmp/get-pip.py
-    ln -s ../../../../bin/pip2 /var/www/home/$username/.local/bin/pip 
-fi
-chown -h $username:$username /var/www/home/$username/.local/bin/pip
+    # ln -s ../../../../bin/pip$python /var/www/home/$username/.local/bin/pip 
+# fi
 
 # rm /var/www/home/$username/tmp/get-pip.py
 
