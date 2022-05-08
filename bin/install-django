@@ -43,4 +43,4 @@ chroot --userspec=$username:$username /var/www/ /bin/bash -c "\
 export HOME=/home/$username && \
 export USER=$username && \
 source ~/.profile && \
-pip install django"
+~/.local/bin/pip install django"
