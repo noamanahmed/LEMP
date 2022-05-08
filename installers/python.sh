@@ -16,6 +16,8 @@ fi
 
 python_versions_array=( "2.7" "3.5" "3.6" "3.7" "3.8" "3.9" "3.10")
 
+curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip3.py
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip2.py
 for python_version in ${python_versions_array[@]}; do
   apt install python$python_version -qqy
   apt install python$python_version-venv -qqy
@@ -26,12 +28,10 @@ for python_version in ${python_versions_array[@]}; do
   fi
 
   if (( $(echo "$python_version >= 3" |bc -l) ))
-  then
-    curl https://bootstrap.pypa.io/get-pip.py --output /tmp/get-pip.py
-    python$python_version /tmp/get-pip.py
-  else
-    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
-    python$python_version /tmp/get-pip.py  
+  then    
+    python$python_version /tmp/get-pip3.py
+  else    
+    python$python_version /tmp/get-pip2.py  
   fi
   
 done
