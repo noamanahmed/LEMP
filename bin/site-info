@@ -74,6 +74,9 @@ while [ $# -gt 0 ]; do
     --laravel)
       laravel=yes
       ;;
+    --django)
+      django=yes
+      ;;
     --nossl)
       nossl=yes
       ;;       

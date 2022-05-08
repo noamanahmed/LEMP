@@ -40,7 +40,7 @@ then
 fi
 
 chroot --userspec=$username:$username /var/www/ /bin/bash -c "\
-export HOME=/home/python2 && \
-export USER=python2 && \
+export HOME=/home/$username && \
+export USER=$username && \
 source ~/.profile && \
 pip install django"
