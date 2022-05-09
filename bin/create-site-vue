@@ -60,10 +60,17 @@ then
     exit
 fi
 
-if ! host $domain
-  then
-  echo "This is not a valid domain! Aborting!"
-  exit
+# If we are not running things locally.
+if [ -z "$local" ]
+then
+  if ! host $domain
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+  fi
+else
+  # Lets add hosts entry
+  echo "127.0.0.1 $domain" >> /etc/hosts
 fi
 
 
