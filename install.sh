@@ -34,11 +34,11 @@ while [ $# -gt 0 ]; do
         --without_php)
             without_php=yes
         ;;
-        --without_mongodb)
-            without_mongodb=yes
+        --with_mongodb)
+            with_mongodb=yes
         ;;
-        --without_mongodb_express)
-            without_mongodb_express=yes
+        --with_mongodb_express)
+            with_mongodb_express=yes
         ;;
         --without_nvm)
             without_nvm=yes
@@ -85,11 +85,11 @@ while [ $# -gt 0 ]; do
         --without_phppgadmin)
             without_phppgadmin=yes
         ;;        
-        --without_postgres)
-            without_postgres=yes
+        --with_postgres)
+            with_postgres=yes
         ;;
-        --without_pgadmin)
-            without_pgadmin=yes
+        --with_pgadmin)
+            with_pgadmin=yes
         ;;
         --with_elk)
             with_elk=yes
@@ -221,7 +221,7 @@ echo "LEMP Stack Installation completed!"
 
 echo "Installing MERN Stack"
 ## Install MERN
-if [ -z "$without_mongodb" ]
+if [ -n "$with_mongodb" ]
 then
     echo "Installing mongodb"
     bash $DIR/installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
@@ -322,7 +322,7 @@ then
 fi
 
 
-if [ -z "$without_postgres" ]
+if [ -n "$with_postgres" ]
 then
     ## Optional Postgres
     echo "Installing postgres"
@@ -400,14 +400,14 @@ then
     ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
 fi
 
-if [ -z "$without_mongodb" ] && [ -z "$without_mongodb_express" ]
+if [ -n "$with_mongodb" ] && [ -n "$with_mongodb_express" ]
 then
     ## Optional install mongodb express gui tool for mongodb
     echo "Installing mongodb express"
     bash $DIR/installers/mongodb_express.sh > $INSTALL_DIR/mongodb_express.sh.log 2>&1
 fi
 
-if [ -z "$without_postgres" ] && [ -z "$without_pgadmin" ]
+if [ -n "$with_postgres" ] && [ -n "$with_pgadmin" ]
 then
     ## Optional install postgres express gui tool for postgres
     echo "Installing pgadmin"
@@ -454,5 +454,5 @@ seconds=$(echo "$end - $start" | bc)
 echo "Time Taken to install: "
 seconds=$(awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}')
 
-bash slack-notification -u $username -d $domain -m "Installation completed: $hostname Time Taken: $seconds " --success
+bash slack-notification -u $username -d $hostname -m "Installation completed: $hostname Time Taken: $seconds " --success
 

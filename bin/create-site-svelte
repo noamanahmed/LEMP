@@ -60,6 +60,13 @@ then
     exit
 fi
 
+if ! host $domain
+  then
+  echo "This is not a valid domain! Aborting!"
+  exit
+fi
+
+
 email=admin@$HOSTNAME
 
 

@@ -229,6 +229,15 @@ chown -R $username:$username /backups/$username
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
 
+if [ -z "$wordpress" ]
+then
+  ## WordPress websites rarely required Vue 
+  ## Open an issue if you want me to enable nvm for
+  ## all kinds of PHP sites by default.    
+  ## Installing nvm (NPM is required for Vue)
+  bash install-nvm -u $username
+fi
+
 
 ## Fixing permissions
 bash fix-permissions -u $username
@@ -257,16 +266,16 @@ fi
 
 if [ -n "$horizon" ]
 then
-  bash install-horizon -u indeedscraper
+  bash install-horizon -u $username
 fi
 
 if [ -n "$scheduler" ]
 then
-  bash install-scheduler -u indeedscraper
+  bash install-scheduler -u $username
 fi
 
 
-site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql"
+site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql yes "
 
 if [ -n "$wordpress" ]
 then

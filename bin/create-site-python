@@ -30,6 +30,9 @@ while [ $# -gt 0 ]; do
     --postgres)
       postgres=yes
       ;;
+    --django)
+      django=yes
+      ;;
     --mongodb)
       mongodb=yes
       ;;
@@ -84,6 +87,12 @@ fi
 if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
 then
   echo "This port is currently in use! Please select another port"
+fi
+
+if ! host $domain
+  then
+  echo "This is not a valid domain! Aborting!"
+  exit
 fi
 
 
@@ -237,9 +246,19 @@ systemctl restart nginx
 mkdir -p /backups/$username
 chown -R $username:$username /backups/$username 
 
-##Copying demo app for simple proxy server
-cp $template_path/www/python/* $www_path/
-sed -i "s/{{port}}/$port/" $www_path/app.py
+
+if [ -n "$django" ]
+then
+  bash install-django -u $username
+fi
+
+
+if [ -z "$django" ]
+then
+  ##Copying demo app for simple proxy server
+  cp $template_path/www/python/* $www_path/
+  sed -i "s/{{port}}/$port/" $www_path/app.py
+fi
 
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
@@ -266,6 +285,8 @@ if [ -z "$no_monitoring" ]
 then
   bash create-monitor -u $username -d $domain
 fi
+
+
 
 
 

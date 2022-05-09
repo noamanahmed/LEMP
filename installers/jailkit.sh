@@ -22,7 +22,7 @@ mkdir -p $chroot_path
 jk_init $chroot_path netutils extendedshell jk_lsh openvpn ssh sftp 
 chroot_bin_path=$chroot_path/bin/
 echo "Copying binaries for JailKit (This might take a while)"
-binaries_array=("ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free"  "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping"  "ssh" "sftp" "sed" "awk" "tr" "tail" "sort" "less" "head" "cut" "egrep" "uname" "uniq" "groups" "env" "dirname" "sha256sum" "sha1sum"  "readlink" "bzip2" "sqlite3" "python2" "python3" "python310" "python35" "python36" "python37" "python38" "python39" "python27" "unzip")
+binaries_array=("ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free"  "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping"  "ssh" "sftp" "sed" "awk" "tr" "tail" "sort" "less" "head" "cut" "egrep" "uname" "uniq" "groups" "env" "dirname" "sha256sum" "sha1sum"  "readlink" "bzip2" "sqlite3" "python2" "python3" "python310" "python35" "python36" "python37" "python38" "python39" "python27" "unzip" "basename")
 
 for binary in ${binaries_array[@]}; do
     echo "Jaling binary $binary"
@@ -54,19 +54,29 @@ cp /usr/bin/wp $chroot_bin_path
 ln -s /bin/env $chroot_path/usr/bin/env
 
 echo "Copying PIP"
-cp /usr/local/bin/pip3 $chroot_bin_path
-cp /usr/local/bin/pip2 $chroot_bin_path
-# ln -s /bin/python2 $chroot_path/usr/bin/python2
-# ln -s /bin/python3 $chroot_path/usr/bin/python3
+cp /usr/local/bin/pip3* $chroot_bin_path
+cp /usr/local/bin/pip2* $chroot_bin_path
+
+if [ ! -f "$chroot_path/usr/bin/python2" ]
+then
+    ln -s ../../bin/python2 $chroot_path/usr/bin/python2
+fi
+
+if [ ! -f "$chroot_path/usr/bin/python3" ]
+then
+    ln -s ../../bin/python3 $chroot_path/usr/bin/python3
+fi
 
 echo "Copying Python libraries"
-cp -rf /usr/lib/python* /var/www/usr/lib
-cp -rf /usr/share/python* /var/www/usr/share
+cp -rf /usr/lib/python* $chroot_path/usr/lib
+mkdir -p $chroot_path/usr/local/lib
+cp -rf /usr/local/lib/python* $chroot_path/usr/local/lib
+cp -rf /usr/share/python* $chroot_path/usr/share
 
 echo "Copying PHP Libraries"
-cp -rf /usr/share/php /var/www/usr/share
-cp -rf /usr/lib/php/ /var/www/usr/lib
-cp -rf /etc/php/ /var/www/etc
+cp -rf /usr/share/php $chroot_path/usr/share
+cp -rf /usr/lib/php/ $chroot_path/usr/lib
+cp -rf /etc/php/ $chroot_path/etc
 
 echo "Copying PHP Binaries (This might take a while)"
 php_binaries_array=("php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81"  )
