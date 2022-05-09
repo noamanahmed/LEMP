@@ -22,7 +22,7 @@ for python_version in ${python_versions_array[@]}; do
   apt install python$python_version -qqy
   apt install python$python_version-venv -qqy
   
-  if [ ! -L "/usr/bin/$(echo "python$python_version" | sed 's/\.//')" ] 
+  if [ -f "$(which python$python_version)" ] && [ ! -L "/usr/bin/$(echo "python$python_version" | sed 's/\.//')" ] 
   then
     ln -s $(which python$python_version) /usr/bin/$(echo "python$python_version" | sed 's/\.//')
   fi

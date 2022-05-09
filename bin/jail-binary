@@ -26,4 +26,22 @@ then
 fi
 
 chroot_path=/var/www/
-jk_cp -j $chroot_path "$(which $binary)"
+
+if [ -f "$binary" ]
+then
+    jk_cp -j $chroot_path $binary
+    for lib in `ldd $binary | cut -d'>' -f2 | awk '{print $1}'` ; do
+    if [ -f "$lib" ] ; then        
+        jk_cp -j $chroot_path $lib                
+    fi 
+    done
+else
+    jk_cp -j $chroot_path "$(which $binary)"
+    for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
+    if [ -f "$lib" ] ; then        
+        jk_cp -j $chroot_path $lib                
+    fi 
+    done
+fi
+
+

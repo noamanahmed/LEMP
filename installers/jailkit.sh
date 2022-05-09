@@ -26,12 +26,15 @@ binaries_array=("ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "p
 
 for binary in ${binaries_array[@]}; do
     echo "Jaling binary $binary"
-    cp "$(which $binary)" $chroot_bin_path
-    for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
-    if [ -f "$lib" ] ; then
-        jk_cp -j $chroot_path $lib                
-    fi  
-    done        
+    if [ -f "$(which python$python_version)" ]
+    then
+        cp "$(which $binary)" $chroot_bin_path
+        for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
+        if [ -f "$lib" ] ; then
+            jk_cp -j $chroot_path $lib                
+        fi  
+        done       
+    fi 
 done
 
 #Fix Internet
@@ -90,7 +93,7 @@ for binary in ${php_binaries_array[@]}; do
         echo "Copying $so_file Libraries"  
         for lib in `ldd $extension_dir/$so_file | cut -d'>' -f2 | awk '{print $1}'` ; do
         if [ -f "$lib" ] ; then
-                cp --parents "$lib" "$chroot_path"
+            cp --parents "$lib" "$chroot_path"
         fi  
         done
     done
