@@ -26,7 +26,7 @@ while [ $# -gt 0 ]; do
     --php)
       php="$2"
       shift
-      ;;
+      ;; 
     --wordpress)
       wordpress=yes
       ;;
@@ -101,11 +101,17 @@ if ! systemctl is-active --quiet mysql
   exit
 fi
 
-if ! host $domain
-  then
-  echo "This is not a valid domain! Aborting!"
-  exit
+# If we are running things locally
+if [ -n "$local" ]
+then
+  if ! host $domain
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+  fi
 fi
+
+exit 0;
 
 email=admin@$HOSTNAME
 

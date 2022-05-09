@@ -17,3 +17,12 @@ php_versions()
 # else
 #     echo User \`$USER\' does not belong to group \`$GROUP\'
 # fi
+
+
+# Add Local flag
+if [ -f "/opt/lemp_local_install" ]
+then
+    local=yes
+    # Disable SSL certbot validation for local domain
+    nossl=yes
+fi
