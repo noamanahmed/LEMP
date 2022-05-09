@@ -172,6 +172,12 @@ if ! systemctl is-active --quiet mysql
   exit
 fi
 
+# If we were this site locally, remove /etc/hosts entry
+if [ -n "$local" ]
+then
+  sed -i "/$domain/d" /etc/hosts
+fi
+
 
 echo "Username $username deleted successfully!"      
 
