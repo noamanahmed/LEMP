@@ -33,6 +33,15 @@ while [ $# -gt 0 ]; do
     --laravel)
       laravel=yes
       ;;
+    --nvm)
+      nvm=yes
+      ;;
+    --node)
+      node=yes
+      ;;
+    --npm)
+      npm=yes
+      ;;
     --horizon)
       horizon=yes
       ;;
@@ -226,12 +235,9 @@ chown -R $username:$username /backups/$username
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
 
-if [ -z "$wordpress" ]
-then
-  ## WordPress websites rarely required Vue 
-  ## Open an issue if you want me to enable nvm for
-  ## all kinds of PHP sites by default.    
-  ## Installing nvm (NPM is required for Vue)
+# Check if we need to use npm in this site
+if [ -n "$nvm" ] || [ -n "$node" ] ||[ -n "$npm" ]
+then  
   bash install-nvm -u $username
 fi
 
