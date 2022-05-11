@@ -38,4 +38,4 @@ if ! groups | grep -qw "$username"; then
     exit 0
 fi
 
-code /var/www/home/$username/www/ --verbose
+code /var/www/home/$username/www/
