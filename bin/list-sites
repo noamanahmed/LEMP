@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-sites='$(members web)'
+sites="$(members web)"
 
 for user in $sites    
 do
