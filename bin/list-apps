@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-apps="ls /etc/nginx/apps-available"
+apps="$(ls /etc/nginx/apps-available | sed 's/.conf//')"
 
 for app in $apps    
 do    
