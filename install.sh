@@ -171,8 +171,9 @@ then
     usermod -a -G $username $username
     echo "$username:$password" | sudo chpasswd
 fi
+
 ## Lets add the user with to sudo group
-usermod -a G sudo sammy
+usermod -a G sudo $username
 
 start=$(date +%s)
 
