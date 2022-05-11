@@ -156,6 +156,13 @@ then
     exit
 fi
 
+
+if [ -z "$password" ]
+then
+    echo "Please provide a password using -p "
+    exit
+fi
+
 # Check if provider user doesn't exists
 if ! id "$username" &>/dev/null
 then
