@@ -112,6 +112,9 @@ PrintMotd no
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
+PermitRootLogin no
+PermitRootLogin prohibit-password
+PasswordAuthentication no
 
 TCPKeepAlive no 
 ClientAliveInterval 600
@@ -127,4 +130,4 @@ Match Group web
         AuthorizedKeysFile /var/www/home/%u/.ssh/authorized_keys
         AllowTcpForwarding no
         X11Forwarding no
-
+        PasswordAuthentication yes
