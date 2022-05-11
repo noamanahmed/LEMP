@@ -35,10 +35,20 @@ fi
 user_root=/var/www/home/$username
 www_path=$user_root/www
 
-chown -R $username:$username /var/www/home/$username
-chmod 711 /var/www/home/$username
-# chmod 750 $(find $www_path -type d)
-# chmod 640 $(find $www_path -type f)
+chown -R $username:web /var/www/home/$username
 
-find $www_path -type d -exec chmod 750 {} \;
-find $www_path -type f -exec chmod 640 {} \;
+
+# If we are running things locally,we can ease the permissions for same group
+if [ -n "$local" ]
+then
+  chmod 770 /var/www/home/$username
+  find $www_path -type d -exec chmod 770 {} \;
+  find $www_path -type f -exec chmod 660 {} \;
+else
+    # Otherwise lets make it non accessible for others
+    chmod 710 /var/www/home/$username
+    find $www_path -type d -exec chmod 750 {} \;
+    find $www_path -type f -exec chmod 640 {} \;  
+fi
+
+

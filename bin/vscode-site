@@ -33,7 +33,4 @@ then
   exit  
 fi
 
-sudo usermod -a -G $username $USER
-sudo chmod 750 -R /var/www/home/$username/
-su - $USER
-code /var/www/home/$username/ --verbose
+code /var/www/$username/home/www
