@@ -13,23 +13,18 @@ fi
 
 args=$@
 
-
 while [ $# -gt 0 ]; do
   case "$1" in
-    -u|--username)
-      username="$2"
+    --php)
+      php="$2"
       shift
-      ;;
-    -d|--domain)
-      domain="$2"
-      shift
-      ;;
+      ;; 
     --nossl)
       nossl=yes
       ;;       
     --no_monitoring)
       no_monitoring=yes
-      ;;    
+      ;;        
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
@@ -38,6 +33,9 @@ while [ $# -gt 0 ]; do
   esac  
   shift
 done
+
+username=$LEMP_HOSTNAME_USERNAME
+domain=$HOSTNAME
 
 if [ -z "$username" ]
 then
@@ -53,29 +51,25 @@ then
 fi
 
 
-
 if id "$username" &>/dev/null
 then
     echo "The $username already exists!. Please run delete-site -u $username"
     exit
 fi
 
-# If we are not running things locally.
-if [ -z "$local" ]
+if [ -z "$php" ]
 then
-  if ! host $domain
-    then
-    echo "This is not a valid domain! Aborting!"
-    exit
-  fi
-else
-  # Lets add hosts entry
-  echo "127.0.0.1 $domain" >> /etc/hosts
+  php=8.1
 fi
 
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
+    echo "This is not a valid PHP Version"
+    exit 1;
+fi
 
 email=admin@$HOSTNAME
-
 
 ##Create user
 user_password="$(openssl rand -hex 12)"
@@ -83,7 +77,6 @@ bash create-linux-user -u $username -p $user_password
 
 ## Jail User for a php site
 bash jail-user -u $username -p yes
-
 
 ## Adding user to groups
 usermod -a -G web $username
@@ -97,65 +90,65 @@ chroot_home=$chroot_path/$user_root
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
 mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/logs/php
+mkdir -p $chroot_home/logs/mail
+mkdir -p $chroot_home/cache
+mkdir -p $chroot_home/cache/nginx
 mkdir -p $chroot_home/www/
 
-www_path=$chroot_home/www
+www_path=$chroot_home/www 
 
 
-## Setting up default static HTML site for a svelte site
+
+#mkdir -p "$user_root/cache/php"
+
+## Fixing Permissions for nginx cache and php logs
+chown -R $username:web $chroot_home/logs/php
+chown -R nginx:nginx $chroot_home/cache/nginx
+
+## Setting up default static HTML site
 mkdir -p $www_path
-cp -rf $template_path/www/svelte/* $www_path/
+cp $template_path/www/*.php $www_path
+cp $template_path/www/*.html $www_path
 
+## Setup PHP
+sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
+systemctl restart php$php-fpm
 
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
-cp "$template_path/nginx/svelte/vhost.conf" $nginx_vhost_file
+cp "$template_path/nginx/php/vhost.conf" $nginx_vhost_file
 
-sed -i "s/{{www_path}}/$(echo $www_path/public/ | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 
-## Enable site and reload nginx
+
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
 if [ -z "$nossl" ]
 then
+  ## Test SSL Generation
+  if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+  then       
+    ## Generate SSL
+    certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
 
-  ## Test SSL Generation  
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/public/
-  then 
-    echo "Error in certbot SSL generating. Cleaning up and aborting"
-    delete-site -u $username -y --no_message
-    exit 1;
+    ## Enabling SSL in nginx settings
+    sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+    nginx -t && systemctl reload nginx    
   fi
-
-  ## Generate SSL
-  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/public/
-
-  ## Enabling SSL in nginx settings
-  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-  nginx -t && systemctl reload nginx    
 fi
-## Enable SSL configured vhost and reload nginx
-nginx -t && systemctl reload nginx
-
-## Setup Log rotation
-# cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
-# sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
-
-## Restart nginx as we added our user to nginx group and for some reason nginx reload doesn't work
-systemctl restart nginx
 
 ## Setting up backup folder
 mkdir -p /backups/$username
 chown -R $username:web /backups/$username 
-
-
-## Jail User for a site
-bash jail-user -u $username
 
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
@@ -163,36 +156,19 @@ bash create-ssh-key -u $username
 ## Fixing permissions
 bash fix-permissions -u $username
 
-
-## Installing nvm
-bash install-nvm -u $username
-
-
-## Install demo app packages
-# Uncomment the following line if you want to rebuild
-#nvm-user -u $username -c 'cd www && npm install && npm run build'
-
+## Switch php version to the one specified 
+bash toggle-php -u $username -p $php
 
 ## Setting up Logrotation
-bash logrotate-site -u $username
+bash logrotate-site -u $username -e yes
 
 
-if [ -z "$no_monitoring" ]
-then
-  bash create-monitor -u $username -d $domain
-fi
-
-
-
-site_info_command="bash site-info $args --ssh_password $user_password "
+site_info_command="bash site-info $args --ssh_password "
 
 site_info="$($site_info_command)"
 
 $site_info_command
 
 bash slack-notification -u $username -d $domain -m "$site_info" --success
-
-
-
 
 

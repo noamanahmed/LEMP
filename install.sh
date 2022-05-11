@@ -2,7 +2,7 @@
 
 DIR=$(dirname "${BASH_SOURCE[0]}")
 DIR=$(realpath "${DIR}")
-
+source $DIR/includes/helpers.sh
 
 if [ "$EUID" -ne 0 ]
 then echo "Please run as root"
@@ -13,6 +13,10 @@ while [ $# -gt 0 ]; do
     case "$1" in
         -u|--username)
             username="$2"
+            shift
+        ;;
+        -p|--password)
+            password="$2"
             shift
         ;;
         -h|--hostname)
@@ -152,13 +156,23 @@ then
     exit
 fi
 
+# Check if provider user doesn't exists
+if ! id "$username" &>/dev/null
+then
+    echo "Creating Sudo User: $username as it doesn't exists"
+    adduser --gecos "" --disabled-password $username
+    usermod -a -G $username $username
+    echo "$username:$password" | sudo chpasswd
+fi
+## Lets add the user with to sudo group
+usermod -a G sudo sammy
+
 start=$(date +%s)
 
 INSTALL_DIR=/tmp/lemp_$(openssl rand -hex 12)
 mkdir -p $INSTALL_DIR
 echo ""
 echo "Installing Directory in $INSTALL_DIR"
-
 
 echo "Updating Packages"
 apt-get update -qqy > $INSTALL_DIR/apt_update.log 2>&1
@@ -429,21 +443,21 @@ source ~/.profile
 if [ -z "$without_hostname_site" ]
 then
     echo "Creating $hostname site with username $username"
-    create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+    create-site-hostname > $INSTALL_DIR/hostname-site.sh.log 2>&1
 fi
 
 if [ -z "$without_phpmyadmin" ]
 then
     ## Install phpmyadmin
     echo "Installing phpmyadmin at $hostname"
-    bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+    bash $DIR/installers/phpmyadmin.sh > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
 fi
 
 if [ -z "$without_phppgadmin" ]
 then
     ## Install phppgadmin
     echo "Installing phppgadmin at $hostname"
-    bash $DIR/installers/phppgadmin.sh -u $username > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
+    bash $DIR/installers/phppgadmin.sh > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
 fi
 
 

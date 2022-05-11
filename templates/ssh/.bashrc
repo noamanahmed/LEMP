@@ -119,7 +119,7 @@ fi
 
 alias setclip="xclip -selection c"
 alias getclip="xclip -selection c -o"
-
+alias permissions="stat -c '%A %a %h %U %G %s %y %n' *| sed 's/\.[[:digit:]]\+[ ]\+-[[:digit:]]\+/ /'"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

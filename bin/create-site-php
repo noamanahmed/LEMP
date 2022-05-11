@@ -215,12 +215,9 @@ then
   nginx -t && systemctl reload nginx    
 fi
 
-## Setup Log rotation
-# cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
-# sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
 
 ## Restart nginx as we added our user to nginx group and for some reason nginx reload doesn't work
-systemctl restart nginx
+#systemctl restart nginx
 
 ## Setting up backup folder
 mkdir -p /backups/$username
