@@ -33,4 +33,4 @@ then
   exit  
 fi
 
-code /var/www/$username/home/www
+code /var/www/home/$username/www/ --verbose
