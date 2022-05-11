@@ -23,8 +23,6 @@ then
   adduser --gecos "" --disabled-password --no-create-home  nginx 
   groupadd web
   groupadd sftp
-  newgrp web
-  newgrp sftp
   usermod -a -G web nginx
   apt install nginx -y
   
