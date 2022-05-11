@@ -34,7 +34,7 @@ fi
 
 domain=$(cat  /etc/nginx/apps-available/$app.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
 port=$(cat  /etc/nginx/apps-available/$app.conf  | grep -m1 -Poe 'port \K[^; ]+')
-url="http://$domain:$port"
+url="https://$domain:$port"
 
 
 app_info="$app"
