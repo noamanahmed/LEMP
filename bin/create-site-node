@@ -213,7 +213,7 @@ systemctl restart nginx
 
 ## Setting up backup folder
 mkdir -p /backups/$username
-chown -R $username:$username /backups/$username 
+chown -R $username:web /backups/$username 
 
 ## Installing nvm
 bash install-nvm -u $username
