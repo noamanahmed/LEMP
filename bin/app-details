@@ -25,27 +25,24 @@ then
 fi
 
 
-
 if [ ! -f "/etc/nginx/apps-available/$app.conf" ]
 then
-    echo "No Vhost found for this app"    
+    echo "No Vhost found for this app $app"    
     exit;
 fi
 
 
-if [ ! -L "/etc/nginx/apps-enabled/$app.conf" ]
-then
-    echo "This site is already disabled!"    
-    exit;
-fi
+domain=$(cat  /etc/nginx/apps-available/$app.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+port=$(cat  /etc/nginx/apps-available/$app.conf  | grep -m1 -Poe 'listen \K[^; ]+')
+url="https://$domain:$port"
 
 
-if [ -f "/etc/nginx/apps-available/$app.conf" ] 
-then    
-    nginx_vhost_enabled="/etc/nginx/apps-enabled/$app.conf"
-    rm $nginx_vhost_enabled
-fi
+app_info="$app"
+app_info+="\t"
+app_info+="$url"
+app_info+="\t"
+app_info+="$port"
+app_info+="\t"
+app_info+="\n"
 
-nginx -t && service nginx reload
-
-echo "App $app  Disabled"
+printf "$app_info"      

@@ -26,12 +26,21 @@ while [ $# -gt 0 ]; do
     --php)
       php="$2"
       shift
-      ;;
+      ;; 
     --wordpress)
       wordpress=yes
       ;;
     --laravel)
       laravel=yes
+      ;;
+    --nvm)
+      nvm=yes
+      ;;
+    --node)
+      node=yes
+      ;;
+    --npm)
+      npm=yes
       ;;
     --horizon)
       horizon=yes
@@ -101,11 +110,19 @@ if ! systemctl is-active --quiet mysql
   exit
 fi
 
-if ! host $domain
-  then
-  echo "This is not a valid domain! Aborting!"
-  exit
+# If we are not running things locally.
+if [ -z "$local" ]
+then
+  if ! host $domain
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+  fi
+else
+  # Lets add hosts entry
+  echo "127.0.0.1 $domain" >> /etc/hosts
 fi
+
 
 email=admin@$HOSTNAME
 
@@ -207,12 +224,9 @@ then
   nginx -t && systemctl reload nginx    
 fi
 
-## Setup Log rotation
-# cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
-# sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
 
 ## Restart nginx as we added our user to nginx group and for some reason nginx reload doesn't work
-systemctl restart nginx
+#systemctl restart nginx
 
 ## Setting up backup folder
 mkdir -p /backups/$username
@@ -220,6 +234,12 @@ chown -R $username:$username /backups/$username
 
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
+
+# Check if we need to use npm in this site
+if [ -n "$nvm" ] || [ -n "$node" ] ||[ -n "$npm" ]
+then  
+  bash install-nvm -u $username
+fi
 
 
 ## Fixing permissions
@@ -249,16 +269,16 @@ fi
 
 if [ -n "$horizon" ]
 then
-  bash install-horizon -u indeedscraper
+  bash install-horizon -u $username
 fi
 
 if [ -n "$scheduler" ]
 then
-  bash install-scheduler -u indeedscraper
+  bash install-scheduler -u $username
 fi
 
 
-site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql $mysql"
+site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql yes "
 
 if [ -n "$wordpress" ]
 then

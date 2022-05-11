@@ -2,7 +2,7 @@
 
 DIR=$(dirname "${BASH_SOURCE[0]}")
 DIR=$(realpath "${DIR}")
-
+source $DIR/includes/helpers.sh
 
 if [ "$EUID" -ne 0 ]
 then echo "Please run as root"
@@ -13,6 +13,10 @@ while [ $# -gt 0 ]; do
     case "$1" in
         -u|--username)
             username="$2"
+            shift
+        ;;
+        -p|--password)
+            password="$2"
             shift
         ;;
         -h|--hostname)
@@ -34,11 +38,11 @@ while [ $# -gt 0 ]; do
         --without_php)
             without_php=yes
         ;;
-        --without_mongodb)
-            without_mongodb=yes
+        --with_mongodb)
+            with_mongodb=yes
         ;;
-        --without_mongodb_express)
-            without_mongodb_express=yes
+        --with_mongodb_express)
+            with_mongodb_express=yes
         ;;
         --without_nvm)
             without_nvm=yes
@@ -85,11 +89,11 @@ while [ $# -gt 0 ]; do
         --without_phppgadmin)
             without_phppgadmin=yes
         ;;        
-        --without_postgres)
-            without_postgres=yes
+        --with_postgres)
+            with_postgres=yes
         ;;
-        --without_pgadmin)
-            without_pgadmin=yes
+        --with_pgadmin)
+            with_pgadmin=yes
         ;;
         --with_elk)
             with_elk=yes
@@ -152,13 +156,31 @@ then
     exit
 fi
 
+
+if [ -z "$password" ]
+then
+    echo "Please provide a password using -p "
+    exit
+fi
+
+# Check if provider user doesn't exists
+if ! id "$username" &>/dev/null
+then
+    echo "Creating Sudo User: $username as it doesn't exists"
+    adduser --gecos "" --disabled-password $username
+    usermod -a -G $username $username
+    echo "$username:$password" | sudo chpasswd
+fi
+ 
+## Lets add the user with to sudo group
+usermod -a -G sudo $username
+
 start=$(date +%s)
 
 INSTALL_DIR=/tmp/lemp_$(openssl rand -hex 12)
 mkdir -p $INSTALL_DIR
 echo ""
 echo "Installing Directory in $INSTALL_DIR"
-
 
 echo "Updating Packages"
 apt-get update -qqy > $INSTALL_DIR/apt_update.log 2>&1
@@ -177,7 +199,7 @@ bash $DIR/installers/prereq.sh > $INSTALL_DIR/prereq.sh.log 2>&1
 
 echo "Setting up SSH"
 ## Setting up SSH
-bash $DIR/installers/ssh.sh > $INSTALL_DIR/ssh.sh.log 2>&1
+bash $DIR/installers/ssh.sh -u $username > $INSTALL_DIR/ssh.sh.log 2>&1
 
 if [ -z "$without_python" ]
 then
@@ -221,7 +243,7 @@ echo "LEMP Stack Installation completed!"
 
 echo "Installing MERN Stack"
 ## Install MERN
-if [ -z "$without_mongodb" ]
+if [ -n "$with_mongodb" ]
 then
     echo "Installing mongodb"
     bash $DIR/installers/mongodb.sh > $INSTALL_DIR/mongodb.sh.log 2>&1
@@ -322,7 +344,7 @@ then
 fi
 
 
-if [ -z "$without_postgres" ]
+if [ -n "$with_postgres" ]
 then
     ## Optional Postgres
     echo "Installing postgres"
@@ -400,14 +422,14 @@ then
     ash $DIR/installers/mailhog.sh -h $hostname > $INSTALL_DIR/mailhog.sh.log 2>&1
 fi
 
-if [ -z "$without_mongodb" ] && [ -z "$without_mongodb_express" ]
+if [ -n "$with_mongodb" ] && [ -n "$with_mongodb_express" ]
 then
     ## Optional install mongodb express gui tool for mongodb
     echo "Installing mongodb express"
     bash $DIR/installers/mongodb_express.sh > $INSTALL_DIR/mongodb_express.sh.log 2>&1
 fi
 
-if [ -z "$without_postgres" ] && [ -z "$without_pgadmin" ]
+if [ -n "$with_postgres" ] && [ -n "$with_pgadmin" ]
 then
     ## Optional install postgres express gui tool for postgres
     echo "Installing pgadmin"
@@ -422,28 +444,28 @@ then
     bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
 
-## Load new .profile
-source ~/.profile
+## Load new .bashrc
+source ~/.bashrc
 
 ## Setup hostname site for phpmyadmin and other stuff
 if [ -z "$without_hostname_site" ]
 then
     echo "Creating $hostname site with username $username"
-    create-site-php -u $username -d $hostname --php 8.1 > $INSTALL_DIR/$username-site.sh.log 2>&1
+    create-site-hostname > $INSTALL_DIR/hostname-site.sh.log 2>&1
 fi
 
 if [ -z "$without_phpmyadmin" ]
 then
     ## Install phpmyadmin
     echo "Installing phpmyadmin at $hostname"
-    bash $DIR/installers/phpmyadmin.sh -u $username > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+    bash $DIR/installers/phpmyadmin.sh > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
 fi
 
 if [ -z "$without_phppgadmin" ]
 then
     ## Install phppgadmin
     echo "Installing phppgadmin at $hostname"
-    bash $DIR/installers/phppgadmin.sh -u $username > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
+    bash $DIR/installers/phppgadmin.sh > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
 fi
 
 
@@ -454,5 +476,5 @@ seconds=$(echo "$end - $start" | bc)
 echo "Time Taken to install: "
 seconds=$(awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}')
 
-bash slack-notification -u $username -d $domain -m "Installation completed: $hostname Time Taken: $seconds " --success
+bash slack-notification -u $username -d $hostname -m "Installation completed: $hostname Time Taken: $seconds " --success
 

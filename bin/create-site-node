@@ -78,6 +78,20 @@ then
   echo "This port is currently in use! Please select another port"
 fi
 
+# If we are not running things locally.
+if [ -z "$local" ]
+then
+  if ! host $domain
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+  fi
+else
+  # Lets add hosts entry
+  echo "127.0.0.1 $domain" >> /etc/hosts
+fi
+
+
 email=admin@$HOSTNAME
 
 ##Create user
@@ -91,8 +105,7 @@ bash jail-user -u $username -p yes
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
-usermod -a -G $username nginx
-usermod -a -G $username nginx
+
 
 ## Create user directories
 
@@ -200,7 +213,7 @@ systemctl restart nginx
 
 ## Setting up backup folder
 mkdir -p /backups/$username
-chown -R $username:$username /backups/$username 
+chown -R $username:web /backups/$username 
 
 ## Installing nvm
 bash install-nvm -u $username
