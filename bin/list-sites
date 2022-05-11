@@ -15,7 +15,7 @@ sites='members web'
 
 for user in $sites    
 do
-    if [ "$user" == "member" ]
+    if [ "$user" == "web" ]
     then
         continue
     fi
