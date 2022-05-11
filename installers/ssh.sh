@@ -38,5 +38,7 @@ cp -rf $template_path/ssh/.ssh/* /home/$username/.ssh/
 cp -rf $template_path/ssh/.profile /home/$username/
 cp -rf $template_path/ssh/.bashrc /home/$username/
 chown -R $username:$username /home/$username/.ssh
+chown -R $username:$username /home/$username/.profile
+chown -R $username:$username /home/$username/.bashrc
 systemctl restart ssh
 systemctl restart sshd
