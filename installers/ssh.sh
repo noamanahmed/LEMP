@@ -18,6 +18,20 @@ do
     esac
 done
 
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u.If you are confused just set it to your first name"
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The username $username doesn't exist"    
+    exit;
+fi
+
 cp -rf $template_path/ssh/sshd_config /etc/ssh/sshd_config
 mkdir -p /home/$username/.ssh
 cp -rf $template_path/ssh/.ssh/* /home/$username/.ssh/
