@@ -168,7 +168,7 @@ if ! id "$username" &>/dev/null
 then
     echo "Creating Sudo User: $username as it doesn't exists"
     adduser --gecos "" --disabled-password $username
-    newgrp $username
+    exec sg $username newgrp `id -gn`
     usermod -a -G $username $username
     echo "$username:$password" | sudo chpasswd
 fi
