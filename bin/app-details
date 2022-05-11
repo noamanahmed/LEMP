@@ -27,7 +27,7 @@ fi
 
 if [ ! -f "/etc/nginx/apps-available/$app.conf" ]
 then
-    echo "No Vhost found for this app"    
+    echo "No Vhost found for this app $app"    
     exit;
 fi
 
