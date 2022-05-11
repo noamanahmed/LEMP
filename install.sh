@@ -199,7 +199,7 @@ bash $DIR/installers/prereq.sh > $INSTALL_DIR/prereq.sh.log 2>&1
 
 echo "Setting up SSH"
 ## Setting up SSH
-bash $DIR/installers/ssh.sh > $INSTALL_DIR/ssh.sh.log 2>&1
+bash $DIR/installers/ssh.sh -u $username > $INSTALL_DIR/ssh.sh.log 2>&1
 
 if [ -z "$without_python" ]
 then
