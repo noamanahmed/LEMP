@@ -11,9 +11,13 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-home_users='members web'
+sites='members web'
 
-for user in $home_users    
+for user in $sites    
 do
-  echo "User : $user"      
+    if [ "$user" == "member" ]
+    then
+        continue
+    fi
+    echo "User : $user"      
 done
