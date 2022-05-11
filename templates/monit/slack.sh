@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Slack webhook URL was never setup
+if [ ! -f "/opt/slack_webhook_url" ]
+then      
+  exit 
+fi
+
+
 URL=$(cat /opt/slack_webhook_url)
 
 if [ -z "$URL" ]
