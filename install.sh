@@ -444,8 +444,8 @@ then
     bash $DIR/installers/mailserver.sh > $INSTALL_DIR/mailserver.sh.log 2>&1
 fi
 
-## Load new .profile
-source ~/.profile
+## Load new .bashrc
+source ~/.bashrc
 
 ## Setup hostname site for phpmyadmin and other stuff
 if [ -z "$without_hostname_site" ]

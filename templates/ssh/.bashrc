@@ -159,6 +159,7 @@ export NVM_DIR="$HOME/.nvm"
 
 
 # You can custom add your aliases here
+alias sudo='sudo -E env "PATH=$PATH"' ## Fixes CMD not found issue using sudo
 alias sail='bash vendor/bin/sail'
 alias setclip="xclip -selection c"
 alias getclip="xclip -selection c -o"
