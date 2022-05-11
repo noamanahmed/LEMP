@@ -32,5 +32,13 @@ then
     exit;
 fi
 
+domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+space=$(du -sh /var/www/home/$username)
 
-echo "User : $username"      
+user_info="$username"
+user_info+="\t"
+user_info+="$domain"
+user_info+="\t"
+user_info+="$space"
+
+echo $user_info      
