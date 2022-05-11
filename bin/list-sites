@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+bash $DIR/../installers/jailkit.sh
+
+home_users='members web'
+
+for user in $home_users    
+do
+  echo "User : $user"      
+done
