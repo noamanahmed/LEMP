@@ -19,5 +19,5 @@ do
     then
         continue
     fi
-    echo "User : $user"      
+    bash site-details -u $user
 done
