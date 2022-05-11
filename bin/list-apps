@@ -11,13 +11,13 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-sites="ls /etc/nginx/apps-available"
+apps="ls /etc/nginx/apps-available"
 
-for user in $sites    
+for app in $apps    
 do    
     disallowed_users=("web" "nginx" "sftp" )
-    if [[ " ${disallowed_users[*]} " =~ " ${user} " ]]; then        
+    if [[ " ${disallowed_users[*]} " =~ " ${app} " ]]; then        
         continue
     fi
-    bash app-details -u $user
+    bash app-details -a $app
 done

@@ -20,7 +20,7 @@ done
 
 if [ -z "$app" ]
 then
-    echo "Please provide a app using -u "
+    echo "Please provide a app using -a "
     exit
 fi
 
