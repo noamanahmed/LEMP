@@ -33,4 +33,5 @@ then
   exit  
 fi
 
+sudo su $USER
 code /var/www/home/$username/www/ --verbose
