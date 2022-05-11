@@ -33,5 +33,9 @@ then
   exit  
 fi
 
-sudo su $USER
+if ! groups | grep -qw "$username"; then
+    echo "Error! Please update groups in your terminal session first by running  update-groups command."
+    exit 0
+fi
+
 code /var/www/home/$username/www/ --verbose

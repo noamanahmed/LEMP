@@ -10,6 +10,7 @@ php_versions()
 
 
 LEMP_HOSTNAME_USERNAME='default_site'
+LEMP_LOCAL_LINUX_USER='noaman' ## Modify this to the username which you are using in Ubuntu GUI
 #Servername
 #cat  /etc/nginx/sites-available/angular1.conf  | grep -m1 -Poe 'server_name \K[^; ]+'
 
