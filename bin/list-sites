@@ -11,8 +11,6 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-bash $DIR/../installers/jailkit.sh
-
 home_users='members web'
 
 for user in $home_users    
