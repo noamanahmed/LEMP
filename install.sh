@@ -158,7 +158,7 @@ while [ $# -gt 0 ]; do
             printf "\t--without_phpmyadmin \n\tDisable phpmyadmin Installation and Configurations\n"
             printf "\t--without_phppgadmin \n\tDisable phppgadmin Installation and Configurations\n"
             printf "\t--with_postgres \n\tEnable Postgress Installation and Configurations \n"
-            printf "\t--with_pgadmin \n\tEnable pgAdmin4 Installation and Configurations (Requires with_postgres flag) \n"
+            printf "\t--with_pgadmin \n\tEnable pgAdmin4 Installation and Configurations (Requires --with_postgres flag) \n"
             printf "\t--with_elk \n\tEnable  Installation and Configurations\n"
             printf "\t--with_kafka \n\t Enable  Installation and Configurations\n"
             printf "\t--with_rabbitmq \n\t Enable  Installation and Configurations\n"
@@ -169,8 +169,8 @@ while [ $# -gt 0 ]; do
             printf "\t--with_mailhog \n\t Enable  Installation and Configurations\n"
             printf "\t--with_mailserver \n\t Enable  Installation and Configurations\n"
             printf "\t--with_zabbix \n\t Enable  Installation and Configurations\n"
-            printf "\t--slack_notification_webhook \n\tEnter Slack Notification Webhook URL to receieve important notifications\n"
-            printf "\t--uptime_robot_key \n\tEnter Uptime Robot Main API key to create/delete monitors\n"
+            printf "\t--slack_notification_webhook https://hooks.slack.com/services/XXXXXXX/XXXXXX/XXXXXXXXXX \n\tEnter Slack Notification Webhook URL to receieve important notifications.\n"
+            printf "\t--uptime_robot_key YOUR_MAIN_API_KEY \n\tEnter Uptime Robot Main API key to create/delete monitors \n"
             exit 0
         ;;
         *)
