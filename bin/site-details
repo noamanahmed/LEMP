@@ -40,5 +40,6 @@ user_info+="\t"
 user_info+="$domain"
 user_info+="\t"
 user_info+="$space"
+user_info+="\n"
 
 echo $user_info      

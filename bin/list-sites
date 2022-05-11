@@ -14,9 +14,10 @@ fi
 sites="$(members web)"
 
 for user in $sites    
-do
-    if [ "$user" == "web" ]
-    then
+do    
+    disallowed_users=("web" "nginx" "sftp" )
+
+    if [[ ! " ${disallowed_users[*]} " =~ " ${user} " ]]; then        
         continue
     fi
     bash site-details -u $user
