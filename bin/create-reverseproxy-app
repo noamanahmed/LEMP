@@ -82,6 +82,7 @@ fi
 
 email=$app@$HOSTNAME
 www_path=/var/www/html
+user_root=/var/www/html
 ## Setup a static HTML site for LetsEncrypt First
 nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$app.conf"
