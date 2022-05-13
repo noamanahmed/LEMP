@@ -49,6 +49,10 @@ jk_cp -j $chroot_path /usr/share/git-core
 echo "Copying Locales"
 cp -rf /etc/default/locale $chroot_path/etc/default/
 
+echo "Copying Timezones"
+cp -rf /usr/share/zoneinfo $chroot_path/usr/share/
+
+
 echo "Copying Composer"
 cp /usr/local/bin/composer $chroot_bin_path
 cp /usr/local/bin/composer1 $chroot_bin_path
