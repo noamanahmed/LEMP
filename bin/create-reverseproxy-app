@@ -81,6 +81,11 @@ fi
 
 
 email=$app@$HOSTNAME
+username='default_site'
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
+www_path=$chroot_home/www 
 
 ## Setup a static HTML site for LetsEncrypt First
 nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
@@ -97,7 +102,7 @@ nginx -t && systemctl reload nginx
 
 
 ## Test SSL Generation  
-if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w /var/www/html
+if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
 then 
 echo "Error in certbot SSL generating. Cleaning up and aborting"
 delete-site -u $app -y --no_message
@@ -105,7 +110,7 @@ exit 1;
 fi
 
 ## Generate SSL
-certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w /var/www/html
+certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
 
 
 ## Removing Static site
@@ -114,8 +119,8 @@ rm -rf $nginx_vhost_file
 nginx -t && systemctl reload nginx
 
 #Set up Nginx
-nginx_vhost_file="/etc/nginx/apps-available/reverseproxy.conf"
-nginx_vhost_enabled="/etc/nginx/apps-enabled/reverseproxy.conf"
+nginx_vhost_file="/etc/nginx/apps-available/$app.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/$app.conf"
 cp $template_path/reverseproxy/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file

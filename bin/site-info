@@ -17,6 +17,10 @@ while [ $# -gt 0 ]; do
       username="$2"
       shift
       ;;
+    -a|--app)
+      app="$2"
+      shift
+      ;;
     -d|--domain)
       domain="$2"
       shift

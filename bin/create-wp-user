@@ -31,14 +31,14 @@ then
     exit;
 fi
 
+www_path=/var/www/home/$username/www
 
-
-if [ ! -f "/home/$username/www/wp-config.php" ] 
+if [ ! -f "$www_path/wp-config.php" ] 
 then
     echo "There is not a wordpress site"    
     exit;
 fi
 
 
-runuser -l $username -c "wp --path=/home/$username/www user delete noaman --reassign=1"
-runuser -l $username -c "wp --path=/home/$username/www user create noaman noaman@mailinator.com --role=administrator"
+wp --allow-root --path=$www_path user delete support_$username --reassign=1
+wp --allow-root --path=$www_path user create support_$username support_$username@$HOSTNAME --role=administrator
