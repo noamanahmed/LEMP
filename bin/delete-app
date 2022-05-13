@@ -46,7 +46,7 @@ then
     exit;
 fi
 
-domain=$(cat  /etc/nginx/app-available/$app.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+domain=$(cat  /etc/nginx/apps-available/$app.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
 
 
 if [ -z "$yes" ]
@@ -89,15 +89,15 @@ done
 
 ## Deleting nginx settings
 
-if [ -L "/etc/nginx/app-enabled/$app.conf" ] 
+if [ -L "/etc/nginx/apps-enabled/$app.conf" ] 
 then
-    rm "/etc/nginx/app-enabled/$app.conf"
+    rm "/etc/nginx/apps-enabled/$app.conf"
 fi
 
 
-if [ -f "/etc/nginx/app-available/$app.conf" ] 
+if [ -f "/etc/nginx/apps-available/$app.conf" ] 
 then
-    rm "/etc/nginx/app-available/$app.conf"
+    rm "/etc/nginx/apps-available/$app.conf"
 fi
 
 
