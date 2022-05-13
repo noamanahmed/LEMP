@@ -81,21 +81,11 @@ fi
 
 
 email=$app@$HOSTNAME
-
-mkdir -p /var/www/html/app/
-mkdir -p /var/www/html/app/$app
-
-www_path=/var/www/html/app/$app
-chroot_home=/var/www/html/app/$app
-
-mkdir -p $chroot_home
-mkdir -p $chroot_home/logs
-mkdir -p $chroot_home/logs/nginx
-mkdir -p $chroot_home/logs/php
-mkdir -p $chroot_home/logs/mail
-mkdir -p $chroot_home/cache
-mkdir -p $chroot_home/cache/nginx
-mkdir -p $chroot_home/www/
+username='default_site'
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
+www_path=$chroot_home/www 
 
 ## Setup a static HTML site for LetsEncrypt First
 nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
