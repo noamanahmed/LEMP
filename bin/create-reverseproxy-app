@@ -83,9 +83,9 @@ fi
 email=$app@$HOSTNAME
 
 ## Setup a static HTML site for LetsEncrypt First
-nginx_vhost_file="/etc/nginx/apps-available/$app.conf"
-nginx_vhost_enabled="/etc/nginx/apps-enabled/$app.conf"
-cp "$template_path/reverseproxy/vhost.conf" $nginx_vhost_file
+nginx_vhost_file="/etc/nginx/app-available/$app.conf"
+nginx_vhost_enabled="/etc/nginx/app-enabled/$app.conf"
+cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
