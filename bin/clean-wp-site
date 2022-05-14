@@ -35,14 +35,6 @@ then
 fi
 
 
-if [ -z "$plugin" ]
-then
-    echo "Please provide a plugin slug using -p "
-    exit
-fi
-
-
-
 if ! id "$username" &>/dev/null
 then
     echo "The $username doesn't exist"    
