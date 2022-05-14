@@ -89,11 +89,13 @@ fi
 if lsof -Pi :$external_port -sTCP:LISTEN -t >/dev/null
 then
   echo "This external_port is currently in use! Please make sure that a port is available to which nginx will listen on a public interface"
+  exit;
 fi
 
 if ! lsof -Pi :$internal_port -sTCP:LISTEN -t >/dev/null
 then
   echo "This internal_port is currently NOT in use! Please ensure that app is running."
+  exit;
 fi
 
 
