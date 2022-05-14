@@ -48,3 +48,5 @@ if ! systemctl is-active --quiet redis
   exit
 fi
 
+
+## TODO Implement Redis ACL. 

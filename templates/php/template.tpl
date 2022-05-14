@@ -9,6 +9,8 @@ listen.owner = {{username}}
 listen.group = {{username}}
 listen.mode = 0660
 
+chroot = /var/www/
+
 pm = dynamic
 pm.max_children = 5
 pm.start_servers = 3
