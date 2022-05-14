@@ -98,7 +98,7 @@ malicious_themes=$(grep -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e '
 
 for plugin in $malicious_plugins    
 do
-
+  echo $plugin
 done
 
 
