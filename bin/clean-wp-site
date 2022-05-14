@@ -102,7 +102,7 @@ do
 done
 
 
-wp_admin_users=$(wp user list --role=administrator --allow-root --field=ID)
+wp_admin_users=$(wp --allow-root --path=$www_path user list --role=administrator --allow-root --field=ID)
 
 for user in $wp_admin_users    
 do

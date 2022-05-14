@@ -30,4 +30,4 @@ fi
 chroot_home=/var/www/home/$username
 www_path=$chroot_home/www
 
-wp --allow-root --path=$www_path user  list
+wp --allow-root --path=$www_path user list
