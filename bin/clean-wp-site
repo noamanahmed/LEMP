@@ -1,0 +1,118 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$plugin" ]
+then
+    echo "Please provide a plugin slug using -p "
+    exit
+fi
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+chroot_home=/var/www/home/$username
+www_path=$chroot_home/www
+
+if [ ! -f "$www_path/wp-config.php" ] 
+then
+    echo "There is not a wordpress site"    
+    exit;
+fi
+
+
+# Disable site
+bash disable-site -u $username
+
+# Remove SSH connectivity
+# rm -rf $chroot_home/.ssh
+# pkill -9 -u $username
+
+
+## First copy the source to
+rm -rf $chroot_home/www_backup
+cp -rf $chroot_home/www $chroot_home/www_backup 
+rm -rf $chroot_home/www
+
+#Get site details
+installed_wp_version=$(wp core version --allow-root)
+database_name=$(wp config get DB_NAME --allow-root)
+database_user=$(wp config get DB_USER --allow-root)
+database_password=$(wp config get DB_PASSWORD --allow-root)
+
+# Reset WP Config
+wp --allow-root --path=$www_path core download --version=$installed_wp_version
+wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
+
+# First copy uploads 
+cp -rf $chroot_home/www_backup/wp-content/uploads $www_path/wp-content
+
+#Remove all .php files from uploads folder
+find $www_path/wp-content/uploads -name "*.php" -type f -delete
+
+#Search plugins for 
+malicious_plugins=$(grep -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/plugins/ | cut -c6-)
+
+for plugin in $malicious_plugins    
+do
+  echo $plugin
+done
+
+#Search plugins for 
+malicious_themes=$(grep -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -c6-)
+
+for plugin in $malicious_plugins    
+do
+
+done
+
+
+wp_admin_users=$(wp user list --role=administrator --allow-root --field=ID)
+
+for user in $wp_admin_users    
+do
+  wp --allow-root --path=$www_path user set-role $user editor
+done
+
+
+
+
