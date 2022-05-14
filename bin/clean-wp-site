@@ -89,17 +89,16 @@ malicious_plugins=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'g
 
 for plugin in $malicious_plugins    
 do
-  echo "Plugin File $theme found using malicious php functions!"
+  echo "Plugin File $plugin found using malicious php functions!"
 done
 
 cp -rf $chroot_home/www_backup/wp-content/themes $www_path/wp-content
 #Search themes for 
-malicious_themes=$(grep -ir -e \*.php 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -d : -f 1 )
+malicious_themes=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -d : -f 1 )
 
 for theme in $malicious_themes    
 do
   echo "Theme File $theme found using malicious php functions!"
-  
 done
 
 #Search database for malware related HTML elements
