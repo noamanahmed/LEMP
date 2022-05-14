@@ -60,6 +60,13 @@ bash disable-site -u $username
 # pkill -9 -u $username
 
 
+#Get site details
+installed_wp_version=$(wp --allow-root --path=$www_path core version --allow-root)
+database_name=$(wp --allow-root --path=$www_path config get DB_NAME --allow-root)
+database_user=$(wp --allow-root --path=$www_path config get DB_USER --allow-root)
+database_password=$(wp --allow-root --path=$www_path config get DB_PASSWORD --allow-root)
+
+
 ## First copy the source to
 rm -rf $chroot_home/www_backup
 mv $chroot_home/www $chroot_home/www_backup 
@@ -68,11 +75,6 @@ mkdir -p $chroot_home/www
 
 chown -R $username:$username $chroot_home/www
 
-#Get site details
-installed_wp_version=$(wp --allow-root --path=$www_path core version --allow-root)
-database_name=$(wp --allow-root --path=$www_path config get DB_NAME --allow-root)
-database_user=$(wp --allow-root --path=$www_path config get DB_USER --allow-root)
-database_password=$(wp --allow-root --path=$www_path config get DB_PASSWORD --allow-root)
 
 # Reset WP Config
 wp --allow-root --path=$www_path core download --version=$installed_wp_version
