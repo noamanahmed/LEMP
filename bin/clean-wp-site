@@ -110,5 +110,7 @@ do
 done
 
 
+bash enable-site -u $username
+
 
 
