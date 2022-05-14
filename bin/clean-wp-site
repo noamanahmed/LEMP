@@ -64,7 +64,7 @@ bash disable-site -u $username
 rm -rf $chroot_home/www_backup
 cp -rf $chroot_home/www $chroot_home/www_backup 
 rm -rf $chroot_home/www
-mkdir -rf $chroot_home/www
+mkdir -p $chroot_home/www
 
 #Get site details
 installed_wp_version=$(wp core version --allow-root)
