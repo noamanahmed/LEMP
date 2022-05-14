@@ -109,6 +109,7 @@ do
   wp --allow-root --path=$www_path user set-role $user editor
 done
 
+bash fix-permissions -u $username
 
 bash enable-site -u $username
 
