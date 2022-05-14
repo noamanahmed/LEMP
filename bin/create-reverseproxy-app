@@ -71,9 +71,9 @@ then
 fi
 
 
-if [ -z "$external_port" ] || [ $external_port -lt 1025 ] || [ $external_port -gt 65535 ]
+if [ -z "$external_port" ] || [ $external_port -lt 2000 ] || [ $external_port -gt 21000 ]
 then
-  echo "Please specify a a valid external port between 1025-65535 using --external_port which nginx will listen on a public interface"
+  echo "Please specify a a valid external port between 2000-21000 using --external_port which nginx will listen on a public interface"
   exit
 fi
 
