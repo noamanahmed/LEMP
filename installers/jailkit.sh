@@ -102,3 +102,23 @@ for binary in ${php_binaries_array[@]}; do
         done
     done
 done
+
+
+if ! grep -Fxq "nginx:" $chroot_path/etc/group
+then
+echo "Fix Missing Group nginx GID in chroot /etc/group"
+echo "nginx:x:$(getent group nginx | cut -d: -f3):" >> $chroot_path/etc/group
+fi
+
+if ! grep -Fxq "web:" $chroot_path/etc/group
+then
+echo "Fix Missing Group Web GIDs in chroot /etc/group"
+echo "web:x:$(getent group web | cut -d: -f3):"  >> $chroot_path/etc/group
+fi
+
+
+if ! grep -Fxq "sftp:" $chroot_path/etc/group
+then
+echo "Fix Missing Group Sftp GID in chroot /etc/group"
+echo "sftp:x:$(getent group sftp | cut -d: -f3):" >> $chroot_path/etc/group
+fi
