@@ -84,19 +84,19 @@ cp -rf $chroot_home/www_backup/wp-content/uploads $www_path/wp-content
 find $www_path/wp-content/uploads -name "*.php" -type f -delete
 
 #Search plugins for 
-malicious_plugins=$(grep -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/plugins/ | cut -c6-)
+malicious_plugins=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/plugins/ | cut -c6-)
 
 for plugin in $malicious_plugins    
 do
-  echo "Plugin File $theme found using malicious functions!"
+  echo "Plugin File $theme found using malicious php functions!"
 done
 
 #Search plugins for 
-malicious_themes=$(grep -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -c6-)
+malicious_themes=$(grep -ir -e \*.php 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -c6-)
 
 for theme in $malicious_themes    
 do
-  echo "Theme File $theme found using malicious functions!"
+  echo "Theme File $theme found using malicious php functions!"
   
 done
 
