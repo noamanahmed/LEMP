@@ -37,6 +37,14 @@ while [ $# -gt 0 ]; do
       port="$2"
       shift
       ;;
+    --external_port)
+      external_port="$2"
+      shift
+      ;;
+    --internal_port)
+      internal_port="$2"
+      shift
+      ;;     
     --mysql)
       mysql="$2"
       shift
