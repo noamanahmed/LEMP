@@ -10,6 +10,7 @@ then echo "Please run as root"
     exit
 fi
 
+mkdir $chroot_path/proc
 #Installing Jailkit
 echo "Installing JailKit"
 apt install jailkit -qqy
@@ -121,4 +122,11 @@ if ! grep -Fxq "sftp:" $chroot_path/etc/group
 then
 echo "Fix Missing Group Sftp GID in chroot /etc/group"
 echo "sftp:x:$(getent group sftp | cut -d: -f3):" >> $chroot_path/etc/group
+fi
+
+
+if [ ! -d "$chroot_path/proc" ]
+then
+    mkdir $chroot_path/proc
+    mount -t proc none $chroot_path/proc
 fi
