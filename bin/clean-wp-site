@@ -86,8 +86,8 @@ find $www_path/wp-content/uploads -name "*.php" -type f -delete
 cp -rf $chroot_home/www_backup/wp-content/plugins $www_path/wp-content
 #Search plugins for
 malicious_plugins="grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/plugins/ | cut -c6-"
-echo malicious_plugins
-malicious_plugins=$(malicious_plugins)
+echo $malicious_plugins
+malicious_plugins=$($malicious_plugins)
 
 for plugin in $malicious_plugins    
 do
