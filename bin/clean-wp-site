@@ -59,10 +59,10 @@ bash disable-site -u $username
 # bash disable-ssh-user -u $username
 
 #Get site details
-installed_wp_version=$(wp --allow-root --path=$www_path core version --allow-root)
-database_name=$(wp --allow-root --path=$www_path config get DB_NAME --allow-root)
-database_user=$(wp --allow-root --path=$www_path config get DB_USER --allow-root)
-database_password=$(wp --allow-root --path=$www_path config get DB_PASSWORD --allow-root)
+installed_wp_version=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path core version --allow-root --skip-plugins --skip-themes)
+database_name=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_NAME --allow-root --skip-plugins --skip-themes)
+database_user=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_USER --allow-root --skip-plugins --skip-themes)
+database_password=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_PASSWORD --allow-root --skip-plugins --skip-themes)
 
 
 ## First copy the source to
@@ -74,8 +74,8 @@ chown -R $username:$username $chroot_home/www
 
 
 # Reset WP Config
-wp --allow-root --path=$www_path core download --version=$installed_wp_version
-wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
+wp --allow-root --skip-plugins --skip-themes --path=$www_path core download --version=$installed_wp_version
+wp --allow-root --skip-plugins --skip-themes --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
 
 # First copy uploads 
 cp -rf $chroot_home/www_backup/wp-content/uploads $www_path/wp-content
@@ -106,21 +106,21 @@ mal_functions=("<iframe" "base64_decode(" "eval(" "<script")
 for func in $mal_functions    
 do
   echo "Searching for $func in Databases"
-  wp --allow-root --path=$www_path db search $fund
+  wp --allow-root --skip-plugins --skip-themes --path=$www_path db search $fund
 done
 
 
 # Reduce role of all previous admins to author.
-wp_admin_users=$(wp --allow-root --path=$www_path user list --role=administrator --allow-root --field=ID)
+wp_admin_users=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path user list --role=administrator --allow-root --skip-plugins --skip-themes --field=ID)
 
 for user in $wp_admin_users    
 do
-  wp --allow-root --path=$www_path user set-role $user editor
+  wp --allow-root --skip-plugins --skip-themes --path=$www_path user set-role $user editor
 done
 
 
 create-wp-user -u $username
-wp --allow-root --path=$www_path plugin install wordfence --activate
+wp --allow-root --skip-plugins --skip-themes --path=$www_path plugin install wordfence --activate
 
 bash fix-permissions -u $username
 bash enable-site -u $username
