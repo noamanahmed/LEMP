@@ -144,6 +144,7 @@ usermod -a -G $username nginx
 chroot_path=/var/www
 user_root=/home/$username
 chroot_home=$chroot_path/$user_root
+fastcgi_path=/home/$username/www
 
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
@@ -159,6 +160,7 @@ www_path=$chroot_home/www
 if [ -n "$laravel" ]
 then
   www_path=$chroot_home/www/public
+  fastcgi_path=/home/$username/www/public
 fi
 
 
@@ -200,6 +202,7 @@ sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{fastcgi_path}}/$(echo $fastcgi_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 
 
