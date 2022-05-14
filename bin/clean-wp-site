@@ -70,7 +70,6 @@ database_password=$(wp --allow-root --path=$www_path config get DB_PASSWORD --al
 ## First copy the source to
 rm -rf $chroot_home/www_backup
 mv $chroot_home/www $chroot_home/www_backup 
-rm -rf $chroot_home/www
 mkdir -p $chroot_home/www
 
 chown -R $username:$username $chroot_home/www
