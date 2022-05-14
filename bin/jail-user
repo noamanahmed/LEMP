@@ -59,7 +59,7 @@ then
     jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 fi
 
-touch $chroot_home/.hushlogin
+
 mkdir -p $chroot_home/.ssh
 mkdir -p $chroot_home/.wp-cli
 mkdir -p $chroot_home/.local
@@ -70,6 +70,7 @@ mkdir -p $chroot_home/tmp
 cp -rf $template_path/jailed_ssh/.ssh/* $chroot_home/.ssh
 cp -rf $template_path/jailed_ssh/.bashrc $chroot_home/.bashrc
 cp -rf $template_path/jailed_ssh/.profile $chroot_home/.profile
+touch $chroot_home/.hushlogin
 
 chown -R $username:$username $chroot_home/.hushlogin
 chown -R $username:$username $chroot_home/.wp-cli
