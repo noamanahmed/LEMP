@@ -110,8 +110,8 @@ chroot_home=$chroot_path/$user_root
 www_path=$chroot_home/www 
 
 ## Setup a static HTML site for LetsEncrypt First
-nginx_vhost_file="/etc/nginx/sites-available/$app.conf"
-nginx_vhost_enabled="/etc/nginx/sites-enabled/$app.conf"
+nginx_vhost_file="/etc/nginx/sites-available/reverseporxy-$app.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/reverseporxy-$app.conf"
 cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
 
 sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
