@@ -84,10 +84,8 @@ cp -rf $chroot_home/www_backup/wp-content/uploads $www_path/wp-content
 find $www_path/wp-content/uploads -name "*.php" -type f -delete
 
 cp -rf $chroot_home/www_backup/wp-content/plugins $www_path/wp-content
-#Search plugins for
-malicious_plugins="grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/plugins/ | cut -c6-"
-echo $malicious_plugins
-malicious_plugins=$($malicious_plugins)
+#Search plugins for 
+malicious_plugins=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/plugins/ | cut -d : -f 1 )
 
 for plugin in $malicious_plugins    
 do
@@ -96,7 +94,7 @@ done
 
 cp -rf $chroot_home/www_backup/wp-content/themes $www_path/wp-content
 #Search themes for 
-malicious_themes=$(grep -ir -e \*.php 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -c6-)
+malicious_themes=$(grep -ir -e \*.php 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -d : -f 1 )
 
 for theme in $malicious_themes    
 do
