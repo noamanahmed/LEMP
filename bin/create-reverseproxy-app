@@ -24,8 +24,12 @@ while [ $# -gt 0 ]; do
       domain="$2"
       shift
       ;;
-    --port)
-      port="$2"
+    --external_port)
+      external_port="$2"
+      shift
+      ;;
+    --internal_port)
+      internal_port="$2"
       shift
       ;;       
     --no_monitoring)
@@ -60,11 +64,19 @@ then
 fi
 
 
-if [ -z "$port" ] || [ $port -lt 1025 ] || [ $port -gt 65535 ]
+if [ -z "$internal_port" ] || [ $internal_port -lt 1025 ] || [ $internal_port -gt 65535 ]
 then
-  echo "Please specify a a valid port between 1025-65535 using --port for nginx to reverse proxy"
+  echo "Please specify a a valid internal port between 1025-65535 using --internal_port for nginx to reverse proxy"
   exit
 fi
+
+
+if [ -z "$external" ] || [ $external -lt 1025 ] || [ $external -gt 65535 ]
+then
+  echo "Please specify a a valid external port between 1025-65535 using --external_port which nginx will listen on a public interface"
+  exit
+fi
+
 
 disallowed_ports_array=("80" "443" "8080" "2082" "8443" "22")
 
@@ -74,10 +86,18 @@ if [[ " ${disallowed_ports_array[*]} " =~ " ${port} " ]]; then
 fi
 
 
-if ! lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
+if lsof -Pi :$external_port -sTCP:LISTEN -t >/dev/null
 then
-  echo "This port is currently NOT in use! Please ensure that app is running."
+  echo "This external_port is currently in use! Please make sure that a port is available to which nginx will listen on a public interface"
 fi
+
+if ! lsof -Pi :$internal_port -sTCP:LISTEN -t >/dev/null
+then
+  echo "This internal_port is currently NOT in use! Please ensure that app is running."
+fi
+
+
+
 
 
 email=$app@$HOSTNAME
@@ -124,7 +144,8 @@ nginx_vhost_enabled="/etc/nginx/apps-enabled/$app.conf"
 cp $template_path/reverseproxy/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
-sed -i "s/{{port}}/$port/" $nginx_vhost_file
+sed -i "s/{{internal_port}}/$internal_port/" $nginx_vhost_file
+sed -i "s/{{external_port}}/$external_port/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
