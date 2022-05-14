@@ -66,6 +66,8 @@ cp -rf $chroot_home/www $chroot_home/www_backup
 rm -rf $chroot_home/www
 mkdir -p $chroot_home/www
 
+chown -R $username:$username $chroot_home/www
+
 #Get site details
 installed_wp_version=$(wp core version --allow-root)
 database_name=$(wp config get DB_NAME --allow-root)
