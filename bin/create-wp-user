@@ -40,5 +40,5 @@ then
 fi
 
 
-wp --allow-root --path=$www_path user delete support_$username --reassign=1
-wp --allow-root --path=$www_path user create support_$username support_$username@$HOSTNAME --role=administrator
+wp --allow-root --skip-plugins --skip-themes --path=$www_path user delete support_$username --reassign=1
+wp --allow-root --skip-plugins --skip-themes --path=$www_path user create support_$username support_$username@$HOSTNAME --role=administrator

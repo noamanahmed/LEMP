@@ -62,4 +62,8 @@ fi
 
 nginx -t && service nginx reload
 
+echo "Clearing Cache"
+clear-cache -u $username
+
+
 echo "$username site Disabled"
