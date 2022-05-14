@@ -83,6 +83,16 @@ fi
 ln -s ../../../../bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/.local/bin/php 
 chown -h $username:$username /var/www/home/$username/.local/bin/php
 
+
+if [ -f "/etc/supervisor/conf.d/$username-site.conf" ]
+then
+    echo "Restarting Supervisor(This might take a while)"
+    supervisorctl restart "$(cat /etc/supervisor/conf.d/$username-site.conf | grep -m1 -Poe 'program:\K[^\] ]+' ):"
+    echo "Supervisorctl restarted!"
+fi
+
+
+
 echo "Clearing Cache"
 clear-cache -u $username
 
