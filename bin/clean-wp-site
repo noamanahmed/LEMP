@@ -55,10 +55,8 @@ fi
 # Disable site
 bash disable-site -u $username
 
-# Remove SSH connectivity
-# rm -rf $chroot_home/.ssh
-# pkill -9 -u $username
-
+# Remove SSH connectivity (comming soon)
+# bash disable-ssh-user -u $username
 
 #Get site details
 installed_wp_version=$(wp --allow-root --path=$www_path core version --allow-root)
@@ -90,18 +88,29 @@ malicious_plugins=$(grep -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 
 
 for plugin in $malicious_plugins    
 do
-  echo $plugin
+  echo "Plugin File $theme found using malicious functions!"
 done
 
 #Search plugins for 
 malicious_themes=$(grep -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -c6-)
 
-for plugin in $malicious_plugins    
+for theme in $malicious_themes    
 do
-  echo $plugin
+  echo "Theme File $theme found using malicious functions!"
+  
+done
+
+#Search database for malware related HTML elements
+mal_functions=("<iframe" "base64_decode(" "eval(" "<script")
+
+for func in $mal_functions    
+do
+  echo "Searching for $func in Databases"
+  wp --allow-root --path=$www_path db search $fund
 done
 
 
+# Reduce role of all previous admins to author.
 wp_admin_users=$(wp --allow-root --path=$www_path user list --role=administrator --allow-root --field=ID)
 
 for user in $wp_admin_users    
@@ -109,9 +118,14 @@ do
   wp --allow-root --path=$www_path user set-role $user editor
 done
 
-bash fix-permissions -u $username
 
+create-wp-user -u $username
+wp --allow-root --path=$www_path plugin install wordfence --activate
+
+bash fix-permissions -u $username
 bash enable-site -u $username
+
+# bash enable-ssh-user -u $username
 
 
 
