@@ -106,7 +106,7 @@ mal_functions=("<iframe" "base64_decode(" "eval(" "<script")
 for func in $mal_functions    
 do
   echo "Searching for $func in Databases"
-  wp --allow-root --skip-plugins --skip-themes --path=$www_path db search $fund
+  wp --allow-root --skip-plugins --skip-themes --path=$www_path db search $func
 done
 
 
