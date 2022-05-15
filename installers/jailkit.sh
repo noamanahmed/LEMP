@@ -47,8 +47,14 @@ echo "Copying Certificates"
 jk_cp -j $chroot_path /etc/ssl/certs/ca-certificates.crt
 jk_cp -j $chroot_path /usr/share/git-core
 
+echo "Fixing SSL Issues"
+mkdir -p $chroot_path/usr/lib/ssl/
+cp -rf /usr/lib/ssl/openssl.cnf $chroot_path/usr/lib/ssl/
+
 echo "Copying Locales"
+mkdir -p $chroot_path/etc/default/
 cp -rf /etc/default/locale $chroot_path/etc/default/
+cp -rf /usr/lib/locale $chroot_path/usr/lib
 
 echo "Copying Timezones"
 cp -rf /usr/share/zoneinfo $chroot_path/usr/share/

@@ -20,12 +20,15 @@ pm.max_requests = 500
 pm.process_idle_timeout = 5s
 
 
-php_admin_value[error_log] = {{user_root}}/logs/php/php-fpm-www-errors.log
+php_admin_value[error_log] = /home/{{username}}/logs/php/php-fpm-www-errors.log
 php_admin_flag[log_errors] = on
 php_admin_value[memory_limit] = 128M
 php_admin_value[upload_max_filesize] = 256M
 php_admin_value[post_max_size] = 258M
-php_admin_value[session.save_path] = {{user_root}}/tmp/
+php_admin_value[session.save_path] = /home/{{username}}/tmp/
+php_admin_flag[session.use_trans_sid]=0
+php_admin_flag[allow_url_fopen]=0
+php_admin_flag[allow_url_include]=0
 
 ;Opcache Settings
 php_admin_flag[opcache.enable]=1
@@ -34,6 +37,7 @@ php_admin_value[opcache.interned_strings_buffer]=16
 php_admin_value[opcache.max_accelerated_files]=65536
 php_admin_flag[opcache.use_cwd]=1
 php_admin_flag[opcache.validate_timestamps]=1
+
 php_admin_value[opcache.revalidate_freq]=2
 php_admin_value[opcache.save_comments]=0
 php_admin_value[opcache.fast_shutdown]=1
@@ -43,4 +47,4 @@ php_admin_value[opcache.force_restart_timeout]=30
 emergency_restart_threshold = 10
 emergency_restart_interval = 1m
 process_control_timeout = 10s
-error_log = {{user_root}}/logs/php/php-fpm-errors.log
+error_log = /home/{{username}}/logs/php/php-fpm-errors.log
