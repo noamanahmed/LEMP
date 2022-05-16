@@ -42,6 +42,11 @@ then
   ln -s /usr/bin/python2.7 /usr/bin/python2
 fi
 
+## Set default python version to 3
+if [ ! -f "/usr/bin/python" ] && [ ! -L "/usr/bin/python" ]
+then
+  ln -s /usr/bin/python3 /usr/bin/python
+fi
 # ## PIP Installation
 # curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
 # python2 /tmp/get-pip.py

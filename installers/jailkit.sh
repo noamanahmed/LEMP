@@ -27,7 +27,7 @@ binaries_array=("ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "p
 
 for binary in ${binaries_array[@]}; do
     echo "Jaling binary $binary"
-    if [ -f "$(which python$python_version)" ]
+    if [ -f "$(which $binary)" ]
     then
         cp "$(which $binary)" $chroot_bin_path
         for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
