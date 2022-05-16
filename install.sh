@@ -485,7 +485,7 @@ then
 fi
 
 ## Load new .bashrc
-source ~/.bashrc
+source /home/$username/.bashrc
 
 ## Setup hostname site for phpmyadmin and other stuff
 if [ -z "$without_hostname_site" ]

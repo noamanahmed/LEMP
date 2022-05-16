@@ -24,7 +24,23 @@ LEMP_LOCAL_LINUX_USER='noaman' ## Modify this to the username which you are usin
 #cp /usr/share/code/code /var/www/usr/share/code/
 #cp /opt/amdgpu/lib/x86_64-linux-gnu/libdrm.so.2 /var/www/lib/x86_64-linux-gnu/
 #cp /opt/amdgpu/lib/x86_64-linux-gnu/libgbm.so.1 /var/www/lib/x86_64-linux-gnu/
+# Nextlcoud nginx block
+# location / {
+#         #rewrite ^ /index.php$uri;
+#         # First attempt to serve request as file, then
+#         # as directory, then fall back to displaying a 404.
+#         # try_files $uri /index.php$uri$is_args$args;
+#         rewrite ^/index.php/(.*) /$1  permanent;
+#            #rewrite ^/index.php/(.*) /index.php$1;      
+#            #try_files $uri $uri/ =404;
+#            #index index.php;
+#             try_files $uri $uri/ /index.php;
+#                 rewrite ^ /index.php last;
 
+# }
+# 'front_controller_active' => true,
+# nextcloud Config.php
+ 
 # Add Local flag
 if [ -f "/opt/lemp_local_install" ]
 then

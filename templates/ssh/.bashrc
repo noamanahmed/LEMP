@@ -161,6 +161,7 @@ export NVM_DIR="$HOME/.nvm"
 # You can custom add your aliases here
 alias sudo='sudo -E env "PATH=$PATH"' ## Fixes CMD not found issue using sudo
 alias update-groups='sudo su $USER'
+alias quickpush="git add . && git commit -am 'Quick Push $(openssl rand -hex 12)' && git push"
 alias sail='bash vendor/bin/sail'
 alias setclip="xclip -selection c"
 alias getclip="xclip -selection c -o"

@@ -113,7 +113,7 @@ fi
 # If we are not running things locally.
 if [ -z "$local" ]
 then
-  if ! host $domain
+  if ! (host -t A $domain || host -t AAAA $domain)
     then
     echo "This is not a valid domain! Aborting!"
     exit
@@ -137,13 +137,14 @@ bash jail-user -u $username -p yes
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
-usermod -a -G nginx $username
 usermod -a -G $username nginx
+service nginx reload
 
 ## Create user directories
 chroot_path=/var/www
 user_root=/home/$username
 chroot_home=$chroot_path/$user_root
+fastcgi_path=/home/$username/www
 
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
@@ -159,6 +160,7 @@ www_path=$chroot_home/www
 if [ -n "$laravel" ]
 then
   www_path=$chroot_home/www/public
+  fastcgi_path=/home/$username/www/public
 fi
 
 
@@ -200,6 +202,7 @@ sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/g" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{fastcgi_path}}/$(echo $fastcgi_path | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
 
 
@@ -209,16 +212,19 @@ nginx -t && systemctl reload nginx
 if [ -z "$nossl" ]
 then
 
-  ## Test SSL Generation
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
-  then 
-    echo "Error in certbot SSL generating. Cleaning up and aborting"
-    delete-site -u $username -y --no_message
-    exit 1;
+  ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+    ## Test SSL Generation
+    if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+    then 
+      echo "Error in certbot SSL generating. Cleaning up and aborting"
+      delete-site -u $username -y --no_message
+      exit 1;
+    fi
+    ## Generate SSL
+    certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
   fi
-  ## Generate SSL
-  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
-
   ## Enabling SSL in nginx settings
   sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
   nginx -t && systemctl reload nginx    

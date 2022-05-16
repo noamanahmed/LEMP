@@ -144,6 +144,12 @@ then
     rm "/etc/systemd/system/$username-site.service"
 fi
 
+## Delete Supervisor Configuration if it exists
+if [ -f "/etc/supervisor/conf.d/$username-site.conf" ]
+then
+    rm -rf /etc/supervisor/conf.d/$username-site.conf
+    supervisorctl restart all
+fi
 
 ## Delete linux user and processes
 pkill -9 -u $username 

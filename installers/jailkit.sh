@@ -22,11 +22,11 @@ mkdir -p $chroot_path
 jk_init $chroot_path netutils extendedshell jk_lsh openvpn ssh sftp 
 chroot_bin_path=$chroot_path/bin/
 echo "Copying binaries for JailKit (This might take a while)"
-binaries_array=("ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free"  "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping"  "ssh" "sftp" "sed" "awk" "tr" "tail" "sort" "less" "head" "cut" "egrep" "uname" "uniq" "groups" "env" "dirname" "sha256sum" "sha1sum"  "readlink" "bzip2" "sqlite3" "python2" "python3" "python310" "python35" "python36" "python37" "python38" "python39" "python27" "unzip" "basename")
+binaries_array=("ls" "ln" "date" "rm" "rmdir" "mysql" "php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81" "git" "wget" "curl" "nano" "stty" "grep" "find" "clear" "du" "cp" "mv" "touch" "cat" "whoami" "tee" "free"  "mkdir" "git-shell" "git-receive-pack" "git-upload-archive" "git-upload-pack" "/usr/lib/git-core/git-remote-https" "ping"  "ssh" "sftp" "sed" "awk" "tr" "tail" "sort" "less" "head" "cut" "egrep" "uname" "uniq" "groups" "env" "dirname" "sha256sum" "sha1sum"  "readlink" "bzip2" "sqlite3" "python2" "python3" "python310" "python35" "python36" "python37" "python38" "python39" "python27" "unzip" "basename" "paste")
 
 for binary in ${binaries_array[@]}; do
     echo "Jaling binary $binary"
-    if [ -f "$(which python$python_version)" ]
+    if [ -f "$(which $binary)" ]
     then
         cp "$(which $binary)" $chroot_bin_path
         for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
@@ -46,8 +46,14 @@ echo "Copying Certificates"
 jk_cp -j $chroot_path /etc/ssl/certs/ca-certificates.crt
 jk_cp -j $chroot_path /usr/share/git-core
 
+echo "Fixing SSL Issues"
+mkdir -p $chroot_path/usr/lib/ssl/
+cp -rf /usr/lib/ssl/openssl.cnf $chroot_path/usr/lib/ssl/
+
 echo "Copying Locales"
+mkdir -p $chroot_path/etc/default/
 cp -rf /etc/default/locale $chroot_path/etc/default/
+cp -rf /usr/lib/locale $chroot_path/usr/lib
 
 echo "Copying Timezones"
 cp -rf /usr/share/zoneinfo $chroot_path/usr/share/
@@ -104,21 +110,43 @@ for binary in ${php_binaries_array[@]}; do
 done
 
 
-if ! grep -Fxq "nginx:" $chroot_path/etc/group
+if ! grep -Fq "nginx:" $chroot_path/etc/group
 then
 echo "Fix Missing Group nginx GID in chroot /etc/group"
 echo "nginx:x:$(getent group nginx | cut -d: -f3):" >> $chroot_path/etc/group
 fi
 
-if ! grep -Fxq "web:" $chroot_path/etc/group
+if ! grep -Fq "web:" $chroot_path/etc/group
 then
 echo "Fix Missing Group Web GIDs in chroot /etc/group"
 echo "web:x:$(getent group web | cut -d: -f3):"  >> $chroot_path/etc/group
 fi
 
 
-if ! grep -Fxq "sftp:" $chroot_path/etc/group
+if ! grep -Fq "sftp:" $chroot_path/etc/group
 then
 echo "Fix Missing Group Sftp GID in chroot /etc/group"
 echo "sftp:x:$(getent group sftp | cut -d: -f3):" >> $chroot_path/etc/group
+fi
+
+
+if [ ! -d "$chroot_path/proc" ]
+then
+    mkdir $chroot_path/proc
+    mount -t proc none $chroot_path/proc
+fi
+
+if [ -d "$HOME/.nvm" ]
+then
+    echo "Copying NodeJS libraries"
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    jk_cp -j $chroot_path $(which node)
+    for lib in `ldd $binary | cut -d'>' -f2 | awk '{print $1}'` ; do
+    if [ -f "$lib" ] ; then        
+        jk_cp -j $chroot_path $lib                
+    fi 
+    done
 fi

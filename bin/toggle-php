@@ -27,11 +27,6 @@ fi
 
 
 
-if [ -z "$php" ]
-then
-    echo "Please provide a php version using -p "
-    exit 1;
-fi
 
 
 if ! id "$username" &>/dev/null
@@ -45,6 +40,14 @@ then
     echo "This is not a PHP site"
     exit 1;
 fi
+
+
+if [ -z "$php" ]
+then
+    echo "Please provide a php version using -p "
+    exit 1;
+fi
+
 
 php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
@@ -82,6 +85,16 @@ fi
 
 ln -s ../../../../bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/.local/bin/php 
 chown -h $username:$username /var/www/home/$username/.local/bin/php
+
+
+if [ -f "/etc/supervisor/conf.d/$username-site.conf" ]
+then
+    echo "Restarting Supervisor(This might take a while)"
+    supervisorctl restart "$(cat /etc/supervisor/conf.d/$username-site.conf | grep -m1 -Poe 'program:\K[^\] ]+' ):"
+    echo "Supervisorctl restarted!"
+fi
+
+
 
 echo "Clearing Cache"
 clear-cache -u $username

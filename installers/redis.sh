@@ -18,5 +18,7 @@ fi
 sudo apt install redis-server -qqy
 
 cp $template_path/redis/redis.conf /etc/redis/redis.conf
+password=$(openssl rand 60 | openssl base64 -A)
+sed -i "s/{{password}}/$password/" /etc/redis/redis.conf
 usermod -a -G nginx redis
 systemctl restart redis.service

@@ -1,4 +1,5 @@
 [mysqld]
+default_authentication_plugin=mysql_native_password
 max_connections=24
 connect_timeout=30
 wait_timeout=30
