@@ -63,7 +63,7 @@ fi
 # If we are not running things locally.
 if [ -z "$local" ]
 then
-  if ! host $domain
+  if [ ! host -t A $domain ] && if [ ! host -t AAAA $domain ] 
     then
     echo "This is not a valid domain! Aborting!"
     exit
@@ -72,7 +72,6 @@ else
   # Lets add hosts entry
   echo "127.0.0.1 $domain" >> /etc/hosts
 fi
-
 
 email=admin@$HOSTNAME
 
