@@ -49,6 +49,7 @@ backup_info+="\t"
 backup_info+="Database"
 backup_info+="\t"
 backup_info+="Files"
+backup_info+="\t"
 backup_info+="\n"
 
 for backup in $backups
@@ -57,6 +58,7 @@ do
   backup_info+="$backup"
   backup_info+="\t"
   backup_info+="$(date -r . +'%F %T' | tr '\n' ' ' )"  
+  backup_info+="\t"
   backup_info+="$(du -h db.sql.gz | sed  's/db.sql.gz//'  | tr '\n' ' ' )"  
   backup_info+="$(du -h www.gz | sed  's/www.gz//'  | tr '\n' ' ')"   
   backup_info+="\t" 
