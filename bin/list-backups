@@ -44,6 +44,8 @@ fi
 backups=$(ls /backups/$username)
 backup_info="Backup ID"
 backup_info+="\t"
+backup_info+="Date"
+backup_info+="\t"
 backup_info+="Database"
 backup_info+="\t"
 backup_info+="Files"
@@ -53,7 +55,7 @@ for backup in $backups
 do   
   cd /backups/$username/$backup
   backup_info+="$backup"
-  backup_info+="\t"
+  backup_info+="$(date -r 1652727451_3446a91f +'%F %T' | tr '\n' ' ' )"
   backup_info+="$(du -h db.sql.gz | sed  's/db.sql.gz//'  | tr '\n' ' ' )"  
   backup_info+="$(du -h www.gz | sed  's/www.gz//'  | tr '\n' ' ')"    
 done
