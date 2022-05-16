@@ -26,9 +26,10 @@ php_admin_value[memory_limit] = 128M
 php_admin_value[upload_max_filesize] = 256M
 php_admin_value[post_max_size] = 258M
 php_admin_value[session.save_path] = /home/{{username}}/tmp/
-php_admin_flag[session.use_trans_sid]=0
-php_admin_flag[allow_url_fopen]=0
-php_admin_flag[allow_url_include]=0
+php_admin_value[sys_temp_dir] = /home/{{username}}/tmp/
+php_admin_flag[session.use_trans_sid]=Off
+php_admin_flag[allow_url_fopen]=Off
+php_admin_flag[allow_url_include]=Off
 
 ;Opcache Settings
 php_admin_flag[opcache.enable]=1
