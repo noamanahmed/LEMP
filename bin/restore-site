@@ -72,7 +72,7 @@ fi
 if [ -f "/backups/$username/$backup_name/db.sql.gz" ] 
 then
     echo "Restoring MySQL DB"
-    pv /backups/$username/$backup_name/db.sql.gz | gunzip | mysql -u root $username
+    pv /backups/$username/$backup_name/db.sql.gz | gunzip -c | mysql -u root $username
 
 fi
 
