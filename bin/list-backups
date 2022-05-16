@@ -43,7 +43,7 @@ fi
 
 backups=$(ls /backups/$username)
 
-for backup in backups
+for backup in $backups
 do   
   backup_info="$backup"
   backup_info+="\t"
