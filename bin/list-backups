@@ -45,11 +45,12 @@ backups=$(ls /backups/$username)
 
 for backup in $backups
 do   
+  cd /backups/$username/$backup
   backup_info="$backup"
   backup_info+="\t"
-  backup_info+="$(du -h /backups/$username/$backup/db.sql.gz | sed  's/db.sql.gz//' )"
+  backup_info+="$(du -h db.sql.gz | sed  's/db.sql.gz//' )"
   backup_info+="\t"
-  backup_info+="$(du -h /backups/$username/$backup/www.gz | sed  's/www.gz//')"
+  backup_info+="$(du -h www.gz | sed  's/www.gz//')"
   backup_info+="\t"
   backup_info+="\n"
 
