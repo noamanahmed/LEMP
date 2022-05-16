@@ -60,8 +60,7 @@ do
   backup_info+="$(date -r . +'%F %T' | tr '\n' ' ' )"  
   backup_info+="\t"
   backup_info+="$(du -h db.sql.gz | sed  's/db.sql.gz//'  | tr '\n' ' ' )"  
-  backup_info+="$(du -h www.gz | sed  's/www.gz//'  | tr '\n' ' ')"   
-  backup_info+="\t" 
+  backup_info+="$(du -h www.gz | sed  's/www.gz//'  | tr '\n' ' ')"     
 done
 
 printf "$backup_info" |  sed 's/\t/,|,/g' |  column -s ',' -t  
