@@ -62,7 +62,7 @@ fi
 # If we are not running things locally.
 if [ -z "$local" ]
 then
-  if [ ! host -t A $domain ] && if [ ! host -t AAAA $domain ] 
+  if [ ! host -t A $domain ] && [ ! host -t AAAA $domain ] 
     then
     echo "This is not a valid domain! Aborting!"
     exit
