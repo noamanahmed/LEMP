@@ -4,6 +4,7 @@ DIR=$(dirname "${BASH_SOURCE[0]}")
 DIR=$(realpath "${DIR}") 
 
 template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -17,9 +18,16 @@ do
     esac
 done
 
+
+
 if [ -z "$username" ]
 then
-    echo "Please provide a username using -u "
+    username=$LEMP_HOSTNAME_USERNAME
+fi
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist!"
     exit
 fi
 

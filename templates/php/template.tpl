@@ -48,4 +48,4 @@ php_admin_value[opcache.force_restart_timeout]=30
 emergency_restart_threshold = 10
 emergency_restart_interval = 1m
 process_control_timeout = 10s
-error_log = /home/{{username}}/logs/php/php-fpm-errors.log
+error_log = /var/log/php-{{username}}-fpm-errors.log
