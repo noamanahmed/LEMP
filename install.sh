@@ -56,8 +56,8 @@ while [ $# -gt 0 ]; do
         --without_redis)
             without_redis=yes
         ;;
-        --without_docker)
-            without_docker=yes
+        --with_docker)
+            with_docker=yes
         ;;
         --without_composer)
             without_composer=yes
@@ -146,7 +146,7 @@ while [ $# -gt 0 ]; do
             printf "\t--without_proftpd \n\tDisable proftpd Installation and Configurations\n"
             printf "\t--without_letsencrypt \n\tDisable letsencrypt Installation and Configurations\n"
             printf "\t--without_redis \n\tDisable redis Installation and Configurations\n"
-            printf "\t--without_docker \n\tDisable docker Installation and Configurations\n"
+            printf "\t--with_docker \n\tDisable docker Installation and Configurations\n"
             printf "\t--without_composer \n\tDisable composer Installation and Configurations\n"
             printf "\t--without_java \n\tDisable java Installation and Configurations\n"
             printf "\t--without_meilisearch \n\tDisable meilisearch Installation and Configurations\n"
@@ -315,7 +315,7 @@ then
     bash $DIR/installers/redis.sh > $INSTALL_DIR/redis.sh.log 2>&1
 fi
 
-if [ -z "$without_docker" ]
+if [ -n "$with_docker" ]
 then
     echo "Installing Docker"
     bash $DIR/installers/docker.sh > $INSTALL_DIR/docker.sh.log 2>&1
