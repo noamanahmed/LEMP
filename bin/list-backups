@@ -42,11 +42,18 @@ then
 fi
 
 backups=$(ls /backups/$username)
+backup_info="Backup ID"
+backup_info+="\t"
+backup_info+="Database"
+backup_info+="\t"
+backup_info+="Files"
+backup_info+="\t"
+backup_info+="\n"
 
 for backup in $backups
 do   
   cd /backups/$username/$backup
-  backup_info="$backup"
+  backup_info+="$backup"
   backup_info+="\t"
   backup_info+="$(du -h db.sql.gz | sed  's/db.sql.gz//' )"
   backup_info+="\t"
