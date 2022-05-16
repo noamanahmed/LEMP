@@ -135,3 +135,17 @@ then
     mkdir $chroot_path/proc
     mount -t proc none $chroot_path/proc
 fi
+
+if [ -d "$HOME/.nvm" ]
+then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    jk_cp -j $chroot_path $(which node)
+    for lib in `ldd $binary | cut -d'>' -f2 | awk '{print $1}'` ; do
+    if [ -f "$lib" ] ; then        
+        jk_cp -j $chroot_path $lib                
+    fi 
+    done
+fi
