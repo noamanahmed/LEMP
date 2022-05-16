@@ -86,6 +86,7 @@ bash jail-user -u $username -p yes
 ## Adding user to groups
 usermod -a -G web $username
 usermod -a -G sftp $username
+usermod -a -G $username nginx
 
 ## Create user directories
 chroot_path=/var/www

@@ -165,7 +165,7 @@ bash toggle-php -u $username -p $php
 bash logrotate-site -u $username -e yes
 
 
-site_info_command="bash site-info $args -u $username -d $domain --ssh_password "
+site_info_command="bash site-info $args -u $username -d $domain --ssh_password $user_password"
 
 site_info="$($site_info_command)"
 
