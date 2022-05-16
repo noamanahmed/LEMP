@@ -226,8 +226,8 @@ chown -R $username:web /backups/$username
 bash install-nvm -u $username
 
 
-##(TODO) Switch node version to the one specified 
-##bash toggle-node -u $username -p 
+# Switch node version to the one specified 
+bash toggle-node -u $username -n 18
 
 ##Copying demo app for simple proxy server
 cp $template_path/www/node/* $www_path/
