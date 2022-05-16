@@ -36,3 +36,4 @@ unzip -o -d /tmp/ /tmp/phpmyadmin.zip
 rm -rf /var/www/home/$username/www/phpmyadmin
 mv -f /tmp/phpMyAdmin-5.2.0-all-languages /var/www/home/$username/www/phpmyadmin
 cp -rf $template_path/phpmyadmin/* /var/www/home/$username/www/phpmyadmin/
+fix-permissions -u $username
