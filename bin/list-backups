@@ -62,4 +62,4 @@ do
   backup_info+="\n"  
 done
 
-printf "$backup_info" |  column -s ',' -t  
+printf "$backup_info" |  sed 's/\t/,|,/g' |  column -s ',' -t  
