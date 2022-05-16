@@ -125,12 +125,17 @@ nginx -t && systemctl reload nginx
 if [ -z "$nossl" ]
 then  
 
-  ## Test SSL Generation  
-  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/dist/
-  then 
-    echo "Error in certbot SSL generating. Cleaning up and aborting"
-    delete-site -u $username -y --no_message
-    exit 1;
+  ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+
+    ## Test SSL Generation  
+    if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/dist/
+    then 
+      echo "Error in certbot SSL generating. Cleaning up and aborting"
+      delete-site -u $username -y --no_message
+      exit 1;
+    fi
   fi
   
   ## Generate SSL
