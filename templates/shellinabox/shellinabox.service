@@ -5,12 +5,12 @@ After=sshd.service
 
 [Service]                                                                                                                     
 User=root                                                                                                                     
-Type=forking                                                                                                                  
+Type=simple                                                                                                                  
 EnvironmentFile=/etc/default/shellinabox
-ExecStart=/usr/bin/shellinaboxd  $SHELLINABOXD_ARGS                                                                           
-ExecReload=/bin/kill -HUP $MAINPID                                                                                            
-KillMode=process                                                                                                              
-Restart=on-abort                                                                                                              
+ExecStart=/usr/bin/shellinaboxd  $SHELLINABOXD_ARGS --port $SHELLINABOX_PORT                                                                           
+#ExecReload=/bin/kill -HUP $MAINPID                                                                                            
+#KillMode=process                                                                                                              
+#Restart=on-abort                                                                                                              
 
 [Install]                                                                                                                     
 WantedBy=multi-user.target
