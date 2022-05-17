@@ -44,6 +44,7 @@ fi
 
 chroot_home=/var/www/home/$username
 www_path=$chroot_home/www
+wp_binary=$chroot_home/.local/bin/php /var/www/bin/wp
 
 if [ ! -f "$www_path/wp-config.php" ] 
 then
@@ -51,6 +52,8 @@ then
     exit;
 fi
 
+## Disable monitoring(Temporary turn off monitoring)
+# bash disable-monitor -u $username
 
 # Disable site
 bash disable-site -u $username
@@ -59,10 +62,10 @@ bash disable-site -u $username
 # bash disable-ssh-user -u $username
 
 #Get site details
-installed_wp_version=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path core version --allow-root --skip-plugins --skip-themes)
-database_name=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_NAME --allow-root --skip-plugins --skip-themes)
-database_user=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_USER --allow-root --skip-plugins --skip-themes)
-database_password=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_PASSWORD --allow-root --skip-plugins --skip-themes)
+installed_wp_version=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path core version --allow-root --skip-plugins --skip-themes)
+database_name=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_NAME --allow-root --skip-plugins --skip-themes)
+database_user=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_USER --allow-root --skip-plugins --skip-themes)
+database_password=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_PASSWORD --allow-root --skip-plugins --skip-themes)
 
 
 ## First copy the source to
@@ -74,8 +77,8 @@ chown -R $username:$username $chroot_home/www
 
 
 # Reset WP Config
-wp --allow-root --skip-plugins --skip-themes --path=$www_path core download --version=$installed_wp_version
-wp --allow-root --skip-plugins --skip-themes --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
+$wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path core download --version=$installed_wp_version
+$wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
 
 # First copy uploads 
 cp -rf $chroot_home/www_backup/wp-content/uploads $www_path/wp-content
@@ -89,6 +92,7 @@ malicious_plugins=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'g
 
 for plugin in $malicious_plugins    
 do
+  malicious_file='yes'
   echo "Plugin File $plugin found using malicious php functions!"
 done
 
@@ -98,6 +102,7 @@ malicious_themes=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gz
 
 for theme in $malicious_themes    
 do
+  malicious_file='yes'
   echo "Theme File $theme found using malicious php functions!"
 done
 
@@ -107,26 +112,34 @@ mal_functions=("<iframe" "base64_decode(" "eval(" "<script")
 for func in ${mal_functions[@]};    
 do
   echo "Searching for $func in Databases"
-  wp --allow-root --skip-plugins --skip-themes --path=$www_path db search $func
+  $wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path db search $func
 done
 
 
 # Reduce role of all previous admins to author.
-wp_admin_users=$(wp --allow-root --skip-plugins --skip-themes --path=$www_path user list --role=administrator --allow-root --skip-plugins --skip-themes --field=ID)
+wp_admin_users=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path user list --role=administrator --allow-root --skip-plugins --skip-themes --field=ID)
 
 for user in $wp_admin_users    
 do
-  wp --allow-root --skip-plugins --skip-themes --path=$www_path user set-role $user editor
+  $wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path user set-role $user editor
 done
 
-
+# Create new admin user
 create-wp-user -u $username
-wp --allow-root --skip-plugins --skip-themes --path=$www_path plugin install wordfence --activate
+$wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path plugin install wordfence --activate
 
 bash fix-permissions -u $username
-bash enable-site -u $username
 
-# bash enable-ssh-user -u $username
+if [ -z "$malicious_file" ]
+then
+  bash enable-site -u $username
+  #Enable monitoring Again
+  # bash enable-monitor -u $username
+  #Enable SSH Use
+  # bash enable-ssh-user -u $username
+fi
+
+
 
 
 
