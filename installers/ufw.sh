@@ -49,6 +49,8 @@ ufw allow 6190/tcp
 ufw allow 6200/tcp 
 ##For PgAdmin
 ufw allow 6210/tcp 
+##For Shellinabox
+ufw allow 6220/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp
