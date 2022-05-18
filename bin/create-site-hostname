@@ -138,15 +138,19 @@ nginx -t && systemctl reload nginx
 
 if [ -z "$nossl" ]
 then
-  ## Test SSL Generation
-  if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
-  then       
-    ## Generate SSL
-    certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+  ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+    ## Test SSL Generation
+    if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+    then       
+      ## Generate SSL
+      certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
 
-    ## Enabling SSL in nginx settings
-    sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-    nginx -t && systemctl reload nginx    
+      ## Enabling SSL in nginx settings
+      sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+      nginx -t && systemctl reload nginx    
+    fi
   fi
 fi
 
@@ -161,7 +165,7 @@ bash create-ssh-key -u $username
 bash toggle-php -u $username -p $php
 
 ## Install composer dependencies for the laravel hostsite
-/var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www
+COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
 
 ## Fixing permissions
 bash fix-permissions -u $username
