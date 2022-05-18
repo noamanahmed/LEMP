@@ -40,16 +40,23 @@ then
     exit;
 fi
 
+if [ ! grep -Fq "#$nginx_performance_directive" $chroot_path/etc/group ]
+then
+    echo "This site is already disabled!"    
+    exit;
+fi
+
+nginx_vhost_path="/etc/nginx/sites-available/$username.conf"
 nginx_performance_directive="include /etc/nginx/performance.conf;"
 fastcgi_cache_directive="fastcgi_cache $username"
 
-if ! grep -Fq "#$nginx_performance_directive" $chroot_path/etc/group
+if ! grep -Fq "#$nginx_performance_directive" $nginx_vhost_path
 then
 sed -i "s/#$(echo $nginx_performance_directive | sed 's/\//\\\//g')/$(echo $nginx_performance_directive | sed 's/\//\\\//g')/g" /etc/nginx/sites-available/$username.conf
 fi
 
 
-if ! grep -Fq "#$fastcgi_cache_directive" $chroot_path/etc/group
+if ! grep -Fq "#$fastcgi_cache_directive" $nginx_vhost_path
 then
 sed -i "s/#$(echo $fastcgi_cache_directive | sed 's/\//\\\//g')/$(echo $fastcgi_cache_directive | sed 's/\//\\\//g')/g" /etc/nginx/sites-available/$username.conf
 fi
