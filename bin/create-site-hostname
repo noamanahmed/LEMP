@@ -88,7 +88,7 @@ service nginx reload
 chroot_path=/var/www
 user_root=/home/$username
 chroot_home=$chroot_path/$user_root
-fastcgi_path=/home/$username/www
+fastcgi_path=/home/$username/www/public
 
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
