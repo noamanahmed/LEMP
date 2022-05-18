@@ -157,13 +157,14 @@ then
     if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
     then       
       ## Generate SSL
-      certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
-
-      ## Enabling SSL in nginx settings
-      sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-      nginx -t && systemctl reload nginx    
+      certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path  
     fi
   fi
+
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx   
+  
 fi
 
 ## Setting up backup folder
