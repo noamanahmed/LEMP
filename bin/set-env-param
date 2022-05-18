@@ -1,0 +1,69 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;        
+    -s|--search)
+      search="$2"
+      shift
+      ;;        
+    -r|--replace)
+      replace="$2"
+      shift
+      ;;        
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+if [ -z "$search" ]
+then
+    echo "Please provide a search using -s "
+    exit
+fi
+
+if [ -z "$replace" ]
+then
+    echo "Please provide a replace using -r "
+    exit
+fi
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist."
+    exit
+fi
+
+if [ ! -f /var/www/home/$username/www.env ]
+then 
+    echo "There is no .env file at /var/www/home/$username/www.env"
+    exit 1
+fi
+
+sed -i "s/$search.*/$replace/g" /var/www/home/$username/www.env
+
