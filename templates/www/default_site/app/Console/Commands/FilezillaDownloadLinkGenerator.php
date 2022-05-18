@@ -50,7 +50,7 @@ class FilezillaDownloadLinkGenerator extends Command
         $data['port'] = $this->argument('port');
         $data = json_encode($data);
 
-        $this->set_cache($cache_key,$data,12000);
+        $this->set_cache($cache_key,$data,900);
 
         $this->info(route('filezilla.download',$cache_key));        
 
