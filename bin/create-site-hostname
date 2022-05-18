@@ -157,11 +157,15 @@ chown -R $username:web /backups/$username
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
 
+## Switch php version to the one specified 
+bash toggle-php -u $username -p $php
+
+## Install composer dependencies for the laravel hostsite
+/var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Switch php version to the one specified 
-bash toggle-php -u $username -p $php
 
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes
