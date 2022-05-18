@@ -33,32 +33,24 @@ then
 fi
 
 
-if [ ! -f "/etc/nginx/sites-available/$username.conf" ] && [ ! -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
+if [ ! -f "/etc/nginx/sites-available/$username.conf" ]
 then
     echo "No Vhost found for this user"    
     exit;
 fi
 
 
-if [ -L "/etc/nginx/sites-enabled/$username.conf" ] && [ -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
+if [ -L "/etc/nginx/sites-enabled/$username.conf" ]
 then
     echo "This site is already enabled"    
     exit;
 fi
 
 
-if [ -f "/etc/nginx/sites-available/$username.conf" ] && [ ! -L "/etc/nginx/sites-enabled/$username.conf" ]
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
 then
     nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
     nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
-    ln -s $nginx_vhost_file $nginx_vhost_enabled
-fi
-
-
-if [ -f "/etc/nginx/sites-available/$username-ssl.conf" ] && [ ! -L "/etc/nginx/sites-enabled/$username-ssl.conf" ]
-then
-    nginx_vhost_file="/etc/nginx/sites-available/$username-ssl.conf"
-    nginx_vhost_enabled="/etc/nginx/sites-enabled/$username-ssl.conf"
     ln -s $nginx_vhost_file $nginx_vhost_enabled
 fi
 
