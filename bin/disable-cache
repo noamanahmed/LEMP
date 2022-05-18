@@ -40,7 +40,7 @@ then
     exit;
 fi
 
-if grep -Fq "#$nginx_performance_directive" $nginx_vhost_path && grep -Fq "#$fastcgi_cache_directive" $nginx_vhost_path
+if [ [ grep -Fq "#$nginx_performance_directive" $nginx_vhost_path ] ] && [ [ grep -Fq "#$fastcgi_cache_directive" $nginx_vhost_path] ]
 then
     echo "This has already disable cache. Hit Control+F5 to refresh the browser cache!"    
     exit;
