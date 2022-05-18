@@ -114,6 +114,18 @@ rm -rf $www_path
 cp -rf $template_path/www/default_site $www_path
 www_path=$www_path/public
 
+
+## Switch php version to the one specified 
+bash toggle-php -u $username -p $php
+
+## Install composer dependencies for the laravel hostsite ( I will clean these commands later on)
+COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
+cp /var/www/home/$username/www/.env.example /var/www/home/$username/www/.env
+/var/www/home/$username/.local/bin/php /var/www/home/$username/www/artisan key:generate
+
+## Change env parameters
+bash set-env-param -u $username -s APP_URL -r APP_URL=\"https://$domain\"
+
 ## Setup PHP
 sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
@@ -173,24 +185,11 @@ chown -R $username:web /backups/$username
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
 
-## Switch php version to the one specified 
-bash toggle-php -u $username -p $php
-
-## Install composer dependencies for the laravel hostsite ( I will clean these commands later on)
-COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
-cp /var/www/home/$username/www/.env.example /var/www/home/$username/www/.env
-/var/www/home/$username/.local/bin/php /var/www/home/$username/www/artisan key:generate
-
-## Change env parameters
-bash set-env-param -u $username -s APP_URL -r APP_URL=https://$domain
-
 ## Fixing permissions
 bash fix-permissions -u $username
 
-
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes
-
 
 site_info_command="bash site-info $args -u $username -d $domain --ssh_password $user_password"
 
