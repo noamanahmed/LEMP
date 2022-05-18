@@ -120,6 +120,18 @@ sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
 
+## Creating MYSQL user and database
+database_name="$(echo $username | head -c 12)"
+database_user="$(echo $username | head -c 12)"
+database_password="$(openssl rand -hex 8)"
+
+mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+mysql -e "FLUSH PRIVILEGES;"
+
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
@@ -164,8 +176,13 @@ bash create-ssh-key -u $username
 ## Switch php version to the one specified 
 bash toggle-php -u $username -p $php
 
-## Install composer dependencies for the laravel hostsite
+## Install composer dependencies for the laravel hostsite ( I will clean these commands later on)
 COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
+cp /var/www/home/$username/www/.env.example /var/www/home/$username/www/.env
+/var/www/home/$username/.local/bin/php /var/www/home/$username/www/artisan key:generate
+
+## Change env parameters
+bash set-env-param -u $username -s APP_URL -r APP_URL=https://$domain
 
 ## Fixing permissions
 bash fix-permissions -u $username

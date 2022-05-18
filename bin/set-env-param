@@ -65,5 +65,5 @@ then
     exit 1
 fi
 
-sed -i "s/$search.*/$replace/g" /var/www/home/$username/www/.env
+sed -i "s/$(echo $search | sed 's/\//\\\//g').*/$(echo $replace | sed 's/\//\\\//g')/g" /var/www/home/$username/www/.env
 
