@@ -59,11 +59,11 @@ then
     exit
 fi
 
-if [ ! -f /var/www/home/$username/www.env ]
+if [ ! -f /var/www/home/$username/www/.env ]
 then 
-    echo "There is no .env file at /var/www/home/$username/www.env"
+    echo "There is no .env file at /var/www/home/$username/www/.env"
     exit 1
 fi
 
-sed -i "s/$search.*/$replace/g" /var/www/home/$username/www.env
+sed -i "s/$search.*/$replace/g" /var/www/home/$username/www/.env
 
