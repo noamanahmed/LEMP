@@ -109,8 +109,8 @@ www_path=$chroot_home/www
 chown -R $username:web $chroot_home/logs/php
 chown -R nginx:nginx $chroot_home/cache/nginx
 
-## Setting up default static HTML site
-#mkdir -p $www_path
+## Setting up Laravel default hostname site
+rm -rf $www_path
 cp -rf $template_path/www/default_site $www_path
 www_path=$www_path/public
 
