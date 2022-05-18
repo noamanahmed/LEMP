@@ -153,4 +153,13 @@ output+="Port: $ssh_port\n"
 output+="Username: $username\n"
 output+="Password: $ssh_password\n"
 
+if systemctl is-active --quiet  shellinabox
+  then 
+  output+="\n"
+  output+="Web SSH Details\n"
+  output+="https://$HOSTNAME:6220/\n"
+fi
+
+
+
 printf "$output"
