@@ -172,8 +172,8 @@ chown -R nginx:nginx $chroot_home/cache/nginx
 
 ## Setting up default static HTML site
 mkdir -p $www_path
-cp $template_path/www/*.php $www_path
-cp $template_path/www/*.html $www_path
+cp $template_path/www/php/*.php $www_path
+cp $template_path/www/php/*.html $www_path
 
 ## Setup PHP
 sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
