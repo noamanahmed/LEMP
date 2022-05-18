@@ -111,7 +111,7 @@ chown -R nginx:nginx $chroot_home/cache/nginx
 
 ## Setting up default static HTML site
 #mkdir -p $www_path
-cp -rf $template_path/default_site $www_path
+cp -rf $template_path/www/default_site $www_path
 www_path=$www_path/public
 
 ## Setup PHP
