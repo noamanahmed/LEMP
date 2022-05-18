@@ -18,14 +18,6 @@ while [ $# -gt 0 ]; do
       username="$2"
       shift
       ;;
-    -p|--php)
-      php="$2"
-      shift
-      ;;
-    -a|--app)
-      app="$2"
-      shift
-      ;;
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"

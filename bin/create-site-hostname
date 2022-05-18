@@ -76,7 +76,7 @@ user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
 
 ## Jail User for a php site
-bash jail-user -u $username -p yes
+bash jail-user -u $username
 
 ## Adding user to groups
 usermod -a -G web $username
@@ -88,7 +88,7 @@ service nginx reload
 chroot_path=/var/www
 user_root=/home/$username
 chroot_home=$chroot_path/$user_root
-fastcgi_path=/home/$username/www
+fastcgi_path=/home/$username/www/public
 
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
@@ -109,16 +109,28 @@ www_path=$chroot_home/www
 chown -R $username:web $chroot_home/logs/php
 chown -R nginx:nginx $chroot_home/cache/nginx
 
-## Setting up default static HTML site
-mkdir -p $www_path
-cp $template_path/www/*.php $www_path
-cp $template_path/www/*.html $www_path
+## Setting up Laravel default hostname site
+rm -rf $www_path
+cp -rf $template_path/www/default_site $www_path
+www_path=$www_path/public
 
 ## Setup PHP
 sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
+
+## Creating MYSQL user and database
+database_name="$(echo $username | head -c 12)"
+database_user="$(echo $username | head -c 12)"
+database_password="$(openssl rand -hex 8)"
+
+mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+mysql -e "FLUSH PRIVILEGES;"
 
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
@@ -138,16 +150,21 @@ nginx -t && systemctl reload nginx
 
 if [ -z "$nossl" ]
 then
-  ## Test SSL Generation
-  if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
-  then       
-    ## Generate SSL
-    certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
-
-    ## Enabling SSL in nginx settings
-    sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
-    nginx -t && systemctl reload nginx    
+  ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+    ## Test SSL Generation
+    if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+    then       
+      ## Generate SSL
+      certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path  
+    fi
   fi
+
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx   
+  
 fi
 
 ## Setting up backup folder
@@ -157,11 +174,20 @@ chown -R $username:web /backups/$username
 ## Create SSH Key Pair for git
 bash create-ssh-key -u $username
 
+## Switch php version to the one specified 
+bash toggle-php -u $username -p $php
+
+## Install composer dependencies for the laravel hostsite ( I will clean these commands later on)
+COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
+cp /var/www/home/$username/www/.env.example /var/www/home/$username/www/.env
+/var/www/home/$username/.local/bin/php /var/www/home/$username/www/artisan key:generate
+
+## Change env parameters
+bash set-env-param -u $username -s APP_URL -r APP_URL=\"https://$domain\"
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Switch php version to the one specified 
-bash toggle-php -u $username -p $php
 
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes

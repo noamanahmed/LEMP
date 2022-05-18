@@ -57,11 +57,7 @@ The installation instructions have been moved to its own wiki page called
 
 
 ## Work in Progress
-- ELK Stack (Elasticsearch Logstash Kibana)
+- Compile nginx from source to allow brotli,redis and work on page speed
 - Server Hardening
 - Pushing backups to offsite storage as object storage etc 
-
-## In Future
-- Compile nginx from source to allow brotli,redis and work on page speed
-- Prometheus (Netdata can be used for the timebeing)
-- Ansible
+- Support for other programming languages like Go,Rust,.Net etc

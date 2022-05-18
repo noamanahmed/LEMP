@@ -48,10 +48,11 @@ then
 else
     # Otherwise lets make it non accessible for others
     chown -R $username:$username /var/www/home/$username
-    chmod 710 /var/www/home/$username
-    usermod -a -G nginx $username
+    chmod 710 /var/www/home/$username    
     find $www_path -type d -exec chmod 750 {} \;
-    find $www_path -type f -exec chmod 640 {} \;  
+    find $www_path -type f -exec chmod 640 {} \;
+    chown -R $username:$username /var/www/home/$username/logs/php
+    chown -R nginx:nginx /var/www/home/$username/cache/nginx  
 fi
 
 

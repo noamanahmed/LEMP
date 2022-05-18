@@ -153,4 +153,21 @@ output+="Port: $ssh_port\n"
 output+="Username: $username\n"
 output+="Password: $ssh_password\n"
 
+
+if [ "$LEMP_HOSTNAME_USERNAME" != "$username" ]
+then
+  output+="Filezilla Site Import Download Link: \n$(/var/www/home/$LEMP_HOSTNAME_USERNAME/.local/bin/php /var/www/home/$LEMP_HOSTNAME_USERNAME/www/artisan filezilla:generate-config $username $ssh_password $domain $ssh_port)\n"
+fi
+
+
+
+if systemctl is-active --quiet  shellinabox
+  then 
+  output+="\n"
+  output+="Web SSH Details\n"
+  output+="https://$HOSTNAME:6220/\n"
+fi
+
+
+
 printf "$output"
