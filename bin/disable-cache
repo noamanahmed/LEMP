@@ -40,9 +40,9 @@ then
     exit;
 fi
 
-if [ ! grep -Fq "#$nginx_performance_directive" $chroot_path/etc/group ]
+if [ grep -Fq "#$nginx_performance_directive" $chroot_path/etc/group ] && [ grep -Fq "#$fastcgi_cache_directive" $chroot_path/etc/group ]
 then
-    echo "This site is already disabled!"    
+    echo "This has already disable cache. Hit Control+F5 to refresh the browser cache!"    
     exit;
 fi
 
