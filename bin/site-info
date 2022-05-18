@@ -154,7 +154,11 @@ output+="Username: $username\n"
 output+="Password: $ssh_password\n"
 
 
-output+="Filezilla Site Import Download Link: \n$(/var/www/home/$LEMP_HOSTNAME_USERNAME/.local/bin/php /var/www/home/$LEMP_HOSTNAME_USERNAME/www/artisan filezilla:generate-config $username $ssh_password $domain $ssh_port)\n"
+if [ "$LEMP_HOSTNAME_USERNAME" != "$username" ]
+then
+  output+="Filezilla Site Import Download Link: \n$(/var/www/home/$LEMP_HOSTNAME_USERNAME/.local/bin/php /var/www/home/$LEMP_HOSTNAME_USERNAME/www/artisan filezilla:generate-config $username $ssh_password $domain $ssh_port)\n"
+fi
+
 
 
 if systemctl is-active --quiet  shellinabox
