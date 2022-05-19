@@ -32,7 +32,18 @@ then
     exit;
 fi
 
+domin=""
 
-USER=$username HOME=/home/$username chroot --userspec=$username:$username /var/www/ /bin/bash -c 'source ~/.profile; bash'
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+fi
+
+USER=$username HOME=/home/$username chroot --userspec=$username:$username /var/www/ /bin/bash -c "source ~/.profile; clear ; \
+echo \"***************************\" && \
+echo \"User: $username\" && \
+echo \"Domain:  $domain\" && \
+echo \"***************************\" && \
+bash "
 
 
