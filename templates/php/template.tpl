@@ -30,6 +30,9 @@ php_admin_value[sys_temp_dir] = /home/{{username}}/tmp/
 php_admin_flag[session.use_trans_sid]=Off
 php_admin_flag[allow_url_fopen]=Off
 php_admin_flag[allow_url_include]=Off
+php_admin_flag[cgi.fix_pathinfo]=Off
+
+
 
 ;Opcache Settings
 php_admin_flag[opcache.enable]=1
