@@ -33,7 +33,4 @@ then
 fi
 
 
-chroot --userspec=$username:$username /var/www/ /bin/bash 
-export USER=$username
-export HOME=/home/$username
-source ~/.profile
+USER=$username HOME=/home/$username chroot --userspec=$username:$username /var/www/ /bin/bash 
