@@ -31,6 +31,6 @@ then
     exit
 fi
 
-git clone https://github.com/phppgadmin/phppgadmin /var/www/home/$username/www/phppgadmin
-cp /var/www/home/$username/www/phppgadmin/conf/config.inc.php-dist /var/www/home/$username/www/phppgadmin/conf/config.inc.php
+git clone https://github.com/phppgadmin/phppgadmin /var/www/home/$username/www/public/phppgadmin
+cp /var/www/home/$username/www/public/phppgadmin/conf/config.inc.php-dist /var/www/home/$username/www/public/phppgadmin/conf/config.inc.php
 fix-permissions -u $username
