@@ -1,9 +1,10 @@
 #!/bin/bash
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit
-fi
+# Commented to allow all users to install NVM
+# if [ "$EUID" -ne 0 ]
+#   then echo "Please run as root"
+#   exit
+# fi
 
 # Remove already exisitng versions
 rm -rf $(which node)
@@ -16,4 +17,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 nvm install node
 nvm use stable
+nvm alias stable
+nvm alias default stable
 npm install --global yarn

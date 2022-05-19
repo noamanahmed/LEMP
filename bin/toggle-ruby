@@ -1,0 +1,79 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:r: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;
+        r) ruby=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+
+if [ -z "$ruby" ]
+then
+    echo "Please provide a ruby version using -r "
+    exit
+fi
+
+ruby_versions_array=( "3.1.2" )
+
+if [[ ! " ${ruby_versions_array[*]} " =~ " ${ruby} " ]]; then
+    echo "This is not a valid ruby Version"
+    exit 1;
+fi
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+echo "Switching CLI ruby Version to $ruby"
+
+if [ -L "/var/www/home/$username/.local/bin/ruby" ]
+then
+    rm -rf /var/www/home/$username/.local/bin/ruby
+fi
+
+
+ln -s ../../../../bin/$(echo "ruby$ruby" | sed 's/\.//') /var/www/home/$username/.local/bin/ruby 
+chown -h $username:$username /var/www/home/$username/.local/bin/ruby
+
+echo "Switching GEM binary accordingly"
+
+if [ -L "/var/www/home/$username/.local/bin/gem" ]
+then
+    rm -rf /var/www/home/$username/.local/bin/gem
+fi
+
+ln -s ../../../../bin/gem /var/www/home/$username/.local/bin/gem 
+chown -h $username:$username /var/www/home/$username/.local/bin/gem
+
+if [ -f "/etc/systemd/system/$username-site.service" ] 
+then
+    echo "Restarting systemd service $username-site.service"
+    systemctl restart $username-site    
+fi
+
+echo "Clearing Cache"
+clear-cache -u $username
+

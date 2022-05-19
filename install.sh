@@ -38,6 +38,9 @@ while [ $# -gt 0 ]; do
         --without_php)
             without_php=yes
         ;;
+        --without_ruby)
+            without_ruby=yes
+        ;;
         --with_mongodb)
             with_mongodb=yes
         ;;
@@ -296,6 +299,15 @@ then
     bash $DIR/installers/nvm.sh > $INSTALL_DIR/nvm.sh.log 2>&1
 fi
 echo "MEAN Stack Installation completed!"
+
+
+
+if [ -z "$without_ruby" ]
+then
+    echo "Installing ruby"
+    bash $DIR/installers/ruby.sh > $INSTALL_DIR/ruby.sh.log 2>&1
+fi
+
 
 # if [ -z "$without_proftpd" ]
 # then

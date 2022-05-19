@@ -152,6 +152,13 @@ if [ -d "$HOME/.pyenv/shims" ] ; then
     PATH="$HOME/.pyenv/shims:$PATH"
 fi
 
+
+# set PATH so it includes rbenv
+if [ -d "$HOME/.rbenv/bin" ] ; then
+    PATH="$HOME/.rbenv/bin:$PATH"
+fi
+
+
 # Setup NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
