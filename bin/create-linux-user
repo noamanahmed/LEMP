@@ -36,10 +36,31 @@ if [ -z "$user_password" ]
 then
     user_password="$(openssl rand -hex 12)"
 fi
-##Create user
 
-adduser --gecos "" --disabled-password --no-create-home $username
+user_id=500
+unavailable_user_ids=$(cat /etc/passwd | awk -F: '{print $3}' | sort -n)
+
+
+while [[ "${unavailable_user_ids[*]}" =~ "${user_id}" ]]
+do
+    ((user_id++))    
+done
+
+##Create user
+adduser --gecos "" --uid $user_id --disabled-password --no-create-home $username
 usermod -a -G $username $username
 echo "$username:$user_password" | sudo chpasswd
-#ln -s /var/chroot/home/$username /home/$username
 
+
+
+
+#ln -s /var/chroot/home/$username /home/$username
+if [ -d "/var/lib/AccountsService/users/" ]
+then
+    cat <<EOT >> /var/lib/AccountsService/users/$username
+[$username]  
+Language=   
+XSession=gnome  
+SystemAccount=true  
+EOT
+fi
