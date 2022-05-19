@@ -33,4 +33,6 @@ then
 fi
 
 
-USER=$username HOME=/home/$username chroot --userspec=$username:$username /var/www/ /bin/bash 
+USER=$username HOME=/home/$username chroot --userspec=$username:$username /var/www/ /bin/bash -c 'source ~/.profile; bash'
+
+
