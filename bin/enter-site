@@ -32,26 +32,8 @@ then
     exit;
 fi
 
-domin=""
 
-if [ -f "/etc/nginx/sites-available/$username.conf" ]
-then
-    domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
-fi
-
-space=0
-
-if [ -d "/var/www/home/$username" ]
-then
-    space=$(du -sh /var/www/home/$username)
-fi
-
-
-user_info="$username"
-user_info+="\t"
-user_info+="$domain"
-user_info+="\t"
-user_info+="$space"
-user_info+="\n"
-
-printf "$user_info"      
+chroot --userspec=$username:$username /var/www/ /bin/bash 
+export HOME=/home/$username
+export USER=$username
+source ~/.profile
