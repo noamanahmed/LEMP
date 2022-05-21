@@ -44,7 +44,7 @@ echo \"***************************\" && \
 echo \"User: $username\" && \
 echo \"Domain:  $domain\" && \
 echo \"***************************\" && \
-cd $HOME && \
+cd /home/$username/ && \
 bash "
 
 
