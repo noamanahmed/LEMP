@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# TODO 
+# Allow jailed users to disable cache from inside the chroot
+

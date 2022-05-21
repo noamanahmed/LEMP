@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+
+if [ ! -f "/home/$username/www/wp-config.php" ] 
+then
+    echo "There is not a wordpress site"    
+    exit;
+fi
+
+wp --path=/home/$username/www plugin delete $plugin
+
+
