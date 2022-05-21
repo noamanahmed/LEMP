@@ -40,11 +40,6 @@ then
 fi
 
 
-if [ -L "/etc/nginx/sites-enabled/$username.conf" ]
-then
-    echo "This site is already enabled"    
-    exit;
-fi
 
 status=''
 
