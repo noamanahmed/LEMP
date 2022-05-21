@@ -245,6 +245,9 @@ nvm-user -u $username -c 'cd www && npm install'
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes
 
+## Disable caching
+bash disable-cache -u $username
+
 ## Finaly Start the systemd script to run the demo app
 cp $template_path/systemd/node-site.service /etc/systemd/system/$username-site.service
 sed -i "s/{{username}}/$username/" /etc/systemd/system/$username-site.service
