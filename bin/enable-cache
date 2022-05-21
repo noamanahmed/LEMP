@@ -36,7 +36,7 @@ fi
 
 if [ ! -f "/etc/nginx/sites-available/$username.conf" ]
 then
-    echo "This site is already disabled!"    
+    echo "This site is unavailable!"    
     exit;
 fi
 
