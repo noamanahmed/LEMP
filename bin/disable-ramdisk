@@ -40,16 +40,16 @@ then
     exit;
 fi
 
-
-if mountpoint -q /var/www/home/$username/cache/nginx/
+if ! mountpoint -q /var/www/home/$username/cache/nginx/
 then 
-    echo "Ramdisk is already enabled on this site. Aborting!"
+    echo "Ramdisk is NOT enabled on this site. Aborting!"
     exit 1;
 fi
 
+# Empty cache contents
+rm -rf /var/www/home/$username/cache/nginx/*
+ummount /var/www/home/$username/cache/nginx/
 rm -rf /var/www/home/$username/cache/nginx/
-sudo mkdir -p /var/www/home/$username/cache/nginx/
-sudo mount -t tmpfs -o size=64M tmpfs /var/www/home/$username/cache/nginx/
+mkdir -p /var/www/home/$username/cache/nginx/
 sudo chown -R nginx:nginx /var/www/home/$username/cache/nginx/
-
-echo "Ram Disk Enabled"
+echo "Ram Disk Disable. Reverting to file based caching"
