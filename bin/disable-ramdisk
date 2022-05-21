@@ -71,7 +71,7 @@ mkdir -p /var/www/home/$username/cache/nginx/
 sudo chown -R nginx:nginx /var/www/home/$username/cache/nginx/
 echo "Ram Disk Disabled. Reverting to file based caching"
 
-if [ "$status" == "$enabled" ]
+if [ "$status" == "enabled" ]
 then
     enable-site -u $username
 fi
