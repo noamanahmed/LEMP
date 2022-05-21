@@ -48,7 +48,7 @@ fi
 
 # Empty cache contents
 rm -rf /var/www/home/$username/cache/nginx/*
-ummount /var/www/home/$username/cache/nginx/
+unmount /var/www/home/$username/cache/nginx/
 rm -rf /var/www/home/$username/cache/nginx/
 mkdir -p /var/www/home/$username/cache/nginx/
 sudo chown -R nginx:nginx /var/www/home/$username/cache/nginx/
