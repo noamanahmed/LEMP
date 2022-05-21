@@ -42,14 +42,29 @@ then
 fi
 
 
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
 if [ -z "$php" ]
 then
-    echo "Please provide a php version using -p "
+    for php_v in ${php_versions_array[@]}; do    
+        if [ -f "/etc/php/$php_v/fpm/pool.d/$username.conf" ]
+        then
+            echo "Web php-fpm version: $php_v"
+            break
+        fi
+    done
+    if [ -L "/var/www/home/$username/.local/bin/php" ]
+    then
+    cli_php=$(readlink /var/www/home/wordpress/.local/bin/php | grep -m1 -Poe 'php\K[^; ]+')    
+    cli_php=$cli_php/10
+    echo "CLI PHP Version: $cli_php"
+    
+    fi
+    
     exit 1;
 fi
 
 
-php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
     echo "This is not a valid PHP Version"
