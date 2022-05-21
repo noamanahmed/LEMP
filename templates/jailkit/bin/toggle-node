@@ -1,0 +1,48 @@
+#!/bin/bash
+
+
+while getopts n: flag
+do
+    case "${flag}" in
+        n) node=${OPTARG};;        
+    esac
+done
+
+
+
+
+if [ -z "$node" ]
+then
+    echo "Please provide a node version using -n "
+    exit
+fi
+
+
+node_versions_array=( "4" "6" "8" "10" "12" "14" "16" "18" )
+
+if [[ ! " ${node_versions_array[*]} " =~ " ${node} " ]]; then
+    echo "This is not a valid node Version"
+    exit 1;
+fi
+
+# If we are inside chroot user, then toggle-node SHOULD automatically install nvm first
+if [ ! -d "/home/$username/.nvm" ] 
+then
+    curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /var/www/home/$username/install.sh
+fi
+
+. /var/www/home/$username/.nvm/nvm.sh
+. /var/www/home/$username/.nvm/bash_completion
+nvm install $node
+nvm use $node
+nvm alias $node && nvm alias default $node
+
+# Allow chroot users to restart ONLY THERE SITE.service
+# if [ -f "/etc/systemd/system/$username-site.service" ] 
+# then
+#     echo "Restarting systemd service $username-site.service"
+#     systemctl restart $username-site    
+# fi
+
+echo "Clearing Cache"
+clear-cache -u $username

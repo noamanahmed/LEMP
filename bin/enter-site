@@ -39,19 +39,12 @@ then
     domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
 fi
 
-space=0
+USER=$username HOME=/home/$username chroot --userspec=$username:$username /var/www/ /bin/bash -c "source ~/.profile; clear ; \
+echo \"***************************\" && \
+echo \"User: $username\" && \
+echo \"Domain:  $domain\" && \
+echo \"***************************\" && \
+cd /home/$username/ && \
+bash "
 
-if [ -d "/var/www/home/$username" ]
-then
-    space=$(du -sh /var/www/home/$username)
-fi
 
-
-user_info="$username"
-user_info+="\t"
-user_info+="$domain"
-user_info+="\t"
-user_info+="$space"
-user_info+="\n"
-
-printf "$user_info"      

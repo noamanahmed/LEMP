@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+rm -rf /home/$username/cache/nginx/*
+echo "Cache Purged"

@@ -11,11 +11,10 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-
 while getopts u: flag
 do
     case "${flag}" in
-        u) username=${OPTARG};;                
+        u) username=${OPTARG};;        
     esac
 done
 
@@ -26,32 +25,19 @@ then
 fi
 
 
+
 if ! id "$username" &>/dev/null
 then
     echo "The $username doesn't exist"    
     exit;
 fi
 
-domin=""
 
-if [ -f "/etc/nginx/sites-available/$username.conf" ]
+status="disabled"
+
+if mountpoint -q /var/www/home/$username/cache/nginx/ 
 then
-    domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+    status="enabled"
 fi
 
-space=0
-
-if [ -d "/var/www/home/$username" ]
-then
-    space=$(du -sh /var/www/home/$username)
-fi
-
-
-user_info="$username"
-user_info+="\t"
-user_info+="$domain"
-user_info+="\t"
-user_info+="$space"
-user_info+="\n"
-
-printf "$user_info"      
+echo "RamDisk Status: $status"

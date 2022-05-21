@@ -40,6 +40,8 @@ then
     exit;
 fi
 
+status='disabled'
+
 
 nginx_vhost_path="/etc/nginx/sites-available/$username.conf"
 nginx_performance_directive="include /etc/nginx/performance.conf;"
@@ -51,23 +53,7 @@ if ! grep -Fq "#$nginx_performance_directive" $nginx_vhost_path  && \
    grep -Fq "$nginx_performance_directive" $nginx_vhost_path  && \
    grep -Fq "$fastcgi_cache_directive" $nginx_vhost_path
 then
-    echo "This site cache has already been enabled!"    
-    exit;
+    status='enabled'
 fi
 
-if grep -Fq "#$nginx_performance_directive" $nginx_vhost_path
-then
-sed -i "s/#$(echo $nginx_performance_directive | sed 's/\//\\\//g')/$(echo $nginx_performance_directive | sed 's/\//\\\//g')/g" $nginx_vhost_path
-fi
-
-
-if grep -Fq "#$fastcgi_cache_directive" $nginx_vhost_path
-then
-sed -i "s/#$(echo $fastcgi_cache_directive | sed 's/\//\\\//g')/$(echo $fastcgi_cache_directive | sed 's/\//\\\//g')/g" $nginx_vhost_path
-fi
-
-echo "Cache Enabled"
-clear-cache -u $username
-
-service nginx reload
-
+echo "Cache Status: $status"

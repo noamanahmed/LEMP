@@ -1,0 +1,78 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+
+if [ ! -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    echo "This site is unavailable!"    
+    exit;
+fi
+
+if ! mountpoint -q /var/www/home/$username/cache/nginx/
+then 
+    echo "Ramdisk is NOT enabled on this site. Aborting!"
+    exit 1;
+fi
+
+status=''
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    status="disabled"
+fi
+
+if [ -L "/etc/nginx/sites-enabled/$username.conf" ]
+then
+    status="enabled"
+fi
+
+if [ "$status" == "enabled" ]
+then
+    disable-site -u $username
+fi
+
+# Empty cache contents
+rm -rf /var/www/home/$username/cache/nginx/*
+umount -f /var/www/home/$username/cache/nginx/
+rm -rf /var/www/home/$username/cache/nginx/
+mkdir -p /var/www/home/$username/cache/nginx/
+sudo chown -R nginx:nginx /var/www/home/$username/cache/nginx/
+echo "Ram Disk Disabled. Reverting to file based caching"
+
+if [ "$status" == "enabled" ]
+then
+    enable-site -u $username
+fi
+
