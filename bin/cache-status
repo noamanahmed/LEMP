@@ -42,6 +42,11 @@ fi
 
 status='disabled'
 
+
+nginx_vhost_path="/etc/nginx/sites-available/$username.conf"
+nginx_performance_directive="include /etc/nginx/performance.conf;"
+fastcgi_cache_directive="fastcgi_cache $username"
+
 #Check if cache directive exists and has NOT been commented out!
 if ! grep -Fq "#$nginx_performance_directive" $nginx_vhost_path  && \
    ! grep -Fq "#$fastcgi_cache_directive" $nginx_vhost_path && \
