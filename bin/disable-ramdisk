@@ -46,6 +46,23 @@ then
     exit 1;
 fi
 
+status=''
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    status="disabled"
+fi
+
+if [ -L "/etc/nginx/sites-enabled/$username.conf" ]
+then
+    status="enabled"
+fi
+
+if [ "$status" == "enabled" ]
+then
+    disable-site -u $username
+fi
+
 # Empty cache contents
 rm -rf /var/www/home/$username/cache/nginx/*
 umount -f /var/www/home/$username/cache/nginx/
@@ -53,3 +70,9 @@ rm -rf /var/www/home/$username/cache/nginx/
 mkdir -p /var/www/home/$username/cache/nginx/
 sudo chown -R nginx:nginx /var/www/home/$username/cache/nginx/
 echo "Ram Disk Disabled. Reverting to file based caching"
+
+if [ "$status" == "$enabled" ]
+then
+    enable-site -u $username
+fi
+
