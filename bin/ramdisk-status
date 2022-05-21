@@ -35,7 +35,7 @@ fi
 
 status="disabled"
 
-if [ mountpoint -q /var/www/home/$username/cache/nginx/ ]
+if mountpoint -q /var/www/home/$username/cache/nginx/ 
 then
     status="enabled"
 fi
