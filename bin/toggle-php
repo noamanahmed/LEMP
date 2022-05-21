@@ -56,9 +56,9 @@ then
     if [ -L "/var/www/home/$username/.local/bin/php" ]
     then
     cli_php=$(readlink /var/www/home/wordpress/.local/bin/php | grep -m1 -Poe 'php\K[^; ]+')    
-    cli_php=$cli_php/10
+    cli_php=$((cli_php/10))
     echo "CLI PHP Version: $cli_php"
-    
+
     fi
     
     exit 1;
