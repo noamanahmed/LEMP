@@ -281,6 +281,9 @@ bash toggle-python -u $username -p $python
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes
 
+## Disable caching
+bash disable-cache -u $username
+
 ## Finaly Start the systemd script to run the demo app
 cp $template_path/systemd/python-site.service /etc/systemd/system/$username-site.service
 sed -i "s/{{username}}/$username/" /etc/systemd/system/$username-site.service

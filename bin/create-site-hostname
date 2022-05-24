@@ -192,6 +192,8 @@ bash fix-permissions -u $username
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes
 
+## Disable caching
+bash disable-cache -u $username
 
 site_info_command="bash site-info $args -u $username -d $domain --ssh_password $user_password"
 

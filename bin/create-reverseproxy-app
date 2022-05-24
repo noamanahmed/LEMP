@@ -158,6 +158,13 @@ systemctl reload nginx
 #   bash create-monitor -u $app -d $domain
 # fi
 
+
+## Disable caching
+## TODO Implement caching for reverse proxy apps
+## We are not implementing it as there could be UNKNOWN side effects and there is 
+## just no guarantee that it will work correctly.
+## bash disable-cache -u $username
+
 site_info_command="bash site-info $args "
 
 site_info="$($site_info_command)"

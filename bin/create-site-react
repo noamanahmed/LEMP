@@ -179,6 +179,9 @@ bash install-nvm -u $username
 ## Setting up Logrotation
 bash logrotate-site -u $username
 
+## Disable caching
+bash disable-cache -u $username
+
 if [ -z "$no_monitoring" ]
 then
   bash create-monitor -u $username -d $domain
