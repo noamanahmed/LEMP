@@ -122,13 +122,16 @@ sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 nginx -t && systemctl reload nginx
 
-
-## Test SSL Generation  
-if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
-then 
-echo "Error in certbot SSL generating. Cleaning up and aborting"
-delete-site -u $app -y --no_message
-exit 1;
+if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+  echo "Generating SSL (This may take a while)"
+  ## Test SSL Generation  
+  if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+  then 
+  echo "Error in certbot SSL generating. Cleaning up and aborting"
+  delete-site -u $app -y --no_message
+  exit 1;
+  fi
 fi
 
 ## Generate SSL
