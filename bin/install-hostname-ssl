@@ -1,0 +1,75 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;  
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+username=$LEMP_HOSTNAME_USERNAME
+domain=$HOSTNAME
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The username $username doesn't exist"    
+    exit;
+fi
+
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
+fastcgi_path=/home/$username/www/public
+www_path=$chroot_home/www 
+www_path=$www_path/public
+
+if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+then
+  echo "Generating SSL (This may take a while)"
+  ## Test SSL Generation
+  if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+  then       
+    ## Generate SSL
+    certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path  
+  fi
+fi
