@@ -80,7 +80,7 @@ email=admin@$HOSTNAME
 user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
 
-## Jail User for a php site
+## Jail User
 bash jail-user -u $username
 
 

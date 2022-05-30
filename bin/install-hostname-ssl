@@ -56,13 +56,7 @@ then
     exit;
 fi
 
-email=admin@$HOSTNAME
-chroot_path=/var/www
-user_root=/home/$username
-chroot_home=$chroot_path/$user_root
-fastcgi_path=/home/$username/www/public
-www_path=$chroot_home/www 
-www_path=$www_path/public
+php -S $HOSTNAME:20000
 
 if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
 then
