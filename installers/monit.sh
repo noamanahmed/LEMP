@@ -34,9 +34,9 @@ fi
 
 apt install monit -qqy
 cp $template_path/monit/monitrc /etc/monit/monitrc
-chmod 600 /etc/monit/monitrc
 sed -i "s/{{username}}/$username/" /etc/monit/monitrc
 sed -i "s/{{password}}/$password/" /etc/monit/monitrc
+chmod 600 /etc/monit/monitrc
 ln -s /etc/monit/conf-available/nginx /etc/monit/conf-enabled/
 ln -s /etc/monit/conf-available/mysql /etc/monit/conf-enabled/
 ln -s /etc/monit/conf-available/openssh-server /etc/monit/conf-enabled/
