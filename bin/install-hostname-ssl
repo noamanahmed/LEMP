@@ -26,15 +26,8 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-username=$LEMP_HOSTNAME_USERNAME
+
 domain=$HOSTNAME
-
-if [ -z "$username" ]
-then
-    echo "Please provide a username using -u "
-    exit
-fi
-
 
 if [ -z "$domain" ]
 then
@@ -42,21 +35,11 @@ then
     exit
 fi
 
-
-if [ -z "$username" ]
-then
-    echo "Please provide a username using -u "
+if ! (host -t A $domain || host -t AAAA $domain)
+    then
+    echo "This is not a valid domain! Aborting!"
     exit
 fi
-
-
-if ! id "$username" &>/dev/null
-then
-    echo "The username $username doesn't exist"    
-    exit;
-fi
-
-
 
 
 if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
