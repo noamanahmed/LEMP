@@ -28,6 +28,7 @@ done
 
 
 domain=$HOSTNAME
+email=admin@$HOSTNAME
 
 if [ -z "$domain" ]
 then
