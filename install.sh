@@ -490,6 +490,10 @@ fi
 ## Load new .bashrc
 source /home/$username/.bashrc
 
+## Generate Hostname SSL
+echo "Generating hostname SSL Certificates"
+bash install-hostname-ssl -u $username
+
 ## Setup hostname site for phpmyadmin and other stuff
 if [ -z "$without_hostname_site" ]
 then
