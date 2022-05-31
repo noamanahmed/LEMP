@@ -56,15 +56,18 @@ then
     exit;
 fi
 
-php -S $HOSTNAME:20000
+
+
 
 if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
 then
+  service nginx stop
   echo "Generating SSL (This may take a while)"
   ## Test SSL Generation
-  if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+  if certbot certonly --dry-run --quiet --standalone -d $domain --non-interactive --agree-tos -m $email -w $www_path
   then       
     ## Generate SSL
-    certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path  
+    certbot certonly --quiet --standalone -d $domain --non-interactive --agree-tos -m $email -w $www_path  
   fi
+  service nginx start
 fi
