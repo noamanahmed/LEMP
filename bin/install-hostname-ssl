@@ -48,10 +48,10 @@ then
   service nginx stop
   echo "Generating SSL (This may take a while)"
   ## Test SSL Generation
-  if certbot certonly --dry-run --quiet --standalone -d $domain --non-interactive --agree-tos -m $email -w $www_path
+  if certbot certonly --dry-run --quiet --standalone -d $domain --non-interactive --agree-tos -m $email 
   then       
     ## Generate SSL
-    certbot certonly --quiet --standalone -d $domain --non-interactive --agree-tos -m $email -w $www_path  
+    certbot certonly --quiet --standalone -d $domain --non-interactive --agree-tos -m $email   
   fi
   service nginx start
 fi
