@@ -128,6 +128,7 @@ then
    ## Only Generate SSL If it is not already present. Timesave when re-creating sites
   if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
   then
+    echo "Generating SSL (This may take a while)"
     ## Test SSL Generation  
     if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/build/
     then 

@@ -80,7 +80,7 @@ email=admin@$HOSTNAME
 user_password="$(openssl rand -hex 12)"
 bash create-linux-user -u $username -p $user_password
 
-## Jail User for a php site
+## Jail User
 bash jail-user -u $username
 
 
@@ -129,7 +129,7 @@ then
    ## Only Generate SSL If it is not already present. Timesave when re-creating sites
   if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
   then
-
+    echo "Generating SSL (This may take a while)"
     ## Test SSL Generation  
     if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/dist/
     then 

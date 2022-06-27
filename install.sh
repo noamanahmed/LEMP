@@ -222,6 +222,8 @@ mkdir -p $INSTALL_DIR
 echo ""
 echo "Installing Directory in $INSTALL_DIR"
 
+export DEBIAN_FRONTEND=noninteractive
+
 echo "Updating Packages"
 apt-get update -qqy > $INSTALL_DIR/apt_update.log 2>&1
 apt-get upgrade -qqy > $INSTALL_DIR/apt_upgrade.log 2>&1
@@ -487,6 +489,10 @@ fi
 
 ## Load new .bashrc
 source /home/$username/.bashrc
+
+## Generate Hostname SSL
+echo "Generating hostname SSL Certificates"
+bash install-hostname-ssl -u $username
 
 ## Setup hostname site for phpmyadmin and other stuff
 if [ -z "$without_hostname_site" ]

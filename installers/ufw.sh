@@ -54,6 +54,8 @@ ufw allow 6220/tcp
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp
+## For General usage
+ufw allow 20000:21000/tcp
 ufw --force enable
 
 
