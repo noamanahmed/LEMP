@@ -61,3 +61,6 @@ The installation instructions have been moved to its own wiki page called
 - Server Hardening
 - Pushing backups to offsite storage as object storage etc 
 - Support for other programming languages like Go,Rust,.Net etc
+- Create restart-site script
+- Fix Hostname site and move different commonly used tools to path based hostname route + dedicated port access.
+- Create Joomla,Drupal,Magento,OpenCart etc installer
