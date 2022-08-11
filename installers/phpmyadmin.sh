@@ -35,6 +35,14 @@ php=8.1
 username=phpmyadmin
 password=phpmyadmin
 user_root=/opt/phpmyadmin
+
+
+## Delete linux user and processes
+pkill -9 -u $username 
+userdel -r -f $username > /dev/null 2>&1
+delgroup $username > /dev/null 2>&1
+rm -rf $user_root
+
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
@@ -56,7 +64,7 @@ mkdir -p $user_root/cache/nginx
 chown -R $username:$username $user_root
 
 # Setup PHP
-cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
+cp $template_path/phpmyadmin/php.conf /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
@@ -77,8 +85,6 @@ systemctl restart php$php-fpm
 # mysql -e "FLUSH PRIVILEGES;"
 
 
-fix-permissions -u $username
-
 ## Setting up phpmyadmin admin
 nginx_vhost_file="/etc/nginx/apps-available/phpmyadmin.conf"
 nginx_vhost_enabled="/etc/nginx/apps-enabled/phpmyadmin.conf"
@@ -86,7 +92,7 @@ cp $template_path/phpmyadmin/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/" $nginx_vhost_file
-sed -i "s/{{www_path}}/$(echo $user_root/public | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{www_path}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
 sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_file
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
