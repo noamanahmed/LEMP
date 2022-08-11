@@ -73,10 +73,10 @@ email=admin@$HOSTNAME
 
 ##Create user
 user_password="$(openssl rand -hex 12)"
-bash create-linux-user -u $username -p $user_password
+bash /opt/lemp/bin/create-linux-user -u $username -p $user_password
 
 ## Jail User for a php site
-bash jail-user -u $username
+bash /opt/lemp/bin/jail-user -u $username
 
 ## Adding user to groups
 usermod -a -G web $username
@@ -173,10 +173,10 @@ mkdir -p /backups/$username
 chown -R $username:web /backups/$username 
 
 ## Create SSH Key Pair for git
-bash create-ssh-key -u $username
+bash /opt/lemp/bin/create-ssh-key -u $username
 
 ## Switch php version to the one specified 
-bash toggle-php -u $username -p $php
+bash /opt/lemp/bin/toggle-php -u $username -p $php
 
 ## Install composer dependencies for the laravel hostsite ( I will clean these commands later on)
 COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
@@ -184,24 +184,24 @@ cp /var/www/home/$username/www/.env.example /var/www/home/$username/www/.env
 /var/www/home/$username/.local/bin/php /var/www/home/$username/www/artisan key:generate
 
 ## Change env parameters
-bash set-env-param -u $username -s APP_URL -r APP_URL=\"https://$domain\"
+bash /opt/lemp/bin/set-env-param -u $username -s APP_URL -r APP_URL=\"https://$domain\"
 
 ## Fixing permissions
-bash fix-permissions -u $username
+bash /opt/lemp/bin/fix-permissions -u $username
 
 
 ## Setting up Logrotation
-bash logrotate-site -u $username -e yes
+bash /opt/lemp/bin/logrotate-site -u $username -e yes
 
 ## Disable caching
-bash disable-cache -u $username
+bash /opt/lemp/bin/disable-cache -u $username
 
-site_info_command="bash site-info $args -u $username -d $domain --ssh_password $user_password"
+site_info_command="bash /opt/lemp/bin/site-info $args -u $username -d $domain --ssh_password $user_password"
 
 site_info="$($site_info_command)"
 
 $site_info_command
 
-bash slack-notification -u $username -d $domain -m "$site_info" --success
+bash /opt/lemp/bin/slack-notification -u $username -d $domain -m "$site_info" --success
 
 

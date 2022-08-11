@@ -64,3 +64,4 @@ The installation instructions have been moved to its own wiki page called
 - Create restart-site script
 - Fix Hostname site and move different commonly used tools to path based hostname route + dedicated port access.
 - Create Joomla,Drupal,Magento,OpenCart etc installer
+- Setting up cron jobs to auto renew ssl, backup
