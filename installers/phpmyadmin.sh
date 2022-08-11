@@ -53,7 +53,6 @@ mkdir -p $www_root
 
 wget https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.zip -O /tmp/phpmyadmin.zip
 unzip -o -d /tmp/ /tmp/phpmyadmin.zip  
-rm -rf $user_root
 mv -f /tmp/phpMyAdmin-5.2.0-all-languages $www_root
 cp -rf $template_path/phpmyadmin/config.inc.php $www_root
 
