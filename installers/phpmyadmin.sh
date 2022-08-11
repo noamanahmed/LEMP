@@ -37,7 +37,7 @@ password=phpmyadmin
 user_root=/opt/phpmyadmin
 www_root=/opt/phpmyadmin/www
 
-## Delete linux user and processes
+## Reset Previous State
 pkill -9 -u $username 
 userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
@@ -48,11 +48,12 @@ rm -rf /etc/nginx/apps-enabled/phpmyadmin.conf
 # Create User
 adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
-
 mkdir -p $www_root
+
 
 wget https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.zip -O /tmp/phpmyadmin.zip
 unzip -o -d /tmp/ /tmp/phpmyadmin.zip  
+rm -rf $www_root
 mv -f /tmp/phpMyAdmin-5.2.0-all-languages $www_root
 cp -rf $template_path/phpmyadmin/config.inc.php $www_root
 
