@@ -50,6 +50,7 @@ adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
 
 mkdir -p $www_root
+
 wget https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.zip -O /tmp/phpmyadmin.zip
 unzip -o -d /tmp/ /tmp/phpmyadmin.zip  
 rm -rf $user_root
