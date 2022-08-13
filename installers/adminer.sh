@@ -32,17 +32,17 @@ fi
 
 
 php=8.1
-username=phpmyadmin
-password=phpmyadmin
-user_root=/opt/phpmyadmin
-www_root=/opt/phpmyadmin/www
+username=adminer
+password=adminer
+user_root=/opt/adminer
+www_root=/opt/adminer/www
 
 ## Reset Previous State
 pkill -9 -u $username 
 userdel -r -f $username > /dev/null 2>&1
 delgroup $username > /dev/null 2>&1
 rm -rf $user_root
-rm -rf /etc/nginx/apps-enabled/phpmyadmin.conf
+rm -rf /etc/nginx/apps-enabled/adminer.conf
 
 
 # Create User
@@ -50,12 +50,9 @@ adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
 mkdir -p $www_root
 
-
-wget https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-all-languages.zip -O /tmp/phpmyadmin.zip
-unzip -o -d /tmp/ /tmp/phpmyadmin.zip  
 rm -rf $www_root
-mv -f /tmp/phpMyAdmin-5.2.0-all-languages $www_root
-cp -rf $template_path/phpmyadmin/config.inc.php $www_root
+wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php -O $www_root/index.php
+#cp -rf $template_path/phpmyadmin/config.inc.php $www_root
 
 
 mkdir -p $user_root/logs/
@@ -74,7 +71,7 @@ sed -i "s/{{user_root}}/$(echo $user_root/www | sed 's/\//\\\//g')/" /etc/php/$p
 systemctl restart php$php-fpm
 
 ## Creating MYSQL user and database
-# Skipped PHPMyAdmin doesn't need a specific database for itself
+# Skipped Adminer doesn't need a specific database for itself
 # database_name="$(echo $username | head -c 12)"
 # database_user="$(echo $username | head -c 12)"
 # database_password="$(openssl rand -hex 8)"
@@ -90,9 +87,9 @@ systemctl restart php$php-fpm
 
 
 ## Setting up phpmyadmin admin
-nginx_vhost_file="/etc/nginx/apps-available/phpmyadmin.conf"
-nginx_vhost_enabled="/etc/nginx/apps-enabled/phpmyadmin.conf"
-cp $template_path/phpmyadmin/vhost.conf $nginx_vhost_file
+nginx_vhost_file="/etc/nginx/apps-available/adminer.conf"
+nginx_vhost_enabled="/etc/nginx/apps-enabled/adminer.conf"
+cp $template_path/adminer/vhost.conf $nginx_vhost_file
 
 sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
 sed -i "s/{{username}}/$username/" $nginx_vhost_file
