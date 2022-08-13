@@ -51,7 +51,7 @@ usermod -a -G $username nginx
 mkdir -p $www_root
 
 wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php -O $www_root/index.php
-#cp -rf $template_path/phpmyadmin/config.inc.php $www_root
+cp -rf $template_path/adminer/adminer.css $www_root
 
 
 mkdir -p $user_root/logs/
