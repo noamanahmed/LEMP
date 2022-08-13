@@ -35,11 +35,24 @@ then
 fi
 
 
-if [ ! -f "/etc/nginx/sites-available/$username.conf" ]
+if [ ! -f "/etc/nginx/sites-available/$username.conf" ]  &&  ! -f "/etc/nginx/apps-available/$username.conf" ]
 then
-    echo "No Vhost found for this user"    
+    echo "No Vhost found for this user/app"    
     exit;
 fi
 
-nano /etc/nginx/sites-available/$username.conf
-nginx -t
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    nano /etc/nginx/sites-available/$username.conf
+    nginx -t
+    exit;
+fi
+
+
+if [ -f "/etc/nginx/apps-available/$username.conf" ]
+then
+    nano /etc/nginx/sites-available/$username.conf
+    nginx -t
+    exit;
+fi
