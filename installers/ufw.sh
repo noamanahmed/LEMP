@@ -52,7 +52,9 @@ ufw allow 6210/tcp
 ##For Shellinabox
 ufw allow 6220/tcp 
 ##For PhpMyAdmin
-ufw allow 6230/tcp 
+ufw allow 6230/tcp
+##For Adminer
+ufw allow 6240/tcp 
 ##For Nginx
 ufw allow 80/tcp
 ufw allow 443/tcp
