@@ -35,7 +35,7 @@ then
 fi
 
 
-if [ ! -f "/etc/nginx/sites-available/$username.conf" ]  &&  ! -f "/etc/nginx/apps-available/$username.conf" ]
+if [ ! -f "/etc/nginx/sites-available/$username.conf" ]  && [ ! -f "/etc/nginx/apps-available/$username.conf" ]
 then
     echo "No Vhost found for this user/app"    
     exit;
