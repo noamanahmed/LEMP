@@ -50,7 +50,6 @@ adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
 mkdir -p $www_root
 
-rm -rf $www_root
 wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php -O $www_root/index.php
 #cp -rf $template_path/phpmyadmin/config.inc.php $www_root
 
