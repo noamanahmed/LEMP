@@ -30,4 +30,8 @@ fi
 chroot_home=/var/www/home/$username
 www_path=$chroot_home/www
 
+<<<<<<< Updated upstream
 $chroot_home/.local/bin/php /var/www/bin/wp --allow-root --path=$www_path user list
+=======
+/var/www/home/forexdf/.local/bin/php /var/www/bin/wp --allow-root --path=$www_path user list
+>>>>>>> Stashed changes
