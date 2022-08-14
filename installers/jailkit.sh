@@ -46,8 +46,12 @@ echo "Copying Certificates"
 jk_cp -j $chroot_path /etc/ssl/certs/ca-certificates.crt
 jk_cp -j $chroot_path /usr/share/git-core
 
+
 echo "Fixing SSL Issues"
 mkdir -p $chroot_path/usr/lib/ssl/
+cp -rf /etc/ssl/certs $chroot_path/etc/ssl
+ln -s /etc/ssl/certs $chroot_path/usr/lib/ssl/certs
+cp -rf /usr/share/ca-certificates/ $chroot_path/usr/share/
 cp -rf /usr/lib/ssl/openssl.cnf $chroot_path/usr/lib/ssl/
 
 echo "Copying Locales"

@@ -70,7 +70,7 @@ chown -R $username:$username $user_root
 # Setup PHP
 cp $template_path/phpmyadmin/php.conf /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
-sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{user_root}}/$(echo $user_root/www | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
 
 ## Creating MYSQL user and database
