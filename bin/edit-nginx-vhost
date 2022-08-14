@@ -1,0 +1,58 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:p: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit 1;
+fi
+
+
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit 1;
+fi
+
+
+if [ ! -f "/etc/nginx/sites-available/$username.conf" ]  && [ ! -f "/etc/nginx/apps-available/$username.conf" ]
+then
+    echo "No Vhost found for this user/app"    
+    exit;
+fi
+
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    nano /etc/nginx/sites-available/$username.conf
+    nginx -t
+    exit;
+fi
+
+
+if [ -f "/etc/nginx/apps-available/$username.conf" ]
+then
+    nano /etc/nginx/apps-available/$username.conf
+    nginx -t
+    exit;
+fi

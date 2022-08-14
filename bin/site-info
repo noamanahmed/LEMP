@@ -133,6 +133,7 @@ output+="Database name: $database_name\n"
 output+="Database user: $database_user_name\n"
 output+="Database password: $database_password\n"
 output+="phpMyAdmin: https://$HOSTNAME/phpmyadmin\n"
+output+="Adminer: https://$HOSTNAME/adminer\n"
 fi
 
 

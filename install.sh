@@ -86,6 +86,9 @@ while [ $# -gt 0 ]; do
         --without_phpmyadmin)
             without_phpmyadmin=yes
         ;;
+        --without_adminer)
+            without_adminer=yes
+        ;;
         --without_phppgadmin)
             without_phppgadmin=yes
         ;;        
@@ -156,6 +159,7 @@ while [ $# -gt 0 ]; do
             printf "\t--without_supervisor \n\tDisable supervisor Installation and Configurations\n"
             printf "\t--without_hostname_site \n\tDisable hostname_site Installation and Configurations\n"
             printf "\t--without_phpmyadmin \n\tDisable phpmyadmin Installation and Configurations\n"
+            printf "\t--without_adminer \n\tDisable adminer Installation and Configurations\n"
             printf "\t--without_phppgadmin \n\tDisable phppgadmin Installation and Configurations\n"
             printf "\t--with_postgres \n\tEnable Postgress Installation and Configurations \n"
             printf "\t--with_pgadmin \n\tEnable pgAdmin4 Installation and Configurations (Requires --with_postgres flag) \n"
@@ -506,6 +510,14 @@ then
     ## Install phpmyadmin
     echo "Installing phpmyadmin at $hostname"
     bash $DIR/installers/phpmyadmin.sh > $INSTALL_DIR/$username-phpmyadmin.sh.log 2>&1
+fi
+
+
+if [ -z "$without_adminer" ]
+then
+    ## Install adminer
+    echo "Installing adminer at $hostname"
+    bash $DIR/installers/adminer.sh > $INSTALL_DIR/$username-adminer.sh.log 2>&1
 fi
 
 if [ -z "$without_phppgadmin" ]
