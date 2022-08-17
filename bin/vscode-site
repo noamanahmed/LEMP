@@ -33,9 +33,10 @@ then
   exit  
 fi
 
-if ! groups | grep -qw "$username"; then
-    echo "Error! Please update groups in your terminal session first by running  update-groups command."
-    exit 0
-fi
+
+# if ! groups | grep -qw "$username"; then
+#     echo "Error! Please update groups in your terminal session first by running  update-groups command."
+#     exit 0
+# fi
 
 code /var/www/home/$username/www/
