@@ -46,9 +46,12 @@ do
     ((user_id++))    
 done
 
+
+echo "Creating Linux User"
+
 ##Create user
 adduser --gecos "" --uid $user_id --disabled-password --no-create-home $username
-usermod -a -G $username $username
+#usermod -a -G $username $username
 echo "$username:$user_password" | sudo chpasswd
 
 
@@ -64,3 +67,6 @@ XSession=gnome
 SystemAccount=true  
 EOT
 fi
+
+
+echo "Linux User Created"

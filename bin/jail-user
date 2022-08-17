@@ -48,6 +48,7 @@ chroot_home=/var/www/home/$username
 if [ ! -d "$chroot_home" ]
 then
     pkill -9 -u $username
+    echo "jk_jailuser -m -j $chroot_path --shell=/bin/bash $username"
     jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
 fi
 
