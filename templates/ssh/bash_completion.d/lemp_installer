@@ -23,6 +23,7 @@ complete -o nospace -F -user_name_script delete-site
 complete -o nospace -F -user_name_script enable-site
 complete -o nospace -F -user_name_script disable-site
 
+complete -o nospace -F -user_name_script clear-cache
 complete -o nospace -F -user_name_script enable-cache
 complete -o nospace -F -user_name_script disable-cache
 
@@ -30,11 +31,24 @@ complete -o nospace -F -user_name_script enable-ramdisk
 complete -o nospace -F -user_name_script disable-ramdisk
 
 complete -o nospace -F -user_name_script list-backups
+complete -o nospace -F -user_name_script restore-site
 
 complete -o nospace -F -user_name_script restart-site
 
 complete -o nospace -F -user_name_script edit-nginx-vhost
 complete -o nospace -F -user_name_script edit-php-fpm-pool
+complete -o nospace -F -user_name_script restart-php-fpm-pool
 
 
 complete -o nospace -F -create_site_php_script create-site-php
+
+
+complete -o nospace -F -user_name_script install-django
+complete -o nospace -F -user_name_script install-horizon
+complete -o nospace -F -user_name_script install-nvm
+complete -o nospace -F -user_name_script install-wp
+complete -o nospace -F -user_name_script install-wp-plugin
+
+complete -o nospace -F -user_name_script jail-user
+complete -o nospace -F -user_name_script nvm-user
+complete -o nospace -F -user_name_script wp-users
