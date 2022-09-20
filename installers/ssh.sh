@@ -37,6 +37,7 @@ mkdir -p /home/$username/.ssh
 cp -rf $template_path/ssh/.ssh/* /home/$username/.ssh/
 cp -rf $template_path/ssh/.profile /home/$username/
 cp -rf $template_path/ssh/.bashrc /home/$username/
+cp -rf $template_path/ssh/bash_completion.d/* /etc/bash_completion.d/
 chown -R $username:$username /home/$username/.ssh
 chown -R $username:$username /home/$username/.profile
 chown -R $username:$username /home/$username/.bashrc
