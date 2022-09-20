@@ -7,6 +7,15 @@
   esac
 }
 
+-create_site_php_script()
+{
+  php_versions_array="8.1 8.0 7.4 7.3 7.2 7.1 7.0 5.6"
+  
+  case $3 in
+    --php) COMPREPLY=($(compgen -W "${php_versions_array}" "${COMP_WORDS[$COMP_CWORD]}"));;
+  esac
+}
+
 complete -o nospace -F -user_name_script enter-site
 complete -o nospace -F -user_name_script vscode-site
 complete -o nospace -F -user_name_script delete-site
@@ -21,3 +30,11 @@ complete -o nospace -F -user_name_script enable-ramdisk
 complete -o nospace -F -user_name_script disable-ramdisk
 
 complete -o nospace -F -user_name_script list-backups
+
+complete -o nospace -F -user_name_script restart-site
+
+complete -o nospace -F -user_name_script edit-nginx-vhost
+complete -o nospace -F -user_name_script edit-php-fpm-pool
+
+
+complete -o nospace -F -create_site_php_script create-site-php
