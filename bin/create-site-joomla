@@ -258,6 +258,7 @@ joomla_password="$(openssl rand -hex 8)"
 joomla_password_hashed="$(echo -n "$joomla_password" | md5sum | awk '{ print $1 }' )"
 db_prefix="jos_lemp_"
 joomla_user_id=1;
+current_date=$(date '+%F %T')
 
 sed -i "s/\$user = ''/\$user = '${database_user}'/" $www_path/installation/configuration.php-dist
 sed -i "s/\$password = ''/\$password = '${database_password}'/" $www_path/installation/configuration.php-dist
@@ -277,8 +278,8 @@ sed -i "s/#__/${db_prefix}/" $www_path/installation/sql/mysql/supports.sql
 cat $www_path/installation/sql/mysql/base.sql | mysql -u $database_user --password=$database_password -h 127.0.0.1 $database_name
 cat $www_path/installation/sql/mysql/extensions.sql | mysql -u $database_user --password=$database_password -h 127.0.0.1 $database_name
 cat $www_path/installation/sql/mysql/supports.sql | mysql -u $database_user --password=$database_password -h 127.0.0.1 $database_name
-echo "INSERT INTO \`${db_prefix}users\` (\`id\`, \`name\`, \`username\`, \`email\`, \`password\`, \`block\`, \`sendEmail\`, \`registerDate\`, \`lastvisitDate\`, \`activation\`, \`params\`, \`lastResetTime\`, \`resetCount\`, \`otpKey\`, \`otep\`, \`requireReset\`) VALUES ('${joomla_user_id}', 'Me', '${username}', '${email}', '${joomla_password_hashed}', '0', '0', '0000-00-00 00:00:00.000000', '0000-00-00 00:00:00.000000', '', '', '0000-00-00 00:00:00', '0', '', '', '0');" | mysql -u $database_user --password=$database_password -h 127.0.0.1  $database_name
-echo "INSERT INTO \`${db_prefix}user_usergroup_map\` (\`user_id\`, \`group_id\`) VALUES ('${JUSERID}', '8');" | mysql -u $DBUSER --password=$DBPASS $DB
+echo "INSERT INTO \`${db_prefix}users\` (\`id\`, \`name\`, \`username\`, \`email\`, \`password\`, \`block\`, \`sendEmail\`, \`registerDate\`, \`lastvisitDate\`, \`activation\`, \`params\`, \`lastResetTime\`, \`resetCount\`, \`otpKey\`, \`otep\`, \`requireReset\`) VALUES ('${joomla_user_id}', 'Me', '${username}', '${email}', '${joomla_password_hashed}', '0', '0', '${current_date}', '${current_date}', '', '', '${current_date}', '0', '', '', '0');" | mysql -u $database_user --password=$database_password -h 127.0.0.1  $database_name
+echo "INSERT INTO \`${db_prefix}user_usergroup_map\` (\`user_id\`, \`group_id\`) VALUES ('${joomla_user_id}', '8');" | mysql -u $database_name --password=$database_password $database_name
 joomla_user_inc=$((joomla_user_id+1))
 echo "ALTER TABLE \`${db_prefix}users\` auto_increment = ${joomla_user_inc};" | mysql -u $database_user --password=$database_password $database_name
 rm -rf $www_path/installation/

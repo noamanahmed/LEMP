@@ -52,3 +52,8 @@ complete -o nospace -F -user_name_script install-wp-plugin
 complete -o nospace -F -user_name_script jail-user
 complete -o nospace -F -user_name_script nvm-user
 complete -o nospace -F -user_name_script wp-users
+
+complete -o nospace -F -user_name_script toggle-php
+complete -o nospace -F -user_name_script toggle-python
+complete -o nospace -F -user_name_script toggle-node
+
