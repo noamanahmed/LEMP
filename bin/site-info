@@ -76,6 +76,10 @@ while [ $# -gt 0 ]; do
       php="$2"
       shift
       ;;
+    --version)
+      version="$2"
+      shift
+      ;;
     --wordpress)
       wordpress=yes
       ;;
@@ -83,6 +87,13 @@ while [ $# -gt 0 ]; do
       wp_password="$2"
       shift
       ;;      
+    --joomla)
+      joomla=yes
+      ;;
+    --joomla_password)
+      joomla_password="$2"
+      shift
+      ;;    
     --laravel)
       laravel=yes
       ;;
@@ -99,7 +110,7 @@ while [ $# -gt 0 ]; do
       printf "***************************\n"
       printf "* Error: Invalid argument. $1 *\n"
       printf "***************************\n"      
-      exit 1
+      #exit 1
   esac  
   shift
 done
@@ -125,7 +136,15 @@ output+="\n"
 
 fi
 
-if [ -n "$wordpress" ] || [ -n "$mysql" ]
+if [ -n "$joomla" ]
+then
+output+="\n"
+output+="Joomla Admin user: $username\n"
+output+="Joomla password: $joomla_password\n"
+output+="\n"
+
+fi
+if [ -n "$wordpress" ] ||  [ -n "$joomla" ]  || [ -n "$mysql" ]
 then
 output+="\n"
 output+="MySQL Database Credentials\n"
