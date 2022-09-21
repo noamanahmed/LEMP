@@ -117,6 +117,13 @@ done
 
 ssh_port=$( netstat -tulnp | grep ssh  | grep -oP '0.0.0.0:\K([0-9]*)')
 
+protocol="https"
+
+if [ -z "$local" ]
+then  
+  protocol="http"  
+fi
+
 output=""
 output+="\n"
 output+="Site Setup succssfull\n"
@@ -151,8 +158,8 @@ output+="MySQL Database Credentials\n"
 output+="Database name: $database_name\n"
 output+="Database user: $database_user_name\n"
 output+="Database password: $database_password\n"
-output+="phpMyAdmin: https://$HOSTNAME/phpmyadmin\n"
-output+="Adminer: https://$HOSTNAME/adminer\n"
+output+="phpMyAdmin: $protocol://$HOSTNAME/phpmyadmin\n"
+output+="Adminer: $protocol://$HOSTNAME/adminer\n"
 fi
 
 
@@ -163,7 +170,7 @@ output+="Postgres Database Credentials\n"
 output+="Database name: $database_name\n"
 output+="Database user: $database_user_name\n"
 output+="Database password: $database_password\n"
-output+="phppgadmin : https://$HOSTNAME/phppgadmin\n"
+output+="phppgadmin : $protocol://$HOSTNAME/phppgadmin\n"
 fi
 
 output+="\n"
@@ -185,7 +192,7 @@ if systemctl is-active --quiet  shellinabox
   then 
   output+="\n"
   output+="Web SSH Details\n"
-  output+="https://$HOSTNAME:6220/\n"
+  output+="$protocol://$HOSTNAME:6220/\n"
 fi
 
 
