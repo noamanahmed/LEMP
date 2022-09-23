@@ -36,21 +36,28 @@ user_root=/var/www/home/$username
 www_path=$user_root/www
 
 
-
+echo "Fixing Permissions for User $username. (This might take a while)"
 
 # If we are running things locally,we can ease the permissions for same group
 if [ -n "$local" ]
 then
   chown -R $username:web /var/www/home/$username
   chmod 770 /var/www/home/$username
-  find $www_path -type d -exec chmod 770 {} \;
-  find $www_path -type f -exec chmod 660 {} \;
+  find $www_path -type d -print0 | xargs -0 chmod 770 
+  find $www_path -type f -print0 | xargs -0 chmod 660 
+
+  #find $www_path -type d -exec chmod 770 {} \;
+  #find $www_path -type f -exec chmod 660 {} \;
 else
     # Otherwise lets make it non accessible for others
     chown -R $username:$username /var/www/home/$username
     chmod 710 /var/www/home/$username    
-    find $www_path -type d -exec chmod 750 {} \;
-    find $www_path -type f -exec chmod 640 {} \;
+
+    find $www_path -type d -print0 | xargs -0 chmod 750 
+    find $www_path -type f -print0 | xargs -0 chmod 640
+     
+    #find $www_path -type d -exec chmod 750 {} \;
+    #find $www_path -type f -exec chmod 640 {} \;
     
     if [ -d "/var/www/home/$username/logs/php" ]
     then
@@ -65,4 +72,4 @@ else
     
 fi
 
-
+echo "Completed Fixing Permissions for User $username "

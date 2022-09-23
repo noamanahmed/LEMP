@@ -23,10 +23,14 @@ while [ $# -gt 0 ]; do
       domain="$2"
       shift
       ;;
+    --version)
+      version="$2"
+      shift
+      ;;
     --php)
       php="$2"
       shift
-      ;;
+      ;; 
     --nvm)
       nvm=yes
       ;;
@@ -85,6 +89,14 @@ if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
     exit 1;
 fi
 
+magento_versions_array=("1" "2")
+
+if [[ ! " ${magento_versions_array[*]} " =~ " ${version} " ]]; then
+    echo "This is not a valid magento Version"
+    exit 1;
+fi
+
+
 if ! systemctl is-active --quiet nginx
   then 
   echo "Nginx is not running! Aborting!"
@@ -132,7 +144,6 @@ service nginx reload
 chroot_path=/var/www
 user_root=/home/$username
 chroot_home=$chroot_path/$user_root
-fastcgi_path=/home/$username/www
 
 mkdir -p $chroot_home
 mkdir -p $chroot_home/logs
@@ -143,13 +154,10 @@ mkdir -p $chroot_home/cache
 mkdir -p $chroot_home/cache/nginx
 mkdir -p $chroot_home/www/
 
-www_path=$chroot_home/www 
 
-if [ -n "$laravel" ]
-then
-  www_path=$chroot_home/www/public
-  fastcgi_path=/home/$username/www/public
-fi
+www_path=$chroot_home/www/pub
+fastcgi_path=/home/$username/www/pub
+
 
 
 #mkdir -p "$user_root/cache/php"
@@ -236,12 +244,69 @@ then
   bash install-nvm -u $username
 fi
 
+## Setup Magento
+rm -rf $chroot_home/www
+
+magento_password="$(openssl rand -hex 8)"
+magento_password_hashed="$(echo -n "$magento_password" | md5sum | awk '{ print $1 }' )"
+db_prefix="magento_lemp_"
+magento_user_id=1;
+current_date=$(date '+%F %T')
+encryption_key=$(openssl rand -hex 16)
+
+if (( $(echo "$version == 2" |bc -l) ))
+then
+  if [ ! -f "/tmp/magento_2.zip" ] 
+  then
+    wget -O /tmp/magento_2.zip https://github.com/magento/magento2/archive/refs/tags/2.4.5.zip  
+  fi      
+  unzip -o /tmp/magento_2.zip -d $chroot_home/  
+  mv $chroot_home/magento2-2.4.5 $chroot_home/www
+fi
+
+
+if (( $(echo "$version == 1" |bc -l) ))
+then    
+  if [ ! -f "/tmp/magento_1.zip" ] 
+  then
+    wget -O /tmp/magento_1.zip https://github.com/OpenMage/magento-mirror/archive/refs/tags/1.9.4.5.zip  
+  fi
+
+  unzip -o /tmp/magento_1.zip -d $chroot_home/www    
+  mv $chroot_home/magento-mirror-1.9.4.5 $chroot_home/www
+  
+fi
+
+
+
+## Switch php version to the one specified 
+bash toggle-php -u $username -p $php
+
+## Install Compose Dependencies
+COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
+chmod +x $chroot_home/www/bin/magento
+
+
+
+install_cmd="$chroot_home/.local/bin/php $chroot_home/www/bin/magento setup:install --key=$encryption_key  --backend-frontname=admin --session-save=files --db-host=127.0.0.1 --db-name=$database_name --db-user=$database_user --db-password=$database_password --base-url=http://$domain --base-url-secure=https://$domain --admin-user=$username --admin-password=$magento_password --admin-email=$email --admin-firstname=$username --admin-lastname=$username"
+printf "$install_cmd"
+$install_cmd
 
 ## Fixing permissions
 bash fix-permissions -u $username
 
-## Switch php version to the one specified 
-bash toggle-php -u $username -p $php
+# if (( $(echo "$version == 2" |bc -l) ))
+# then      
+
+  
+# fi
+
+# if (( $(echo "$version == 1" |bc -l) ))
+# then      
+  
+# fi
+
+
 
 ## Setting up Logrotation
 bash logrotate-site -u $username -e yes
@@ -254,7 +319,10 @@ then
   bash create-monitor -u $username -d $domain
 fi
 
+
 site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql yes "
+site_info_command+=" --magento --magento_password $magento_password"
+
  
 site_info="$($site_info_command)"
 

@@ -57,3 +57,5 @@ complete -o nospace -F -user_name_script toggle-php
 complete -o nospace -F -user_name_script toggle-python
 complete -o nospace -F -user_name_script toggle-node
 
+complete -o nospace -F -user_name_script fix-permissions
+
