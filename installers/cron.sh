@@ -13,7 +13,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 cp $template_path/cron/certbot /var/spool/cron/root
-crontab -u root /var/spool/cron/certbot/root
+crontab -u root /var/spool/cron/root
 rm /var/spool/cron/root
 
 crontab -u root $template_path/cron/certbot
