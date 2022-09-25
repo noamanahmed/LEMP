@@ -11,9 +11,10 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
-cp $template_path/cron/certbot /var/spool/cron/
-crontab -u root /var/spool/cron/certbot
-rm /var/spool/cron/certbot
+
+cp $template_path/cron/certbot /var/spool/cron/root
+crontab -u root /var/spool/cron/certbot/root
+rm /var/spool/cron/root
 
 crontab -u root $template_path/cron/certbot
 crontab -u root $template_path/cron/mailserver
