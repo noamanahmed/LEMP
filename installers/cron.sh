@@ -12,5 +12,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-crontab $template_path/cron/*
+crontab $template_path/cron/certbot
+crontab $template_path/cron/mailserver
+crontab $template_path/cron/backup-sites
 

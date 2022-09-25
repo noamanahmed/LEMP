@@ -527,6 +527,8 @@ then
     bash $DIR/installers/phppgadmin.sh > $INSTALL_DIR/$username-phppgadmin.sh.log 2>&1
 fi
 
+echo "Installing Cron"
+bash $DIR/installers/cron.sh > $INSTALL_DIR/cron.sh.log 2>&1
 
 
 
