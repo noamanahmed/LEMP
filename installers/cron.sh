@@ -12,7 +12,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-crontab -u root $template_path/cron/certbot
-# crontab -u root $template_path/cron/mailserver
-# crontab -u root $template_path/cron/backup-sites
+(crontab -u root -l; echo $(cat $template_path/cron/certbot)) | sort -u | crontab -u root -
+(crontab -u root -l; echo $(cat $template_path/cron/backup-sites)) | sort -u | crontab -u root -
+(crontab -u root -l; echo $(cat $template_path/cron/mailserver)) | sort -u | crontab -u root -
 
