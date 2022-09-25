@@ -534,8 +534,8 @@ bash $DIR/installers/cron.sh > $INSTALL_DIR/cron.sh.log 2>&1
 
 end=$(date +%s)
 seconds=$(echo "$end - $start" | bc)
-echo "Time Taken to install: "
 seconds=$(awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/3600000, t/60000%60, t/1000%60}')
+echo "Time Taken to install: $seconds"
 
 bash slack-notification -u $username -d $hostname -m "Installation completed: $hostname Time Taken: $seconds " --success
 
