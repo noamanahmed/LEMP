@@ -1,0 +1,82 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts a: flag
+do
+    case "${flag}" in
+        a) username=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide an app name using -a "
+    exit
+fi
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+user_root=/opt/$username
+www_path=$user_root/www
+
+
+if [ ! -d "$www_path" ] 
+then
+    echo "There is no www path to fix permissions. Aborting!"    
+    exit;
+fi
+
+
+echo "Fixing Permissions for App $username. (This might take a while)"
+
+# If we are running things locally,we can ease the permissions for same group
+if [ -n "$local" ]
+then
+  chown -R $username:web /opt/$username
+  chmod 770 /opt/$username
+  find $www_path -type d -print0 | xargs -0 chmod 770 
+  find $www_path -type f -print0 | xargs -0 chmod 660 
+
+  #find $www_path -type d -exec chmod 770 {} \;
+  #find $www_path -type f -exec chmod 660 {} \;
+else
+    # Otherwise lets make it non accessible for others
+    chown -R $username:$username /opt/$username
+    chmod 710 /opt/$username    
+
+    find $www_path -type d -print0 | xargs -0 chmod 750 
+    find $www_path -type f -print0 | xargs -0 chmod 640
+     
+    #find $www_path -type d -exec chmod 750 {} \;
+    #find $www_path -type f -exec chmod 640 {} \;
+    
+    if [ -d "/opt/$username/logs/php" ]
+    then
+        chown -R $username:$username /opt/$username/logs/php
+    fi
+
+    if [ -d "/opt/$username/cache/nginx" ]
+    then
+        chown -R nginx:nginx /opt/$username/cache/nginx  
+    fi
+    
+    
+fi
+
+echo "Completed Fixing Permissions for App $username "
