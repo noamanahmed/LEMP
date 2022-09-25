@@ -39,6 +39,12 @@ then
     exit;
 fi
 
+sed -i -E 's/listen ([0-9]+) ssl/listen \1/g'  /etc/nginx/sites-available/$username.conf
+sed -i -E 's/[^#]error_page 497/#error_page 497/g'  /etc/nginx/sites-available/$username.conf
+sed -i -E 's/[^#]ssl_certificate /#ssl_certificate /g'  /etc/nginx/sites-available/$username.conf
+sed -i -E 's/[^#]ssl_certificate_key /#ssl_certificate_key /g'  /etc/nginx/sites-available/$username.conf
+sed -i -E 's/[^#]include \/etc\/letsencrypt\/options-ssl-nginx.conf/#include \/etc\/letsencrypt\/options-ssl-nginx.conf/g'  /etc/nginx/sites-available/$username.conf
+sed -i -E 's/[^#]ssl_dhparam /#ssl_dhparam /g'  /etc/nginx/sites-available/$username.conf
 
 
 nginx -t && service nginx reload
