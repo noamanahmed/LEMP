@@ -102,3 +102,7 @@ sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_fi
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
 
+if [ -f "/opt/lemp_local_install" ]
+then
+    bash disable-app-ssl -a $username
+fi

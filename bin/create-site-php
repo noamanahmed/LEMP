@@ -193,6 +193,16 @@ mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhos
 mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
 mysql -e "FLUSH PRIVILEGES;"
 
+
+touch $chroot_home/.my.cnf
+chown $username:$username $chroot_home/.my.cnf
+
+echo '[client]' >> $chroot_home/.my.cnf
+echo "user=$database_user" >> $chroot_home/.my.cnf
+echo "host=127.0.0.1" >> $chroot_home/.my.cnf
+
+
+
 ## Creating nginx settings
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"

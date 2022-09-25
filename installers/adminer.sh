@@ -50,8 +50,10 @@ adduser --gecos "" --disabled-password  --home $user_root  $username
 usermod -a -G $username nginx
 mkdir -p $www_root
 
-wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php -O $www_root/index.php
+wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php -O $www_root/adminer.php
 cp -rf $template_path/adminer/adminer.css $www_root
+cp -rf $template_path/adminer/index.php $www_root
+cp -rf $template_path/adminer/plugins $www_root
 
 
 mkdir -p $user_root/logs/
@@ -64,7 +66,7 @@ mkdir -p $user_root/cache/nginx
 chown -R $username:$username $user_root
 
 # Setup PHP
-cp $template_path/phpmyadmin/php.conf /etc/php/$php/fpm/pool.d/$username.conf
+cp $template_path/adminer/php.conf /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{user_root}}/$(echo $user_root/www | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
@@ -85,7 +87,7 @@ systemctl restart php$php-fpm
 # mysql -e "FLUSH PRIVILEGES;"
 
 
-## Setting up phpmyadmin admin
+## Setting up adminer admin
 nginx_vhost_file="/etc/nginx/apps-available/adminer.conf"
 nginx_vhost_enabled="/etc/nginx/apps-enabled/adminer.conf"
 cp $template_path/adminer/vhost.conf $nginx_vhost_file
@@ -97,4 +99,11 @@ sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" $nginx_vhost_fi
 
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
+
+if [ -f "/opt/lemp_local_install" ]
+then
+    bash disable-app-ssl -a $username
+fi
+
+
 
