@@ -53,4 +53,4 @@ echo "Clearing Cache"
 clear-cache -u $username
 
 
-echo "$username site Disabled"
+echo "$username site SSL Disabled"

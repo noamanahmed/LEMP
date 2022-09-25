@@ -7,7 +7,7 @@ function adminer_object() {
     foreach (glob("plugins/*.php") as $filename) {
         include_once "./$filename";
     }
-    
+     
     // enable extra drivers just by including them
     //~ include "./plugins/drivers/simpledb.php";
     
@@ -16,8 +16,11 @@ function adminer_object() {
             "MySQL" => array( "server" =>"127.0.0.1", "driver"=> "server" ),
             "PostgreSQL" => array( "server" =>"127.0.0.1", "driver"=> "pgsql" )
         ]),
+        new AdminerCSS([
+            'adminer/adminer.css'
+        ])
     );
-   
+    
     
     return new AdminerPlugin($plugins);
 }
