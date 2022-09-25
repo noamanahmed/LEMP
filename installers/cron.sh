@@ -12,4 +12,5 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+crontab $template_path/cron/*
 
