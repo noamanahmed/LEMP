@@ -28,3 +28,6 @@ systemctl restart nginx
 #https://www.linuxbabe.com/mail-server/postfix-amavis-spamassassin-clamav-ubuntu
 #https://www.linuxbabe.com/mail-server/block-email-spam-check-header-body-with-postfix-spamassassin
 #https://www.linuxbabe.com/mail-server/setting-up-dkim-and-spf
+
+
+touch $LEMP_FLAG_DIR/MAILSERVER_INSTALLED

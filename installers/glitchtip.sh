@@ -99,3 +99,5 @@ fi
 
 # ln -s $nginx_vhost_file $nginx_vhost_enabled
 # systemctl reload nginx
+
+touch $LEMP_FLAG_DIR/GLITCHTIP_INSTALLED

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -27,3 +34,4 @@ chmod +x /usr/local/bin/composer1
 chmod +x /usr/local/bin/composer2
 
 
+touch $LEMP_FLAG_DIR/COMPOSER_INSTALLED

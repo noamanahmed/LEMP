@@ -157,3 +157,6 @@ fi
 
 echo "Copying custom binaries for Jailed users"
 cp -rf $template_path/jailkit/bin/* $chroot_bin_path
+
+
+touch $LEMP_FLAG_DIR/JAILKIT_INSTALLED

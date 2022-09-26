@@ -16,3 +16,6 @@ apt install arj bzip2 cabextract cpio rpm2cpio file gzip lhasa nomarch pax rar u
 apt install amavisd-new -qqy
 
 
+touch $LEMP_FLAG_DIR/AMAVISD_INSTALLED
+
+

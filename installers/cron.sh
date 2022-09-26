@@ -16,3 +16,6 @@ fi
 (crontab -u root -l; echo "$(cat $template_path/cron/backup-sites)" ) | sort -u | crontab -u root -
 (crontab -u root -l; echo "$(cat $template_path/cron/mailserver)" ) | sort -u | crontab -u root -
 
+
+
+touch $LEMP_FLAG_DIR/CRON_INSTALLED

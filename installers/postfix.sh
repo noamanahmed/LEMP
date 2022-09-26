@@ -17,3 +17,5 @@ apt-get install --assume-yes postfix postfix-mysql
 systemctl stop postfix
 
 
+
+touch $LEMP_FLAG_DIR/POSTFIX_INSTALLED

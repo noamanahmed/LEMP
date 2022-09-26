@@ -1,5 +1,12 @@
 #!/bin/bash
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
@@ -56,3 +63,7 @@ fi
 
 # For Virtualenv 
 apt install virtualenv -qqy
+
+
+touch $LEMP_FLAG_DIR/PYTHON_INSTALLED
+touch $LEMP_FLAG_DIR/VIRTUALENV_INSTALLED

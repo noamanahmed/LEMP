@@ -12,3 +12,6 @@ if [ "$EUID" -ne 0 ]
 fi
 
 apt install default-jre -y
+
+
+touch $LEMP_FLAG_DIR/JAVA_INSTALLED

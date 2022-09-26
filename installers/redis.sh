@@ -23,3 +23,5 @@ password=$(openssl rand -hex 32)
 sed -i "s/{{password}}/$password/" /etc/redis/redis.conf
 usermod -a -G nginx redis
 systemctl restart redis.service
+
+touch $LEMP_FLAG_DIR/REDIS_INSTALLED

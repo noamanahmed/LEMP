@@ -32,3 +32,5 @@ systemctl enable kafka
 
 
 
+touch $LEMP_FLAG_DIR/KAFKA_INSTALLED
+touch $LEMP_FLAG_DIR/ZOOKEEPER_INSTALLED

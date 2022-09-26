@@ -22,3 +22,6 @@ server_ip=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
 sed -i "s/{{server_ip}}/$server_ip/" /etc/zabbix/zabbix_agentd.conf
 sed -i "s/{{domain}}/$HOSTNAME/" /etc/zabbix/zabbix_agentd.conf
 systemctl restart zabbix-agent
+
+
+touch $LEMP_FLAG_DIR/ZABBIX_INSTALLED

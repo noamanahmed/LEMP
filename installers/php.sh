@@ -40,3 +40,5 @@ for php_version in ${php_versions_array[@]}; do
     ln -s $(which php$php_version) /usr/bin/$(echo "php$php_version" | sed 's/\.//')
   fi
 done
+
+touch $LEMP_FLAG_DIR/PHP_INSTALLED

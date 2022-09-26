@@ -27,3 +27,6 @@ sed -i "s/{{security_key}}/$(openssl rand -hex 24)/" /etc/systemd/system/meilise
 systemctl daemon-reload
 systemctl start meilisearch
 systemctl enable meilisearch
+
+
+touch $LEMP_FLAG_DIR/MEILISEARCH_INSTALLED

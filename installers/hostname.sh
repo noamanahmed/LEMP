@@ -26,3 +26,4 @@ fi
 sed -i "s/$HOSTNAME/$hostname/" /etc/hostname
 sed -i "s/$HOSTNAME/$hostname/" /etc/hosts
 hostnamectl
+

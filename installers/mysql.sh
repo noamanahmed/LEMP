@@ -33,3 +33,5 @@ mysql -ve "FLUSH PRIVILEGES;"
 
 echo "Database Username : $masterUser"
 echo "Database Password : $masterPassword"
+
+touch $LEMP_FLAG_DIR/MYSQL_INSTALLED

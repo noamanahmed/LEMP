@@ -125,3 +125,6 @@ adduser vmail --gecos --system --group --uid 2000 --disabled-login --no-create-h
 
 mkdir -p /var/vmail/
 chown -R vmail:vmail /var/vmail/ 
+
+
+touch $LEMP_FLAG_DIR/POSTFIX_ADMIN_INSTALLED

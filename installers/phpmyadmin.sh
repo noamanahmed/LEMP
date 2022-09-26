@@ -108,3 +108,6 @@ then
 fi
 
 bash fix-app-permissions -a $username
+
+
+touch $LEMP_FLAG_DIR/PHPMYADMIN_INSTALLED

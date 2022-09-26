@@ -20,3 +20,5 @@ apt install postgresql-14 -qqy
 sudo -u postgres createuser -s $(whoami); createdb $(whoami)
 psql -c 'REVOKE connect ON DATABASE root FROM PUBLIC'
 psql -c 'REVOKE connect ON DATABASE postgres FROM PUBLIC'
+
+touch $LEMP_FLAG_DIR/POSTGRES_INSTALLED

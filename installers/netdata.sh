@@ -47,3 +47,4 @@ sed -i "s/{{domain}}/$HOSTNAME/" $nginx_vhost_file
 ln -s $nginx_vhost_file $nginx_vhost_enabled
 systemctl reload nginx
 
+touch $LEMP_FLAG_DIR/NETDATA_INSTALLED

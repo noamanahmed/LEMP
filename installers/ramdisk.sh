@@ -11,3 +11,6 @@ fi
 
 sudo mkdir -p /var/cache/nginx/ramcache
 sudo mount -t tmpfs -o size=1G tmpfs /var/cache/nginx/ramcache
+
+
+touch $LEMP_FLAG_DIR/RAMDISK_INSTALLED

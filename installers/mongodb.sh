@@ -22,3 +22,5 @@ apt install mongodb -qqy
 cp $template_path/mongodb/mongodb.conf /etc/mongodb/mongodb.conf
 systemctl stop mongodb
 systemctl enable --now mongodb
+
+touch $LEMP_FLAG_DIR/MONGODB_INSTALLED

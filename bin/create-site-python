@@ -233,9 +233,6 @@ then
 
 fi
 
-
-
-
 ## Creating nginx settings with reverse proxy
 nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
 nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
@@ -306,10 +303,6 @@ if [ -z "$no_monitoring" ]
 then
   bash create-monitor -u $username -d $domain
 fi
-
-
-
-
 
 site_info_command="bash site-info $args --ssh_password $user_password "
 

@@ -74,3 +74,6 @@ systemctl reload nginx
 
 #Salt select value from keys where name = 'SECURITY_PASSWORD_SALT';
 #Insert into user (username,email,password,active,fs_uniquifier) values ('test','test@gmail.com','password',1,123);
+
+
+touch $LEMP_FLAG_DIR/PGADMIN_INSTALLED

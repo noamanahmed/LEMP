@@ -52,6 +52,6 @@ systemctl restart nginx
 systemctl enable nginx
 
 
-
+touch $LEMP_FLAG_DIR/NGINX_INSTALLED
 
 

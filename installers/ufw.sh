@@ -1,5 +1,12 @@
 #!/bin/bash
 
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -63,3 +70,4 @@ ufw allow 20000:21000/tcp
 ufw --force enable
 
 
+touch $LEMP_FLAG_DIR/UFW_INSTALLED

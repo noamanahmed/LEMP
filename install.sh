@@ -223,6 +223,9 @@ start=$(date +%s)
 
 INSTALL_DIR=/tmp/lemp_$(openssl rand -hex 12)
 mkdir -p $INSTALL_DIR
+
+mkdir -p $LEMP_FLAG_DIR
+
 echo ""
 echo "Installing Directory in $INSTALL_DIR"
 

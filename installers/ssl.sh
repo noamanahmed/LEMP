@@ -24,3 +24,7 @@ virtualenv /opt/certbot
 ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 mkdir -p /etc/letsencrypt/
 cp -rf $template_path/letsencrypt/* /etc/letsencrypt/
+
+
+
+touch $LEMP_FLAG_DIR/LETSENCRYPT_INSTALLED

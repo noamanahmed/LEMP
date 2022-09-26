@@ -14,3 +14,6 @@ fi
 
 apt install rkhunter -qqy
 cp -rf $template_path/rkhunter/rkhunter.conf /etc/rkhunter.conf
+
+
+touch $LEMP_FLAG_DIR/RKHUNTER_INSTALLED

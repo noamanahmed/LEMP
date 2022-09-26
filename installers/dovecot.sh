@@ -31,3 +31,5 @@ for dovecot_file in ${dovecot_files_array[@]}; do
 done
 
  
+
+touch $LEMP_FLAG_DIR/DOVECOT_INSTALLED
