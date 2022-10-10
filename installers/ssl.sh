@@ -21,6 +21,7 @@ mkdir -p /opt/certbot
 virtualenv /opt/certbot
 /opt/certbot/bin/pip install --upgrade pip
 /opt/certbot/bin/pip install certbot
+/opt/certbot/bin/pip install certbot-nginx
 ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 mkdir -p /etc/letsencrypt/
 cp -rf $template_path/letsencrypt/* /etc/letsencrypt/
