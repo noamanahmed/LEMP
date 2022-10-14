@@ -51,6 +51,7 @@ for php_version in ${php_versions_array[@]}; do
     fi
     cp $template_path/monit/php-fpm/$php_version.conf /etc/monit/conf-available/php-$php_version
     ln -s /etc/monit/conf-available/php-$php_version /etc/monit/conf-enabled/    
+    monitor monit php$php_version-fpm
 done
 
 
@@ -61,9 +62,13 @@ cp $template_path/monit/system.conf /etc/monit/conf-available/
 ln -s /etc/monit/conf-available/diskspace.conf /etc/monit/conf-enabled/  
 ln -s /etc/monit/conf-available/system.conf /etc/monit/conf-enabled/  
 
+monit monitor mysqld
+monit monitor nginx
+monit monitor crond
+monit monitor sshd
+
 systemctl restart monit
 systemctl enable monit
-
 
 nginx_vhost_file="/etc/nginx/apps-available/monit.conf"
 nginx_vhost_enabled="/etc/nginx/apps-enabled/monit.conf"
