@@ -37,10 +37,11 @@ cp $template_path/monit/monitrc /etc/monit/monitrc
 sed -i "s/{{username}}/$username/" /etc/monit/monitrc
 sed -i "s/{{password}}/$password/" /etc/monit/monitrc
 chmod 600 /etc/monit/monitrc
-ln -s /etc/monit/conf-available/nginx /etc/monit/conf-enabled/
-ln -s /etc/monit/conf-available/mysql /etc/monit/conf-enabled/
-ln -s /etc/monit/conf-available/openssh-server /etc/monit/conf-enabled/
-ln -s /etc/monit/conf-available/cron /etc/monit/conf-enabled/
+ln -s $template_path/monit/nginx.conf /etc/monit/conf-enabled/nginx
+ln -s $template_path/monit/mysql.conf /etc/monit/conf-enabled/mysql
+ln -s $template_path/monit/ssh.conf /etc/monit/conf-enabled/ssh
+ln -s $template_path/monit/cron.conf /etc/monit/conf-enabled/cron
+
 php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 for php_version in ${php_versions_array[@]}; do
