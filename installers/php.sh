@@ -29,7 +29,7 @@ php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 for php_version in ${php_versions_array[@]}; do
   apt install php$php_version -qqy
-  apt install php$php_version-common php$php_version-mcrypt php$php_version-mongodb php$php_version-tidy php$php_version-xmlrpc php$php_version-intl php$php_version-fpm php$php_version-cli php$php_version-fileinfo php$php_version-mysql php$php_version-xml php$php_version-curl php$php_version-gd php$php_version-imagick php$php_version-cli php$php_version-dev php$php_version-imap php$php_version-mbstring php$php_version-opcache php$php_version-soap php$php_version-zip php$php_version-redis php$php_version-sqlite3 php$php_version-pgsql php$php_version-bcmath php$php_version-gd -qqy
+  apt install php$php_version-common php$php_version-mcrypt php$php_version-mongodb php$php_version-tidy php$php_version-xmlrpc php$php_version-intl php$php_version-fpm php$php_version-cli php$php_version-fileinfo php$php_version-mysql php$php_version-xml php$php_version-curl php$php_version-gd php$php_version-imagick php$php_version-cli php$php_version-dev php$php_version-imap php$php_version-mbstring php$php_version-opcache php$php_version-soap php$php_version-zip php$php_version-redis php$php_version-sqlite3 php$php_version-pgsql php$php_version-bcmath -qqy
 
   if [ -d "$DIR/templates/php/$php_version" ]
   then 
