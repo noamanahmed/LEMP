@@ -32,6 +32,7 @@ complete -o nospace -F -user_name_script disable-ramdisk
 
 complete -o nospace -F -user_name_script list-backups
 complete -o nospace -F -user_name_script restore-site
+complete -o nospace -F -user_name_script backup-site
 
 complete -o nospace -F -user_name_script restart-site
 
