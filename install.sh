@@ -263,7 +263,7 @@ then
     ## Install Security related packages
     bash $DIR/installers/fail2ban.sh > $INSTALL_DIR/fail2ban.sh.log 2>&1
     bash $DIR/installers/ufw.sh > $INSTALL_DIR/ufw.sh.log 2>&1
-    bash $DIR/installers/rkhunter.sh > $INSTALL_DIR/ufw.sh.log 2>&1
+    bash $DIR/installers/rkhunter.sh > $INSTALL_DIR/rkhunter.sh.log 2>&1
 fi
 
 echo "Installing LEMP Stack"
