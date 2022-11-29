@@ -42,23 +42,24 @@ fi
 
 email=admin@$HOSTNAME
 
-## Creating mysql user and database
+# WIP
+# ## Creating mysql user and database
 
-database_name="$username_$(openssl rand -hex 2)"
-database_user="$username_$(openssl rand -hex 2)"
-database_password="$(openssl rand -hex 8)"
-wp_password="$(openssl rand -hex 8)"
+# database_name="$username_$(openssl rand -hex 2)"
+# database_user="$username_$(openssl rand -hex 2)"
+# database_password="$(openssl rand -hex 8)"
+# wp_password="$(openssl rand -hex 8)"
 
-mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
-mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
-mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
-mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
-mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
-mysql -e "FLUSH PRIVILEGES;"
+# mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+# mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+# mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+# mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+# mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+# mysql -e "FLUSH PRIVILEGES;"
 
-wp_password="$(openssl rand -hex 8)"
-wp --allow-root --path=$www_path core download
-wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
-wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=$email    
-bash install-wp-plugin -u $username -p classic-editor --activate
-bash fix-permissions -u $username
+# wp_password="$(openssl rand -hex 8)"
+# wp --allow-root --path=$www_path core download
+# wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
+# wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=$email    
+# bash install-wp-plugin -u $username -p classic-editor --activate
+# bash fix-permissions -u $username
