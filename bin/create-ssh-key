@@ -39,4 +39,6 @@ then
 fi
 chroot_home=/var/www/home/$username
 ssh-keygen -t rsa -N "" -C $username@$HOSTNAME -f $chroot_home/.ssh/id_rsa
+touch $chroot_home/.ssh/authorized_keys
+echo $(cat $chroot_home/.ssh/id_rsa.pub) >> $chroot_home/.ssh/authorized_keys 
 chown -R $username:$username $chroot_home/.ssh
