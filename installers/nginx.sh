@@ -15,6 +15,8 @@ fi
 
 #Remove apache2 and its HTML directories
 apt-get remove --purge apache2 -qqy
+systemctl disable apache
+systemctl stop apache
 
 if ! command -v nginx &> /dev/null
 then
