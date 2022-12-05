@@ -34,7 +34,7 @@ mkdir -p $user_root/cache/nginx
 chown -R $username:$username $user_root
 
 # Setup PHP
-cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
+cp $template_path/roundcube/php.conf /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
 sed -i "s/{{user_root}}/$(echo $user_root | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
 systemctl restart php$php-fpm
