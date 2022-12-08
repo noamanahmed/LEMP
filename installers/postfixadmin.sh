@@ -119,7 +119,7 @@ sed -i "s/{{db_username}}/$database_user/" /etc/dovecot/dovecot-sql.conf.ext
 sed -i "s/{{db_password}}/$database_password/" /etc/dovecot/dovecot-sql.conf.ext
 sed -i "s/{{domain}}/$HOSTNAME/" /etc/dovecot/dovecot-sql.conf.ext
 
-postconf -e "mydestination = \$myhostname, localhost.\$mydomain, localhost"
+postconf -e "mydestination = $HOSTNAME, localhost"
 
 adduser vmail --gecos --system --group --uid 2000 --disabled-login --no-create-home
 
