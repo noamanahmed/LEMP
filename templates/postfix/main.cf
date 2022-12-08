@@ -75,3 +75,10 @@ virtual_mailbox_base = /var/vmail
 virtual_minimum_uid = 2000
 virtual_uid_maps = static:2000
 virtual_gid_maps = static:2000
+
+
+# Milter configuration for DKIM
+milter_default_action = accept
+milter_protocol = 6
+smtpd_milters = local:opendkim/opendkim.sock
+non_smtpd_milters = $smtpd_milters
