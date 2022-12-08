@@ -21,6 +21,7 @@ systemctl stop dovecot
 bash $DIR/postfixadmin.sh
 bash $DIR/roundcube.sh
 bash $DIR/dkim.sh
+systemctl start opendkim
 systemctl start postfix
 systemctl start dovecot
 systemctl restart nginx

@@ -11,6 +11,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 apt install opendkim opendkim-tools -qqy
+systemctl stop opendkim
 gpasswd -a postfix opendkim
 mkdir /etc/opendkim
 mkdir /etc/opendkim/keys
