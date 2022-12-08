@@ -30,8 +30,8 @@ echo ".$HOSTNAME" >> /etc/opendkim/trusted.hosts
 
 mkdir -p /etc/opendkim/keys/$HOSTNAME
 opendkim-genkey -b 2048 -d $HOSTNAME -D /etc/opendkim/keys/$HOSTNAME -s default -v
-chown opendkim:opendkim /etc/opendkim/keys/your-domain.com/default.private
-chmod 600 /etc/opendkim/keys/your-domain.com/default.private
+chown opendkim:opendkim /etc/opendkim/keys/$HOSTNAME/default.private
+chmod 600 /etc/opendkim/keys/$HOSTNAME/default.private
 
 
 mkdir -p /var/spool/postfix/opendkim
@@ -40,7 +40,7 @@ chown opendkim:postfix /var/spool/postfix/opendkim
 cp $template_path/dkim/opendkim.conf /etc/opendkim.conf
 cp $template_path/dkim/opendkim /etc/default/opendkim.conf
 
-cat /etc/opendkim/keys/your-domain.com/default.txt
+cat /etc/opendkim/keys/$HOSTNAME/default.txt
 
 
 touch $LEMP_FLAG_DIR/DKIM_INSTALLED
