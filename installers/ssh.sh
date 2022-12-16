@@ -34,7 +34,7 @@ fi
 
 cp -rf $template_path/ssh/sshd_config /etc/ssh/sshd_config
 mkdir -p /home/$username/.ssh
-cp -rf /root/ssh/.ssh/* /home/$username/.ssh/
+cp -rf /root/.ssh/* /home/$username/.ssh/
 cp -rf $template_path/ssh/.profile /home/$username/
 cp -rf $template_path/ssh/.bashrc /home/$username/
 cp -rf $template_path/ssh/bash_completion.d/* /etc/bash_completion.d/
@@ -42,7 +42,7 @@ chown -R $username:$username /home/$username/.ssh
 chown -R $username:$username /home/$username/.profile
 chown -R $username:$username /home/$username/.bashrc
 
-cp -rf $template_path/ssh/.ssh/* /root/.ssh/
+# cp -rf $template_path/ssh/.ssh/* /root/.ssh/
 cp -rf $template_path/ssh/.profile /root/
 cp -rf $template_path/ssh/.bashrc /root/
 chown -R root:root /root/.ssh
