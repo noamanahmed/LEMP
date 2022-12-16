@@ -193,13 +193,17 @@ then
     exit
 fi
 
+if [ ! -f "/root/.ssh/id_rsa" ]  || [ ! -f "/root/.ssh/id_rsa.pub" ] || [ ! -f "/root/.ssh/authorized_keys" ] 
+then
+    echo "SSH key already exists at $chroot_home/.ssh/id_rsa !"
+    exit 1;
+fi
 
 if [ -z "$hostname" ]
 then
     echo "Please provide a hostname using -h "
     exit
 fi
-
 
 if [ -z "$password" ]
 then
@@ -215,6 +219,9 @@ then
     usermod -a -G $username $username
     echo "$username:$password" | sudo chpasswd
 fi
+
+
+
  
 ## Lets add the user with to sudo group
 usermod -a -G sudo $username

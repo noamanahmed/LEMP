@@ -11,6 +11,6 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-# cd $DIR/../
-# git reset --hard
-# git pull origin
+cd $DIR/../
+git reset --hard
+git pull origin

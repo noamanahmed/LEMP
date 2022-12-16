@@ -16,6 +16,7 @@ fi
 (crontab -u root -l; echo "$(cat $template_path/cron/certbot)" ) | sort -u | crontab -u root -
 (crontab -u root -l; echo "$(cat $template_path/cron/backup-sites)" ) | sort -u | crontab -u root -
 (crontab -u root -l; echo "$(cat $template_path/cron/mailserver)" ) | sort -u | crontab -u root -
+(crontab -u root -l; echo "$(cat $template_path/cron/lemp)" ) | sort -u | crontab -u root -
 
 
 
