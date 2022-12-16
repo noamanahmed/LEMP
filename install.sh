@@ -195,7 +195,8 @@ fi
 
 if [ ! -f "/root/.ssh/id_rsa" ]  || [ ! -f "/root/.ssh/id_rsa.pub" ] || [ ! -f "/root/.ssh/authorized_keys" ] 
 then
-    echo "SSH files in directory /root/.ssh/ are missing. We cannot continue installation unless you have setup SSH based authentication"
+    echo "SSH files in directory /root/.ssh/ are missing. We cannot continue installation unless you have setup SSH based authentication for root user."
+    echo "We will disable root loging once we are done with out setup"
     exit 1;
 fi
 
