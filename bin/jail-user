@@ -60,7 +60,7 @@ mkdir -p $chroot_home/.local/bin
 mkdir -p $chroot_home/.wp-cli/cache
 mkdir -p $chroot_home/tmp
 
-cp -rf $template_path/jailed_ssh/.ssh/* $chroot_home/.ssh
+#cp -rf $template_path/jailed_ssh/.ssh/* $chroot_home/.ssh
 cp -rf $template_path/jailed_ssh/.bashrc $chroot_home/.bashrc
 cp -rf $template_path/jailed_ssh/.profile $chroot_home/.profile
 touch $chroot_home/.hushlogin
