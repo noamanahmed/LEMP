@@ -195,7 +195,7 @@ fi
 
 if [ ! -f "/root/.ssh/id_rsa" ]  || [ ! -f "/root/.ssh/id_rsa.pub" ] || [ ! -f "/root/.ssh/authorized_keys" ] 
 then
-    echo "SSH key already exists at $chroot_home/.ssh/id_rsa !"
+    echo "SSH files in directory /root/.ssh/ are missing. We cannot continue installation unless you have setup SSH based authentication"
     exit 1;
 fi
 
