@@ -10,7 +10,6 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-
 if [ ! -f "$LEMP_FLAG_DIR/version" ]
 then
     echo "LEMP Version file not found at $LEMP_FLAG_DIR/version"    
@@ -18,6 +17,14 @@ then
 fi
 
 INSTALLED_VERSION=$(cat $LEMP_FLAG_DIR/version)
+
+if [ -z "$INSTALLED_VERSION" ]
+then
+    echo "Invalid Version found at $LEMP_FLAG_DIR/version"    
+    exit;
+fi
+
+echo "LEMP Current verison: $INSTALLED_VERSION"
 
 updates=$(ls /opt/lemp/updates/ | sort)
 
@@ -27,11 +34,7 @@ do
   then
     echo "Running LEMP Update $update"
     bash /opt/lemp/updates/$update/update.sh
-    echo $update > $LEMP_FLAG_DIR/VERSION
+    echo "$update" > $LEMP_FLAG_DIR/version
   fi      
 done
 
-
-# cd $DIR/../
-# git reset --hard
-# git pull origin
