@@ -39,19 +39,19 @@ then
     domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
 fi
 
-space=0
+# space=0
 
-if [ -d "/var/www/home/$username" ]
-then
-    space=$(du -sh /var/www/home/$username)
-fi
+# if [ -d "/var/www/home/$username" ]
+# then
+#     space=$(du -sh /var/www/home/$username)
+# fi
 
 
 user_info="$username"
 user_info+="\t"
 user_info+="$domain"
-user_info+="\t"
-user_info+="$space"
-user_info+="\n"
+# user_info+="\t"
+# user_info+="$space"
+# user_info+="\n"
 
 printf "$user_info"      
