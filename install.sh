@@ -541,7 +541,8 @@ fi
 echo "Installing Cron"
 bash $DIR/installers/cron.sh > $INSTALL_DIR/cron.sh.log 2>&1
 
-
+touch $LEMP_FLAG_DIR/VERSION
+echo $LEMP_CURRENT_VERSION >> $LEMP_FLAG_DIR/VERSION
 
 end=$(date +%s)
 seconds=$(echo "$end - $start" | bc)
@@ -549,4 +550,6 @@ seconds=$(awk -v t=$seconds 'BEGIN{t=int(t*1000); printf "%d:%02d:%02d\n", t/360
 echo "Time Taken to install: $seconds"
 
 bash /opt/lemp/bin/slack-notification -u $username -d $hostname -m "Installation completed: $hostname Time Taken: $seconds " --success
+
+
 
