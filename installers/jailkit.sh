@@ -139,7 +139,7 @@ then
     mkdir $chroot_path/proc
     mount -t proc none $chroot_path/proc
     echo "#### Added By Lemp" >> /etc/fstab
-    echo "proc /var/www/proc proc    defaults" >> /etc/fstab
+    echo "proc $chroot_path/proc proc    defaults" >> /etc/fstab
     echo "####"
 fi
 
