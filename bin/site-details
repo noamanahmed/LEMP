@@ -37,6 +37,15 @@ domin=""
 if [ -f "/etc/nginx/sites-available/$username.conf" ]
 then
     domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+
+    if  grep -Fq "listen 443" /etc/nginx/sites-available/$username.conf  && \
+        ! grep -Fq "#listen 443" /etc/nginx/sites-available/$username.conf         
+        then
+            domain="https://$domain"
+        else
+            domain="http://$domain"
+        fi
+
 fi
 
 # space=0
