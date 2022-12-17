@@ -138,6 +138,9 @@ if [ ! -d "$chroot_path/proc" ]
 then
     mkdir $chroot_path/proc
     mount -t proc none $chroot_path/proc
+    echo "#### Added By Lemp" >> /etc/fstab
+    echo "proc /var/www/proc proc    defaults" >> /etc/fstab
+    echo "####"
 fi
 
 if [ -d "$HOME/.nvm" ]
