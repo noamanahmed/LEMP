@@ -259,6 +259,7 @@ then
 fi
 
 
+
 ## Fixing permissions
 bash fix-permissions -u $username
 
@@ -282,10 +283,25 @@ then
     wp_password="$(openssl rand -hex 8)"
     wp --allow-root --path=$www_path core download
     wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
-    wp --allow-root --path=$www_path core install  --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=$email    
+    wp --allow-root --path=$www_path core install --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=$email    
     bash install-wp-plugin -u $username -p classic-editor --activate
     bash fix-permissions -u $username
 fi
+
+
+if [ -n "$laravel" ]
+then
+  rm -rf $chroot_home/www
+  COMPOSER_ALLOW_SUPERUSER=1 composer create-project laravel/laravel $chroot_home/www
+  bash /opt/lemp/bin/set-env-param -u $username -s DB_DATABASE -r DB_DATABASE=\"$database_name\"
+  bash /opt/lemp/bin/set-env-param -u $username -s DB_USERNAME -r DB_USERNAME=\"$database_user\"
+  bash /opt/lemp/bin/set-env-param -u $username -s DB_PASSWORD -r DB_PASSWORD=\"$database_password\"
+  bash /opt/lemp/bin/set-env-param -u $username -s REDIS_PASSWORD -r REDIS_PASSWORD=\"$(cat /etc/redis/redis.conf | grep requirepass | cut -d' ' -f2- | sed -n 2p)\"
+  bash fix-permissions -u $username
+fi
+
+
+
 
 if [ -n "$horizon" ]
 then
@@ -296,7 +312,6 @@ if [ -n "$scheduler" ]
 then
   bash install-scheduler -u $username
 fi
-
 
 site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql yes "
 
