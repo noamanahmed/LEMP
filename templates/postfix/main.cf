@@ -43,7 +43,9 @@ smtp_tls_mandatory_protocols = !SSLv2, !SSLv3, !TLSv1, !TLSv1.1
 smtp_tls_protocols = !SSLv2, !SSLv3, !TLSv1, !TLSv1.1
 
 
-smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+#smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+smtpd_relay_restrictions = permit_sasl_authenticated defer_unauth_destination
+
 myhostname = {{domain}}
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
