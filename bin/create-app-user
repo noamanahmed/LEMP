@@ -1,0 +1,37 @@
+
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:d:f:p flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+##Create user
+user_password="$(openssl rand -hex 12)"
+
+htpasswd /etc/nginx/htpasswd $username
+
+echo ""
+echo "Username: $username"
+echo "Password: $password"
+echo ""

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+sites="$(members web)"
+
+site_info="Domain"
+site_info+="\t"
+site_info+="Username"
+site_info+="\n"
+
+for user in $sites    
+do    
+    disallowed_users=("web" "nginx" "sftp" "$LEMP_LOCAL_LINUX_USER" )
+    if [[ " ${disallowed_users[*]} " =~ " ${user} " ]]; then        
+        continue
+    fi
+    
+    site_info+="$(/opt/lemp/bin/site-details -u $user)"    
+    site_info+="\n"
+done
+
+printf "$site_info" |  sed 's/\t/,|,/g' |  column -s ',' -t  
+
+# for site in $sites
+# do
+#   site_info+="$site"
+#   site_info+="\t"
+#   site_info+="$(date -r . +'%F %T' | tr '\n' ' ' )"  
+#   site_info+="\t"
+#   site_info+="$(du -h db.sql.gz | sed  's/db.sql.gz//'  | tr '\n' ' ' )"  
+#   site_info+="$(du -h www.gz | sed  's/www.gz//'  | tr '\n' ' ')"     
+# done
+
+
+

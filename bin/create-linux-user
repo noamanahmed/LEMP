@@ -1,0 +1,72 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:p: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+        p) user_password=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+if id "$username" &>/dev/null
+then
+    echo "The $username already exists"    
+    exit;
+fi
+
+
+if [ -z "$user_password" ]
+then
+    user_password="$(openssl rand -hex 12)"
+fi
+
+user_id=500
+unavailable_user_ids=$(cat /etc/passwd | awk -F: '{print $3}' | sort -n)
+
+
+while [[ "${unavailable_user_ids[*]}" =~ "${user_id}" ]]
+do
+    ((user_id++))    
+done
+
+
+echo "Creating Linux User"
+
+##Create user
+adduser --gecos "" --uid $user_id --disabled-password --no-create-home $username
+#usermod -a -G $username $username
+echo "$username:$user_password" | sudo chpasswd
+
+
+
+
+#ln -s /var/chroot/home/$username /home/$username
+if [ -d "/var/lib/AccountsService/users/" ]
+then
+    cat <<EOT >> /var/lib/AccountsService/users/$username
+[$username]  
+Language=   
+XSession=gnome  
+SystemAccount=true  
+EOT
+fi
+
+
+echo "Linux User Created"

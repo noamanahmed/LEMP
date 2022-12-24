@@ -1,0 +1,321 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+args=$@
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --mysql)
+      mysql=yes
+      ;;
+    --postgres)
+      postgres=yes
+      ;;
+    --django)
+      django=yes
+      ;;
+    --mongodb)
+      mongodb=yes
+      ;;
+    --port)
+      port="$2"
+      shift
+      ;;
+    --python)
+      python="$2"
+      shift
+      ;;    
+    --nossl)
+      nossl=yes
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+if id "$username" &>/dev/null
+then
+    echo "The $username already exists!. Please run delete-site -u $username"
+    exit
+fi
+
+if [ -z "$port" ] || [ $port -lt 1025 ] || [ $port -gt 65535 ]
+then
+  echo "Please specify a a valid port between 1025-65535 using --port for nginx to reverse proxy"
+  exit
+fi
+
+if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null
+then
+  echo "This port is currently in use! Please select another port"
+fi
+
+# If we are not running things locally.
+if [ -z "$local" ]
+then
+  if ! (host -t A $domain || host -t AAAA $domain) 
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+  fi
+else
+  # Lets add hosts entry
+  echo "127.0.0.1 $domain" >> /etc/hosts
+fi
+
+
+if [ -z "$python" ]
+then
+    echo "Selecting python version 3.9"
+    python=3.9    
+fi
+
+
+python_versions_array=( "2.7" "3.5" "3.6" "3.7" "3.8" "3.9" "3.10")
+
+if [[ ! " ${python_versions_array[*]} " =~ " ${python} " ]]; then
+    echo "This is not a valid python Version"
+    exit 1;
+fi
+
+email=admin@$HOSTNAME
+
+##Create user
+user_password="$(openssl rand -hex 12)"
+bash create-linux-user -u $username -p $user_password
+
+
+## Jail User for a php site
+bash jail-user -u $username
+
+## Adding user to groups
+usermod -a -G web $username
+usermod -a -G sftp $username
+usermod -a -G $username nginx
+service nginx reload
+
+## Create user directories
+
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
+
+mkdir -p $chroot_home
+mkdir -p $chroot_home/logs
+mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/logs/python
+mkdir -p $chroot_home/cache
+mkdir -p $chroot_home/cache/nginx
+mkdir -p $chroot_home/www/
+
+www_path=$chroot_home/www
+mkdir -p $www_path
+
+## Fixing Permissions for nginx cache
+chown -R nginx:nginx $chroot_home/cache/nginx
+
+## Generate postgres/mysql database and users. Postgres is set to default
+if [ -z "$mysql" ] || [ -n "$posgres" ]
+then
+  database_name="db_$(echo $username | head -c 12)"
+  database_user=$database_name
+  database_password="$(openssl rand -hex 8)"
+
+  psql -c "CREATE DATABASE $database_name;"
+  psql -c "CREATE USER $database_user WITH PASSWORD '$database_password';"
+  psql -c "GRANT ALL PRIVILEGES ON DATABASE "$database_name" to $database_user;"
+  psql -c "REVOKE connect ON DATABASE $database_name FROM PUBLIC;"
+fi
+
+if [ -n "$mysql" ]
+then
+  ## Creating MYSQL user and database
+  database_name="db_$(echo $username | head -c 12)"
+  database_user=$database_name
+  database_password="$(openssl rand -hex 8)"
+
+  mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+  mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+  mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED WITH mysql_native_password BY '$database_password'"
+  mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+  mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+  mysql -e "FLUSH PRIVILEGES;"
+
+  touch $chroot_home/.my.cnf
+  chown $username:$username $chroot_home/.my.cnf
+
+  echo '[client]' >> $chroot_home/.my.cnf
+  echo "user=$database_user" >> $chroot_home/.my.cnf
+  echo "host=127.0.0.1" >> $chroot_home/.my.cnf
+  
+fi
+
+
+
+
+if [ -z "$nossl" ]
+then
+
+  ## Setup a static HTML site for LetsEncrypt First
+  nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+  nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+  cp "$template_path/nginx/basic/vhost.conf" $nginx_vhost_file
+
+  sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+  sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+  sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+  sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+
+  ln -s $nginx_vhost_file $nginx_vhost_enabled
+  nginx -t && systemctl reload nginx
+
+
+  ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+    echo "Generating SSL (This may take a while)"
+    ## Test SSL Generation  
+    if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+    then 
+      echo "Error in certbot SSL generating. Cleaning up and aborting"
+      delete-site -u $username -y --no_message
+      exit 1;
+    fi
+
+  fi
+
+  ## Generate SSL
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+
+
+  ## Removing Static site
+  rm -rf $nginx_vhost_enabled
+  rm -rf $nginx_vhost_file
+
+fi
+
+## Creating nginx settings with reverse proxy
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+cp "$template_path/nginx/python/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{port}}/$port/" $nginx_vhost_file
+
+## Enable SSL nginx configurations
+if [ -z "$nossl" ]
+then
+
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  
+fi
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+
+## Setting up backup folder
+mkdir -p /backups/$username
+chown -R $username:web /backups/$username 
+
+
+if [ -n "$django" ]
+then
+  bash install-django -u $username
+fi
+
+
+if [ -z "$django" ]
+then
+  ##Copying demo app for simple proxy server
+  cp $template_path/www/python/* $www_path/
+  sed -i "s/{{port}}/$port/" $www_path/app.py
+fi
+
+## Create SSH Key Pair for git
+bash create-ssh-key -u $username
+
+## Fixing permissions
+bash fix-permissions -u $username
+
+## Switch python version to the one specified 
+bash toggle-python -u $username -p $python
+
+## Setting up Logrotation
+bash logrotate-site -u $username -e yes
+
+## Disable caching
+bash disable-cache -u $username
+
+## Finaly Start the systemd script to run the demo app
+cp $template_path/systemd/python-site.service /etc/systemd/system/$username-site.service
+sed -i "s/{{username}}/$username/" /etc/systemd/system/$username-site.service
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/systemd/system/$username-site.service
+
+systemctl daemon-reload
+systemctl restart $username-site
+systemctl enable $username-site
+
+if [ -z "$no_monitoring" ]
+then
+  bash create-monitor -u $username -d $domain
+fi
+
+site_info_command="bash site-info $args --ssh_password $user_password "
+
+if [ -n "$mysql" ]
+then
+site_info_command+=" --mysql $mysql --database_name $database_name --database_user_name $database_user --database_password $database_password"
+fi
+
+site_info_command+=" --postgres yes --database_name $database_name --database_user_name $database_user --database_password $database_password"
+
+ 
+site_info="$($site_info_command)"
+
+$site_info_command
+
+bash slack-notification -u $username -d $domain -m "$site_info" --success

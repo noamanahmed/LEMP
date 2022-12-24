@@ -1,0 +1,12 @@
+[Unit]
+Description=A Postgres administrative tool
+After=network.target
+
+[Service]
+User=pgadmin
+Group=pgadmin
+WorkingDirectory={{user_root}}
+ExecStart={{user_root}}/.virtualenv/bin/gunicorn --chdir {{user_root}}/.virtualenv/lib/python{{python}}/site-packages/pgadmin4/  --bind 127.0.0.1:7210   pgAdmin4:app
+
+[Install]
+WantedBy=multi-user.target

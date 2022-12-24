@@ -1,0 +1,46 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:p: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit 1;
+fi
+
+
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit 1;
+fi
+
+
+
+if [ ! -f "/etc/systemd/system/$username-site.service" ] 
+then
+    echo "There is no systemd file present to restart"
+    exit 1;
+fi
+
+echo "Restarting systemd service $username-site.service"
+systemctl restart $username-site    

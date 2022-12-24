@@ -1,0 +1,62 @@
+-user_name_script()
+{
+  _script_commands=$(members web)
+  
+  case $3 in
+    -u) COMPREPLY=($(compgen -W "${_script_commands}" "${COMP_WORDS[$COMP_CWORD]}"));;
+  esac
+}
+
+-create_site_php_script()
+{
+  php_versions_array="8.1 8.0 7.4 7.3 7.2 7.1 7.0 5.6"
+  
+  case $3 in
+    --php) COMPREPLY=($(compgen -W "${php_versions_array}" "${COMP_WORDS[$COMP_CWORD]}"));;
+  esac
+}
+
+complete -o nospace -F -user_name_script enter-site
+complete -o nospace -F -user_name_script vscode-site
+complete -o nospace -F -user_name_script delete-site
+
+complete -o nospace -F -user_name_script enable-site
+complete -o nospace -F -user_name_script disable-site
+
+complete -o nospace -F -user_name_script clear-cache
+complete -o nospace -F -user_name_script enable-cache
+complete -o nospace -F -user_name_script disable-cache
+
+complete -o nospace -F -user_name_script enable-ramdisk
+complete -o nospace -F -user_name_script disable-ramdisk
+
+complete -o nospace -F -user_name_script list-backups
+complete -o nospace -F -user_name_script restore-site
+complete -o nospace -F -user_name_script backup-site
+
+complete -o nospace -F -user_name_script restart-site
+
+complete -o nospace -F -user_name_script edit-nginx-vhost
+complete -o nospace -F -user_name_script edit-php-fpm-pool
+complete -o nospace -F -user_name_script restart-php-fpm-pool
+
+
+complete -o nospace -F -create_site_php_script create-site-php
+
+
+complete -o nospace -F -user_name_script install-django
+complete -o nospace -F -user_name_script install-horizon
+complete -o nospace -F -user_name_script install-nvm
+complete -o nospace -F -user_name_script install-wp
+complete -o nospace -F -user_name_script install-wp-plugin
+
+complete -o nospace -F -user_name_script jail-user
+complete -o nospace -F -user_name_script nvm-user
+complete -o nospace -F -user_name_script wp-users
+
+complete -o nospace -F -user_name_script toggle-php
+complete -o nospace -F -user_name_script toggle-python
+complete -o nospace -F -user_name_script toggle-node
+
+complete -o nospace -F -user_name_script fix-permissions
+

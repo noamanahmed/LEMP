@@ -1,0 +1,81 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+chroot_path=/var/www/
+chroot_home=/var/www/home/$username
+
+
+if [ ! -d "$chroot_home" ]
+then
+    pkill -9 -u $username
+    echo "jk_jailuser -m -j $chroot_path --shell=/bin/bash $username"
+    jk_jailuser -m -j $chroot_path --shell=/bin/bash $username
+fi
+
+
+mkdir -p $chroot_home/.ssh
+mkdir -p $chroot_home/.wp-cli
+mkdir -p $chroot_home/.local
+mkdir -p $chroot_home/.local/bin
+mkdir -p $chroot_home/.wp-cli/cache
+mkdir -p $chroot_home/tmp
+
+#cp -rf $template_path/jailed_ssh/.ssh/* $chroot_home/.ssh
+cp -rf $template_path/jailed_ssh/.bashrc $chroot_home/.bashrc
+cp -rf $template_path/jailed_ssh/.profile $chroot_home/.profile
+touch $chroot_home/.hushlogin
+
+chown -R $username:$username $chroot_home/.hushlogin
+chown -R $username:$username $chroot_home/.wp-cli
+chown -R $username:$username $chroot_home/.ssh
+chown -R $username:$username $chroot_home/.bashrc
+chown -R $username:$username $chroot_home/.profile
+chown -R $username:$username $chroot_home/.local
+#chown -R $username:$username $chroot_home/.config
+#chown -R $username:$username $chroot_home/.nvm
+chown -R $username:$username $chroot_home/tmp
+
+
+sed -i "s/$(echo $chroot_path | sed 's/\//\\\//g').\/home\/$username/\/home\/$username\//" /etc/passwd
+sed -i "s/\/usr\/sbin\/jk_chrootsh/\/bin\/bash/" /etc/passwd
+

@@ -1,0 +1,334 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+args=$@
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --php)
+      php="$2"
+      shift
+      ;; 
+    --wordpress)
+      wordpress=yes
+      ;;
+    --laravel)
+      laravel=yes
+      ;;
+    --nvm)
+      nvm=yes
+      ;;
+    --node)
+      node=yes
+      ;;
+    --npm)
+      npm=yes
+      ;;
+    --horizon)
+      horizon=yes
+      ;;
+    --scheduler)
+      scheduler=yes
+      ;;
+    --nossl)
+      nossl=yes
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;        
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+
+if id "$username" &>/dev/null
+then
+    echo "The $username already exists!. Please run delete-site -u $username"
+    exit
+fi
+
+
+
+if [ -z "$php" ]
+then
+  php=7.4
+fi
+
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
+    echo "This is not a valid PHP Version"
+    exit 1;
+fi
+
+if ! systemctl is-active --quiet nginx
+  then 
+  echo "Nginx is not running! Aborting!"
+  exit
+fi
+
+
+if ! systemctl is-active --quiet mysql
+  then 
+  echo "mysql is not running! Aborting!"
+  exit
+fi
+
+# If we are not running things locally.
+if [ -z "$local" ]
+then
+  if ! (host -t A $domain || host -t AAAA $domain)
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+  fi
+else
+  # Lets add hosts entry
+  echo "127.0.0.1 $domain" >> /etc/hosts
+fi
+
+
+email=admin@$HOSTNAME
+
+##Create user
+user_password="$(openssl rand -hex 12)"
+bash create-linux-user -u $username -p $user_password
+
+## Jail User for a php site
+bash jail-user -u $username
+
+
+## Adding user to groups
+usermod -a -G web $username
+usermod -a -G sftp $username
+usermod -a -G $username nginx
+service nginx reload
+
+## Create user directories
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
+fastcgi_path=/home/$username/www
+
+mkdir -p $chroot_home
+mkdir -p $chroot_home/logs
+mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/logs/php
+mkdir -p $chroot_home/logs/mail
+mkdir -p $chroot_home/cache
+mkdir -p $chroot_home/cache/nginx
+mkdir -p $chroot_home/www/
+
+www_path=$chroot_home/www 
+
+if [ -n "$laravel" ]
+then
+  www_path=$chroot_home/www/public
+  fastcgi_path=/home/$username/www/public
+fi
+
+
+#mkdir -p "$user_root/cache/php"
+
+## Fixing Permissions for nginx cache and php logs
+chown -R $username:$username $chroot_home/logs/php
+chown -R nginx:nginx $chroot_home/cache/nginx
+
+## Setting up default static HTML site
+mkdir -p $www_path
+cp $template_path/www/php/*.php $www_path
+cp $template_path/www/php/*.html $www_path
+
+## Setup PHP
+sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
+systemctl restart php$php-fpm
+
+## Creating MYSQL user and database
+database_name="$(echo $username | head -c 12)"
+database_user="$(echo $username | head -c 12)"
+database_password="$(openssl rand -hex 8)"
+
+mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED WITH mysql_native_password BY '$database_password'"
+mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+mysql -e "FLUSH PRIVILEGES;"
+
+
+touch $chroot_home/.my.cnf
+chown $username:$username $chroot_home/.my.cnf
+
+echo '[client]' >> $chroot_home/.my.cnf
+echo "user=$database_user" >> $chroot_home/.my.cnf
+echo "host=127.0.0.1" >> $chroot_home/.my.cnf
+
+
+
+## Creating nginx settings
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+cp "$template_path/nginx/php/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{fastcgi_path}}/$(echo $fastcgi_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
+
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+if [ -z "$nossl" ]
+then
+
+  ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+    echo "Generating SSL (This may take a while)"
+    ## Test SSL Generation
+    if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+    then 
+      echo "Error in certbot SSL generating. Cleaning up and aborting"
+      delete-site -u $username -y --no_message
+      exit 1;
+    fi
+    ## Generate SSL
+    certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+  fi
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx    
+fi
+
+
+## Restart nginx as we added our user to nginx group and for some reason nginx reload doesn't work
+#systemctl restart nginx
+
+## Setting up backup folder
+mkdir -p /backups/$username
+chown -R $username:$username /backups/$username 
+
+## Create SSH Key Pair for git
+bash create-ssh-key -u $username
+
+# Check if we need to use npm in this site
+if [ -n "$nvm" ] || [ -n "$node" ] ||[ -n "$npm" ]
+then  
+  bash install-nvm -u $username
+fi
+
+
+
+## Fixing permissions
+bash fix-permissions -u $username
+
+## Switch php version to the one specified 
+bash toggle-php -u $username -p $php
+
+## Setting up Logrotation
+bash logrotate-site -u $username -e yes
+
+## Disable caching
+bash disable-cache -u $username
+
+if [ -z "$no_monitoring" ]
+then
+  bash create-monitor -u $username -d $domain
+fi
+
+if [ -n "$wordpress" ]
+then
+
+    wp_password="$(openssl rand -hex 8)"
+    wp --allow-root --path=$www_path core download
+    wp --allow-root --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
+    wp --allow-root --path=$www_path core install --url=$domain --title=$domain --admin_user=$username --admin_password=$wp_password --admin_email=$email    
+    bash install-wp-plugin -u $username -p classic-editor --activate
+    bash fix-permissions -u $username
+fi
+
+
+if [ -n "$laravel" ]
+then
+  rm -rf $chroot_home/www
+  COMPOSER_ALLOW_SUPERUSER=1 composer create-project laravel/laravel $chroot_home/www
+  bash /opt/lemp/bin/set-env-param -u $username -s DB_DATABASE -r DB_DATABASE=\"$database_name\"
+  bash /opt/lemp/bin/set-env-param -u $username -s DB_USERNAME -r DB_USERNAME=\"$database_user\"
+  bash /opt/lemp/bin/set-env-param -u $username -s DB_PASSWORD -r DB_PASSWORD=\"$database_password\"
+  bash /opt/lemp/bin/set-env-param -u $username -s REDIS_PASSWORD -r REDIS_PASSWORD=\"$(cat /etc/redis/redis.conf | grep requirepass | cut -d' ' -f2- | sed -n 2p)\"
+  bash fix-permissions -u $username
+fi
+
+
+
+
+if [ -n "$horizon" ]
+then
+  bash install-horizon -u $username
+fi
+
+if [ -n "$scheduler" ]
+then
+  bash install-scheduler -u $username
+fi
+
+site_info_command="bash site-info $args --ssh_password $user_password --database_name $database_name --database_user_name $database_user --database_password $database_password --mysql yes "
+
+if [ -n "$wordpress" ]
+then
+site_info_command+=" --wordpress --wp_password $wp_password "
+fi
+
+if [ -n "$laravel" ]
+then
+site_info_command+=" --laravel "
+fi
+ 
+site_info="$($site_info_command)"
+
+$site_info_command
+
+bash slack-notification -u $username -d $domain -m "$site_info" --success
+
+

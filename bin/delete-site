@@ -1,0 +1,190 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;     
+    -y|--yes)
+      yes=yes
+      ;;  
+    --no_message)
+      no_message=yes
+      ;;  
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The username $username doesn't exist"    
+    exit;
+fi
+
+domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+
+
+if [ -z "$yes" ]
+then
+    while true; do
+        read -p "Do you wish to delete the user $username with domain $domain ? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+fi
+
+## Create system user if doesnt't exists
+
+# $system_root="/home/$username";
+# mkdir -p $system_root
+# mkdir -p "$system_root/php/$php_version"
+
+
+if [ -d "/opt/php-fpm/$username" ] 
+then
+    ## Delete PHP FPM .sock file directory
+    rm -rf /opt/php-fpm/$username    
+fi
+
+## Reset PHP FPM Pool
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+for php_v in ${php_versions_array[@]}; do    
+    if [ -f "/etc/php/$php_v/fpm/pool.d/$username.conf" ] 
+    then
+        rm /etc/php/$php_v/fpm/pool.d/$username.conf
+        systemctl restart php$php_v-fpm
+    fi    
+done
+
+
+
+## Deleting nginx settings
+
+if [ -L "/etc/nginx/sites-enabled/$username.conf" ] 
+then
+    rm "/etc/nginx/sites-enabled/$username.conf"
+fi
+
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ] 
+then
+    rm "/etc/nginx/sites-available/$username.conf"
+fi
+
+if [ -L "/etc/nginx/sites-enabled/$username-ssl.conf" ] 
+then
+    rm "/etc/nginx/sites-enabled/$username-ssl.conf"
+fi
+
+if [ -f "/etc/nginx/sites-available/$username-ssl.conf" ] 
+then
+    rm "/etc/nginx/sites-available/$username-ssl.conf"
+fi
+
+systemctl reload nginx
+
+## Delete Database and users
+if command -v mysql &> /dev/null
+then
+  mysql -e "DROP DATABASE IF EXISTS $username"
+  mysql -e "DROP USER IF EXISTS '$username'@'localhost';"
+fi
+if command -v psql &> /dev/null
+then
+  psql -c "DROP DATABASE db_$username;"
+  psql -c "DROP USER db_$username;"
+fi
+## Delete Logrotation
+bash logrotate-site -u $username -d yes
+
+## Disable monitoring
+bash delete-monitor -u $username
+
+## Delete Chroot Directory
+rm -rf /var/www/home/$username
+rm -rf /home/$username
+sed -i "/\/home\/$username/d" /var/www/etc/passwd      
+sed -i "/$username:/d" /var/www/etc/group
+
+## Delete service files if exists
+if [ -f "/etc/systemd/system/$username-site.service" ] 
+then
+    systemctl stop $username-site
+    systemctl disable $username-site
+    rm "/etc/systemd/system/$username-site.service"
+fi
+
+## Delete Supervisor Configuration if it exists
+if [ -f "/etc/supervisor/conf.d/$username-site.conf" ]
+then
+    rm -rf /etc/supervisor/conf.d/$username-site.conf
+    supervisorctl restart all
+fi
+
+## Delete linux user and processes
+pkill -9 -u $username 
+userdel -r -f $username > /dev/null 2>&1
+delgroup $username > /dev/null 2>&1
+
+
+
+if [ -z "$no_message" ]
+then    
+    bash slack-notification -u $username -d $domain -m "Site deleted successfully! Username: $username Host: $domain" --warning    
+fi
+
+if ! systemctl is-active --quiet nginx
+  then 
+  echo "Restarting Nginx as it was not running!"
+  service nginx restart
+  exit
+fi
+
+
+if ! systemctl is-active --quiet mysql
+  then 
+  echo "Restarting mysql as it was not running!"
+  service mysql restart
+  exit
+fi
+
+# If we were this site locally, remove /etc/hosts entry
+if [ -n "$local" ]
+then
+  sed -i "/$domain/d" /etc/hosts
+fi
+
+
+echo "Username $username deleted successfully!"      
+
+

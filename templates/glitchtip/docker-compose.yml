@@ -1,0 +1,38 @@
+version: "3.4"
+x-environment:
+  &default-environment
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+  SECRET_KEY: change_me
+  PORT: 6145
+x-depends_on:
+  &default-depends_on
+  - postgres
+  - redis
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    restart: unless-stopped
+  redis:
+    image: redis
+    restart: unless-stopped
+  web:
+    image: glitchtip/glitchtip
+    depends_on: *default-depends_on
+    ports:
+      - "6145:6145"
+    environment: *default-environment
+    restart: unless-stopped
+  worker:
+    image: glitchtip/glitchtip
+    command: ./bin/run-celery-with-beat.sh
+    depends_on: *default-depends_on
+    environment: *default-environment
+    restart: unless-stopped
+  migrate:
+    image: glitchtip/glitchtip
+    depends_on: *default-depends_on
+    command: "./manage.py migrate"
+    environment: *default-environment

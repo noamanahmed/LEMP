@@ -1,0 +1,45 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while getopts u:c: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+        c) command=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+if [ -z "$command" ]
+then
+    echo "Please provide a command using -c "
+    exit
+fi
+
+#echo "Running Command"
+#echo su $username -c "HOME=/var/www/home/$username NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && cd /var/www/home/$username/ && $command"
+su $username -c "HOME=/var/www/home/$username NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && cd /var/www/home/$username/ && $command"

@@ -1,0 +1,116 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:p: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;
+        p) php=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit 1;
+fi
+
+
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit 1;
+fi
+
+if [ ! -L "/var/www/home/$username/bin/php" ] && [ ! -S "/var/run/php/$username-php-fpm.sock" ]
+then
+    echo "This is not a PHP site"
+    exit 1;
+fi
+
+
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+if [ -z "$php" ]
+then
+    for php_v in ${php_versions_array[@]}; do    
+        if [ -f "/etc/php/$php_v/fpm/pool.d/$username.conf" ]
+        then
+            echo "Web php-fpm version: $php_v"
+            break
+        fi
+    done
+    if [ -L "/var/www/home/$username/.local/bin/php" ]
+    then
+    cli_php=$(readlink /var/www/home/wordpress/.local/bin/php | grep -m1 -Poe 'php\K[^; ]+')    
+    cli_php=$(bc <<< "scale=1; $cli_php/10")
+    echo "CLI PHP Version: $cli_php"
+
+    fi
+    
+    exit 1;
+fi
+
+
+
+if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
+    echo "This is not a valid PHP Version"
+    exit 1;
+fi
+
+
+echo "Switching Web PHP Version to $php"
+
+
+
+for php_v in ${php_versions_array[@]}; do    
+    if [ -f "/etc/php/$php_v/fpm/pool.d/$username.conf" ]
+    then
+        if [ "$php_v" == "$php" ]
+        then
+            break
+        fi
+        mv /etc/php/$php_v/fpm/pool.d/$username.conf /etc/php/$php/fpm/pool.d/$username.conf
+        systemctl restart php$php_v-fpm
+        systemctl restart php$php-fpm
+        break
+    fi
+done
+
+
+echo "Switching CLI PHP Version to $php"
+
+if [ -L "/var/www/home/$username/.local/bin/php" ]
+then
+    rm -rf /var/www/home/$username/.local/bin/php
+fi
+
+ln -s ../../../../bin/$(echo "php$php" | sed 's/\.//') /var/www/home/$username/.local/bin/php 
+chown -h $username:$username /var/www/home/$username/.local/bin/php
+
+
+if [ -f "/etc/supervisor/conf.d/$username-site.conf" ]
+then
+    echo "Restarting Supervisor(This might take a while)"
+    supervisorctl restart "$(cat /etc/supervisor/conf.d/$username-site.conf | grep -m1 -Poe 'program:\K[^\] ]+' ):"
+    echo "Supervisorctl restarted!"
+fi
+
+
+
+echo "Clearing Cache"
+clear-cache -u $username
+

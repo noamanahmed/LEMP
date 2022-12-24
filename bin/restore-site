@@ -1,0 +1,81 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u:n: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+        n) backup_name=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+if [ -z "$backup_name" ]
+then
+    echo "Please provide a backup_name using -n "
+    exit
+fi
+
+
+
+if [ ! -d "/backups/$username/$backup_name" ] 
+then
+    echo "There is no backup found at this location /backups/$username/$backup_name"    
+    exit;
+fi
+
+
+
+if [ ! -f "/backups/$username/$backup_name/www.gz" ] && [ ! -f "/backups/$username/$backup_name/db.sql.gz" ] 
+then
+    echo "There are no SQL or www files to replace at /backups/$username/$backup_name/ "    
+    exit;
+fi
+
+user_root=/var/www/home/$username
+
+
+if [ -f "/backups/$username/$backup_name/www.gz" ] 
+then
+    echo "Restoring Files in www"
+    mv -f $user_root/www/ $user_root/www_backup
+    mkdir -p $user_root/www/
+    pv /backups/$username/$backup_name/www.gz | tar -xz -C $user_root/www/
+    rm -rf $user_root/www_backup
+    echo "Fixing permissions"
+    fix-permissions -u $username
+fi
+
+
+if [ -f "/backups/$username/$backup_name/db.sql.gz" ] 
+then
+    echo "Restoring MySQL DB"
+    pv /backups/$username/$backup_name/db.sql.gz | gunzip -c | mysql -u root $username
+
+fi
+
+echo "Clearing Cache"
+clear-cache -u $username
+

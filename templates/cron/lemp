@@ -1,0 +1,5 @@
+# Update Git Repo
+0 22 * * * /opt/lemp/bin/update-lemp-repo
+
+# Run updater
+0 23 * * * /opt/lemp/bin/update-lemp

@@ -1,0 +1,48 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts a: flag
+do
+    case "${flag}" in
+        a) app=${OPTARG};;        
+    esac
+done
+
+if [ -z "$app" ]
+then
+    echo "Please provide a app using -a "
+    exit
+fi
+
+
+if [ ! -f "/etc/nginx/apps-available/$app.conf" ]
+then
+    echo "No Vhost found for this app $app"    
+    exit;
+fi
+
+
+domain=$(cat  /etc/nginx/apps-available/$app.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+port=$(cat  /etc/nginx/apps-available/$app.conf  | grep -m1 -Poe 'listen \K[^; ]+')
+url="https://$domain:$port"
+
+
+app_info="$app"
+app_info+="\t"
+app_info+="$url"
+app_info+="\t"
+app_info+="$port"
+app_info+="\t"
+app_info+="\n"
+
+printf "$app_info"      

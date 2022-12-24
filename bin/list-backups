@@ -1,0 +1,66 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+backups=$(ls /backups/$username)
+backup_info="Backup ID"
+backup_info+="\t"
+backup_info+="Date"
+backup_info+="\t"
+backup_info+="Database"
+backup_info+="\t"
+backup_info+="Files"
+backup_info+="\t"
+backup_info+="\n"
+
+for backup in $backups
+do   
+  cd /backups/$username/$backup
+  backup_info+="$backup"
+  backup_info+="\t"
+  backup_info+="$(date -r . +'%F %T' | tr '\n' ' ' )"  
+  backup_info+="\t"
+  backup_info+="$(du -h db.sql.gz | sed  's/db.sql.gz//'  | tr '\n' ' ' )"  
+  backup_info+="$(du -h www.gz | sed  's/www.gz//'  | tr '\n' ' ')"     
+done
+
+printf "$backup_info" |  sed 's/\t/,|,/g' |  column -s ',' -t  

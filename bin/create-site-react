@@ -1,0 +1,203 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+args=$@
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;
+    --nossl)
+      nossl=yes
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;  
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+
+
+if id "$username" &>/dev/null
+then
+    echo "The $username already exists!. Please run delete-site -u $username"
+    exit
+fi
+
+# If we are not running things locally.
+if [ -z "$local" ]
+then
+  if ! (host -t A $domain || host -t AAAA $domain) 
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+  fi
+else
+  # Lets add hosts entry
+  echo "127.0.0.1 $domain" >> /etc/hosts
+fi
+
+
+email=admin@$HOSTNAME
+
+
+##Create user
+user_password="$(openssl rand -hex 12)"
+bash create-linux-user -u $username -p $user_password
+
+## Jail User for a php site
+bash jail-user -u $username
+
+
+## Adding user to groups
+usermod -a -G web $username
+usermod -a -G sftp $username
+usermod -a -G $username nginx
+service nginx reload
+
+## Create user directories
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
+
+mkdir -p $chroot_home
+mkdir -p $chroot_home/logs
+mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/www/
+
+www_path=$chroot_home/www
+
+
+## Setting up default react app
+mkdir -p $www_path
+cp -rf $template_path/www/react/* $www_path/
+
+
+## Creating nginx settings
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+cp "$template_path/nginx/react/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path/build/ | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+
+## Enable site and reload nginx
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+if [ -z "$nossl" ]
+then  
+
+   ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+    echo "Generating SSL (This may take a while)"
+    ## Test SSL Generation  
+    if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/build/
+    then 
+      echo "Error in certbot SSL generating. Cleaning up and aborting"
+      delete-site -u $username -y --no_message
+      exit 1;
+    fi
+  fi
+
+  ## Generate SSL
+  certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path/build/
+
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx    
+fi
+
+## Enable SSL configured vhost and reload nginx
+nginx -t && systemctl reload nginx
+
+## Setup Log rotation
+# cp $template_path/logrotate/site.conf /etc/logrotate.d/site-$username.conf
+# sed -i "s/{{username}}/$username/" /etc/logrotate.d/site-$username.conf
+
+## Restart nginx as we added our user to nginx group and for some reason nginx reload doesn't work
+systemctl restart nginx
+
+## Setting up backup folder
+mkdir -p /backups/$username
+chown -R $username:web /backups/$username 
+
+
+## Jail User for a site
+bash jail-user -u $username
+
+## Create SSH Key Pair for git
+bash create-ssh-key -u $username
+
+## Fixing permissions
+bash fix-permissions -u $username
+
+## Installing nvm
+bash install-nvm -u $username
+
+## Install demo app packages
+# Uncomment the following line if you want to rebuild
+#nvm-user -u $username -c 'cd www && npm install && npm run build'
+
+## Setting up Logrotation
+bash logrotate-site -u $username
+
+## Disable caching
+bash disable-cache -u $username
+
+if [ -z "$no_monitoring" ]
+then
+  bash create-monitor -u $username -d $domain
+fi
+
+
+site_info_command="bash site-info $args --ssh_password $user_password "
+
+site_info="$($site_info_command)"
+
+$site_info_command
+
+bash slack-notification -u $username -d $domain -m "$site_info" --success
+
+
+
+
+

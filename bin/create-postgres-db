@@ -1,0 +1,40 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+if ! systemctl is-active --quiet postgresql
+  then 
+  echo "postgresql is not running! Aborting!"
+  exit
+fi
+
+## Creating postgres user and database
+
+database_name="db_$(openssl rand -hex 6)"
+database_user=$database_name
+database_password="$(openssl rand -hex 8)"
+
+psql -c "CREATE DATABASE $database_name;"
+psql -c "CREATE USER $database_user WITH PASSWORD '$database_password';"
+psql -c "GRANT ALL PRIVILEGES ON DATABASE "$database_name" to $database_user;"
+psql -c "REVOKE connect ON DATABASE $database_name FROM PUBLIC;"
+
+
+
+
+echo ""
+echo "Postgres Database Credentials"
+echo "Database name: $database_name"
+echo "Database user: $database_user"
+echo "Database password: $database_password"
+echo ""

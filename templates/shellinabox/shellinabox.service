@@ -1,0 +1,16 @@
+[Unit]                                                                                                                        
+Description=Serve a login-terminal over http on  port 7220.                                                                   
+Required=sshd.service                                                                                                         
+After=sshd.service                                                                                                            
+
+[Service]                                                                                                                     
+User=root                                                                                                                     
+Type=simple                                                                                                                  
+EnvironmentFile=/etc/default/shellinabox
+ExecStart=/usr/bin/shellinaboxd  $SHELLINABOX_ARGS --port $SHELLINABOX_PORT                                                                           
+#ExecReload=/bin/kill -HUP $MAINPID                                                                                            
+#KillMode=process                                                                                                              
+#Restart=on-abort                                                                                                              
+
+[Install]                                                                                                                     
+WantedBy=multi-user.target

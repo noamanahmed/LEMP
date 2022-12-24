@@ -1,0 +1,45 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while getopts u: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;        
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh -o /var/www/home/$username/install.sh
+mkdir /var/www/home/$username/.nvm
+chmod +x /var/www/home/$username/install.sh
+chown $username:$username  /var/www/home/$username/install.sh
+chown $username:$username  /var/www/home/$username/.nvm
+cd /var/www/home/$username/ 
+su $username -c "NVM_DIR=.nvm /var/www/home/$username/install.sh"
+su $username -c "NVM_DIR=/var/www/home/$username/.nvm && . /var/www/home/$username/.nvm/nvm.sh && . /var/www/home/$username/.nvm/bash_completion && nvm install node"
+rm -rf /var/www/home/$username/install.sh

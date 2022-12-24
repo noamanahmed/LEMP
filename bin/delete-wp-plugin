@@ -1,0 +1,69 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -p|--plugin)
+      plugin="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$plugin" ]
+then
+    echo "Please provide a plugin slug using -p "
+    exit
+fi
+
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+
+if [ ! -f "/var/www/home/$username/www/wp-config.php" ] 
+then
+    echo "There is not a wordpress site"    
+    exit;
+fi
+
+wp --allow-root --path=/var/www/home/$username/www plugin delete $plugin
+
+bash fix-permissions -u $username
+
+
+

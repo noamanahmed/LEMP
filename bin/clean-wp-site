@@ -1,0 +1,145 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+
+chroot_home=/var/www/home/$username
+www_path=$chroot_home/www
+wp_binary=$chroot_home/.local/bin/php /var/www/bin/wp
+
+if [ ! -f "$www_path/wp-config.php" ] 
+then
+    echo "There is not a wordpress site"    
+    exit;
+fi
+
+## Disable monitoring(Temporary turn off monitoring)
+# bash disable-monitor -u $username
+
+# Disable site
+bash disable-site -u $username
+
+# Remove SSH connectivity (comming soon)
+# bash disable-ssh-user -u $username
+
+#Get site details
+installed_wp_version=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path core version --allow-root --skip-plugins --skip-themes)
+database_name=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_NAME --allow-root --skip-plugins --skip-themes)
+database_user=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_USER --allow-root --skip-plugins --skip-themes)
+database_password=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path config get DB_PASSWORD --allow-root --skip-plugins --skip-themes)
+
+
+## First copy the source to
+rm -rf $chroot_home/www_backup
+mv $chroot_home/www $chroot_home/www_backup 
+mkdir -p $chroot_home/www
+
+chown -R $username:$username $chroot_home/www
+
+
+# Reset WP Config
+$wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path core download --version=$installed_wp_version
+$wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path core config --dbhost=127.0.0.1 --dbname=$database_name --dbuser=$database_user --dbpass=$database_password
+
+# First copy uploads 
+cp -rf $chroot_home/www_backup/wp-content/uploads $www_path/wp-content
+
+#Remove all .php files from uploads folder
+find $www_path/wp-content/uploads -name "*.php" -type f -delete
+
+cp -rf $chroot_home/www_backup/wp-content/plugins $www_path/wp-content
+#Search plugins for 
+malicious_plugins=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/plugins/ | cut -d : -f 1 )
+
+for plugin in $malicious_plugins    
+do
+  malicious_file='yes'
+  echo "Plugin File $plugin found using malicious php functions!"
+done
+
+cp -rf $chroot_home/www_backup/wp-content/themes $www_path/wp-content
+#Search themes for 
+malicious_themes=$(grep --include \*.php -ir -e 'base64(' -e 'str_rot13(' -e 'gzuncompress(' -e 'eval(' -e 'exec(' -e 'system(' -e 'assert(' $www_path/wp-content/themes/ | cut -d : -f 1 )
+
+for theme in $malicious_themes    
+do
+  malicious_file='yes'
+  echo "Theme File $theme found using malicious php functions!"
+done
+
+#Search database for malware related HTML elements
+mal_functions=("<iframe" "base64_decode(" "eval(" "<script")
+
+for func in ${mal_functions[@]};    
+do
+  echo "Searching for $func in Databases"
+  $wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path db search $func
+done
+
+
+# Reduce role of all previous admins to author.
+wp_admin_users=$($wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path user list --role=administrator --allow-root --skip-plugins --skip-themes --field=ID)
+
+for user in $wp_admin_users    
+do
+  $wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path user set-role $user editor
+done
+
+# Create new admin user
+create-wp-user -u $username
+$wp_binary --allow-root --skip-plugins --skip-themes --path=$www_path plugin install wordfence --activate
+
+bash fix-permissions -u $username
+
+if [ -z "$malicious_file" ]
+then
+  bash enable-site -u $username
+  #Enable monitoring Again
+  # bash enable-monitor -u $username
+  #Enable SSH Use
+  # bash enable-ssh-user -u $username
+fi
+
+
+
+
+

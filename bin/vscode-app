@@ -1,0 +1,42 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+
+while getopts a: flag
+do
+    case "${flag}" in
+        a) username=${OPTARG};;                
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide an app using -a "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+if [ -z "$local" ]
+then  
+  echo "This is not a local installation! Aborting."
+  exit  
+fi
+
+
+# if ! groups | grep -qw "$username"; then
+#     echo "Error! Please update groups in your terminal session first by running  update-groups command."
+#     exit 0
+# fi
+
+code /opt/$username/www/

@@ -1,0 +1,105 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;
+    -d|--domain)
+      domain="$2"
+      shift
+      ;;   
+    -m|--message)
+      message="$2"
+      shift
+      ;;   
+    --port)
+      port="$2"
+      shift
+      ;;     
+    --warning)     
+      warning=yes  
+      ;;
+    --success)     
+      success=yes  
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    domain=$username
+fi
+
+
+# Slack webhook URL was never setup
+if [ ! -f "/opt/slack_webhook_url" ]
+then      
+  exit 
+fi
+
+URL=$(cat /opt/slack_webhook_url)
+
+if [ -z "$URL" ]
+then    
+    echo "No slack webhook notification URL defined at /opt/slack_webhook_url"
+    exit
+fi
+
+
+if [ ! -z "$success" ]
+then
+    COLOR='good'
+fi
+
+
+if [ ! -z "$warning" ]
+then
+    COLOR='danger'
+fi
+
+# Type can be good or danger
+
+TEXT=$message
+
+PAYLOAD="{
+  \"attachments\": [
+    {
+      \"text\": \"$TEXT\",
+      \"color\": \"$COLOR\",
+      \"mrkdwn_in\": [\"text\"],
+      \"fields\": [
+        { \"title\": \"Date\", \"value\": \"$(date)\", \"short\": true },
+        { \"title\": \"Host\", \"value\": \"$domain\", \"short\": true }
+      ]
+    }
+  ]
+}"
+
+CURL=$(curl -s -X POST --data-urlencode "payload=$PAYLOAD" $URL)

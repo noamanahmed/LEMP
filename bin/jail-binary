@@ -1,0 +1,47 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while getopts b: flag
+do
+    case "${flag}" in
+        b) binary=${OPTARG};;        
+    esac
+done
+
+if [ -z "$binary" ]
+then
+    echo "Please provide a binary using -b "
+    exit
+fi
+
+chroot_path=/var/www/
+
+if [ -f "$binary" ]
+then
+    jk_cp -j $chroot_path $binary
+    for lib in `ldd $binary | cut -d'>' -f2 | awk '{print $1}'` ; do
+    if [ -f "$lib" ] ; then        
+        jk_cp -j $chroot_path $lib                
+    fi 
+    done
+else
+    jk_cp -j $chroot_path "$(which $binary)"
+    for lib in `ldd "$(which $binary)" | cut -d'>' -f2 | awk '{print $1}'` ; do
+    if [ -f "$lib" ] ; then        
+        jk_cp -j $chroot_path $lib                
+    fi 
+    done
+fi
+
+

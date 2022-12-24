@@ -1,0 +1,103 @@
+fastcgi_cache_path /var/www//home/{{username}}/cache/nginx/ levels=1:2 keys_zone=nextcloud:10m max_size=64m inactive=1h;
+
+server {	
+	listen 80;
+	root {{www_root}};
+	index index.php index.html index.htm;
+	server_name files.projects.noamanahmed.com;
+	    
+	error_log {{user_root}}/logs/nginx/error.log;
+
+	#include /etc/nginx/performance.conf;
+
+	location / {
+        rewrite ^ /index.php;
+    }
+
+    # location / {  
+	# 	# First attempt to serve request as file, then
+	# 	# as directory, then fall back to displaying a 404.
+	# 	try_files $uri $uri/ /index.php;
+	# }
+
+	location ~ ^\/(?:build|tests|config|lib|3rdparty|templates|data)\/ {
+        deny all;
+    }
+    location ~ ^\/(?:\.|autotest|occ|issue|indie|db_|console) {
+        deny all;
+    }
+	## PHP with FastCGI Caching
+	add_header X-Cache $upstream_cache_status;
+
+	location ~ ^\/(?:index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[ms]-provider\/.+|.+\/richdocumentscode\/proxy)\.php(?:$|\/) 
+	{
+		fastcgi_split_path_info ^(.+?\.php)(\/.*|)$;
+        set $path_info $fastcgi_path_info;
+        try_files $fastcgi_script_name =404;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $path_info;
+        fastcgi_param HTTPS on;
+        # Avoid sending the security headers twice
+        fastcgi_param modHeadersAvailable true;
+        # Enable pretty urls
+        fastcgi_param front_controller_active true;        
+        fastcgi_intercept_errors on;
+        fastcgi_request_buffering off;
+		#fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_param SCRIPT_FILENAME /home/{{username}}/www/$fastcgi_script_name;
+		fastcgi_pass unix:/var/run/php/{{username}}-php-fpm.sock;	
+        
+	}
+	  location ~ ^\/(?:updater|oc[ms]-provider)(?:$|\/) {
+        try_files $uri/ =404;
+        index index.php;
+    }
+
+    # Adding the cache control header for js, css and map files
+    # Make sure it is BELOW the PHP block
+    location ~ \.(?:css|js|woff2?|svg|gif|map)$ {
+        try_files $uri /index.php$request_uri;
+        add_header Cache-Control "public, max-age=15778463";
+        # Add headers to serve security related headers (It is intended to
+        # have those duplicated to the ones above)
+        # Before enabling Strict-Transport-Security headers please read into
+        # this topic first.
+        #add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;" always;
+        #
+        # WARNING: Only add the preload option once you read about
+        # the consequences in https://hstspreload.org/. This option
+        # will add the domain to a hardcoded list that is shipped
+        # in all major browsers and getting removed from this list
+        # could take several months.
+        add_header Referrer-Policy "no-referrer" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Download-Options "noopen" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Permitted-Cross-Domain-Policies "none" always;
+        add_header X-Robots-Tag "none" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+
+        # Optional: Don't log access to assets
+        access_log off;
+    }
+
+    location ~ \.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$ {
+        try_files $uri /index.php$request_uri;
+        # Optional: Don't log access to other assets
+        access_log off;
+    }
+
+	location ~ /\.ht {
+		deny all;
+	}
+
+	if ($https != on) { return 301 https://$host$request_uri; }
+	listen 443 ssl http2; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/{{domain}}/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/{{domain}}/privkey.pem; # managed by Certbot
+	ssl_trusted_certificate /etc/letsencrypt/live/{{domain}}/chain.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}

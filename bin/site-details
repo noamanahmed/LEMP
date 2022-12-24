@@ -1,0 +1,66 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while getopts u: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;                
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+domin=""
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+
+    if  grep -Fq "listen 443" /etc/nginx/sites-available/$username.conf  && \
+        ! grep -Fq "#listen 443" /etc/nginx/sites-available/$username.conf         
+        then
+            domain="https://$domain"
+        else
+            domain="http://$domain"
+        fi
+
+fi
+
+# space=0
+
+# if [ -d "/var/www/home/$username" ]
+# then
+#     space=$(du -sh /var/www/home/$username)
+# fi
+
+
+user_info="$username"
+user_info+="\t"
+user_info+="$domain"
+# user_info+="\t"
+# user_info+="$space"
+# user_info+="\n"
+
+printf "$user_info"      

@@ -1,0 +1,14 @@
+[Unit]
+Description=A python site for username {{username}}
+After=network.target
+
+[Service]
+Type=simple
+User={{username}}
+RootDirectory=/var/www/
+WorkingDirectory=/home/{{username}}/www
+ExecStart=/home/{{username}}/.local/bin/python app.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

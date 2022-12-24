@@ -1,0 +1,207 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+args=$@
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --php)
+      php="$2"
+      shift
+      ;; 
+    --nossl)
+      nossl=yes
+      ;;       
+    --no_monitoring)
+      no_monitoring=yes
+      ;;        
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+username=$LEMP_HOSTNAME_USERNAME
+domain=$HOSTNAME
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+
+if id "$username" &>/dev/null
+then
+    echo "The $username already exists!. Please run delete-site -u $username"
+    exit
+fi
+
+if [ -z "$php" ]
+then
+  php=8.1
+fi
+
+php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+
+if [[ ! " ${php_versions_array[*]} " =~ " ${php} " ]]; then
+    echo "This is not a valid PHP Version"
+    exit 1;
+fi
+
+email=admin@$HOSTNAME
+
+##Create user
+user_password="$(openssl rand -hex 12)"
+bash /opt/lemp/bin/create-linux-user -u $username -p $user_password
+
+## Jail User for a php site
+bash /opt/lemp/bin/jail-user -u $username
+
+## Adding user to groups
+usermod -a -G web $username
+usermod -a -G sftp $username
+usermod -a -G $username nginx
+service nginx reload
+
+## Create user directories
+chroot_path=/var/www
+user_root=/home/$username
+chroot_home=$chroot_path/$user_root
+fastcgi_path=/home/$username/www/public
+
+mkdir -p $chroot_home
+mkdir -p $chroot_home/logs
+mkdir -p $chroot_home/logs/nginx
+mkdir -p $chroot_home/logs/php
+mkdir -p $chroot_home/logs/mail
+mkdir -p $chroot_home/cache
+mkdir -p $chroot_home/cache/nginx
+mkdir -p $chroot_home/www/
+
+www_path=$chroot_home/www 
+
+
+
+#mkdir -p "$user_root/cache/php"
+
+## Fixing Permissions for nginx cache and php logs
+chown -R $username:web $chroot_home/logs/php
+chown -R nginx:nginx $chroot_home/cache/nginx
+
+## Setting up Laravel default hostname site
+rm -rf $www_path
+cp -rf $template_path/www/default_site $www_path
+www_path=$www_path/public
+
+## Setup PHP
+sudo cp $template_path/php/template.tpl /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{username}}/$username/" /etc/php/$php/fpm/pool.d/$username.conf
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" /etc/php/$php/fpm/pool.d/$username.conf
+systemctl restart php$php-fpm
+
+## Creating MYSQL user and database
+database_name="$(echo $username | head -c 12)"
+database_user="$(echo $username | head -c 12)"
+database_password="$(openssl rand -hex 8)"
+
+mysql -e "CREATE DATABASE IF NOT EXISTS $database_name"
+mysql -e "DROP USER IF EXISTS '$database_user'@'localhost';"
+mysql -e "CREATE USER '$database_user'@'localhost' IDENTIFIED BY '$database_password'"
+mysql -e "GRANT ALL PRIVILEGES ON $database_name.* To '$database_user'@'localhost'"
+mysql -e "GRANT SESSION_VARIABLES_ADMIN ON *.*  TO '$database_user'@'localhost'";
+mysql -e "FLUSH PRIVILEGES;"
+
+## Creating nginx settings
+nginx_vhost_file="/etc/nginx/sites-available/$username.conf"
+nginx_vhost_enabled="/etc/nginx/sites-enabled/$username.conf"
+cp "$template_path/nginx/hostname/vhost.conf" $nginx_vhost_file
+
+sed -i "s/{{www_path}}/$(echo $www_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
+sed -i "s/{{username}}/$username/g" $nginx_vhost_file
+sed -i "s/{{user_root}}/$(echo $chroot_home | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{fastcgi_path}}/$(echo $fastcgi_path | sed 's/\//\\\//g')/" $nginx_vhost_file
+sed -i "s/{{php_version}}/$php_version/" $nginx_vhost_file
+
+
+ln -s $nginx_vhost_file $nginx_vhost_enabled
+nginx -t && systemctl reload nginx
+
+if [ -z "$nossl" ]
+then
+  ## Only Generate SSL If it is not already present. Timesave when re-creating sites
+  if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+  then
+    echo "Generating SSL (This may take a while)"
+    ## Test SSL Generation
+    if certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
+    then       
+      ## Generate SSL
+      certbot certonly --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path  
+    fi
+  fi
+
+  ## Enabling SSL in nginx settings
+  sed -i "s/#SSL_DISABLED //" $nginx_vhost_file
+  nginx -t && systemctl reload nginx   
+  
+fi
+
+## Setting up backup folder
+mkdir -p /backups/$username
+chown -R $username:web /backups/$username 
+
+## Create SSH Key Pair for git
+bash /opt/lemp/bin/create-ssh-key -u $username
+
+## Switch php version to the one specified 
+bash /opt/lemp/bin/toggle-php -u $username -p $php
+
+## Install composer dependencies for the laravel hostsite ( I will clean these commands later on)
+COMPOSER_ALLOW_SUPERUSER=1 /var/www/home/$username/.local/bin/php /var/www/bin/composer --working-dir /var/www/home/$username/www install
+cp /var/www/home/$username/www/.env.example /var/www/home/$username/www/.env
+/var/www/home/$username/.local/bin/php /var/www/home/$username/www/artisan key:generate
+
+## Change env parameters
+bash /opt/lemp/bin/set-env-param -u $username -s APP_URL -r APP_URL=\"https://$domain\"
+
+## Fixing permissions
+bash /opt/lemp/bin/fix-permissions -u $username
+
+
+## Setting up Logrotation
+bash /opt/lemp/bin/logrotate-site -u $username -e yes
+
+## Disable caching
+bash /opt/lemp/bin/disable-cache -u $username
+
+site_info_command="bash /opt/lemp/bin/site-info $args -u $username -d $domain --ssh_password $user_password"
+
+site_info="$($site_info_command)"
+
+$site_info_command
+
+bash /opt/lemp/bin/slack-notification -u $username -d $domain -m "$site_info" --success
+
+

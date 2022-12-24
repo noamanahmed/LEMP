@@ -1,0 +1,50 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
+while getopts u: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;                
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+domin=""
+
+if [ -f "/etc/nginx/sites-available/$username.conf" ]
+then
+    domain=$(cat  /etc/nginx/sites-available/$username.conf  | grep -m1 -Poe 'server_name \K[^; ]+')
+fi
+
+USER=$username HOME=/home/$username chroot --userspec=$username:$username /var/www/ /bin/bash -c "source ~/.profile; clear ; \
+echo \"***************************\" && \
+echo \"User: $username\" && \
+echo \"Domain:  $domain\" && \
+echo \"***************************\" && \
+cd /home/$username/ && \
+bash "
+
+

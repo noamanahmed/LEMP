@@ -1,0 +1,57 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;  
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+
+domain=$HOSTNAME
+email=admin@$HOSTNAME
+
+if [ -z "$domain" ]
+then
+    echo "Please provide a domain using -d "
+    exit
+fi
+
+if ! (host -t A $domain || host -t AAAA $domain)
+    then
+    echo "This is not a valid domain! Aborting!"
+    exit
+fi
+
+
+if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
+then
+  service nginx stop
+  echo "Generating SSL (This may take a while)"
+  ## Test SSL Generation
+  if certbot certonly --dry-run --quiet --standalone -d $domain --non-interactive --agree-tos -m $email 
+  then       
+    ## Generate SSL
+    certbot certonly --quiet --standalone -d $domain --non-interactive --agree-tos -m $email   
+  fi
+  service nginx start
+fi

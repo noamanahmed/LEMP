@@ -1,0 +1,40 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+if [ ! -f "$LEMP_FLAG_DIR/VERSION" ]
+then
+    echo "LEMP Version file not found at $LEMP_FLAG_DIR/VERSION"    
+    exit;
+fi
+
+INSTALLED_VERSION=$(cat $LEMP_FLAG_DIR/VERSION)
+
+if [ -z "$INSTALLED_VERSION" ]
+then
+    echo "Invalid Version found at $LEMP_FLAG_DIR/VERSION"    
+    exit;
+fi
+
+echo "LEMP Current verison: $INSTALLED_VERSION"
+
+updates=$(ls /opt/lemp/updates/ | sort)
+
+for update in $updates
+do       
+  if (( $(echo "$update > $INSTALLED_VERSION" |bc -l) ))
+  then
+    echo "Running LEMP Update $update"
+    bash /opt/lemp/updates/$update/update.sh
+    echo "$update" > $LEMP_FLAG_DIR/VERSION
+  fi      
+done
+

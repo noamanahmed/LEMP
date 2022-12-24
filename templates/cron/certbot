@@ -1,0 +1,1 @@
+0 0 * * * /usr/bin/certbot renew --nginx --nginx-ctl /usr/sbin/nginx

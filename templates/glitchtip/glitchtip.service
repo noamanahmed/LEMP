@@ -1,0 +1,15 @@
+[Unit]
+Description=GlitchTip Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+User=docker
+Type=forking
+ExecStart=/usr/bin/docker-compose -f /opt/glitchtip/docker-compose.yml up -d
+ExecStop=/usr/bin/docker-compose -f /opt/glitchtip/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
