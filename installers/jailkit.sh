@@ -46,6 +46,9 @@ echo "Copying Certificates"
 jk_cp -j $chroot_path /etc/ssl/certs/ca-certificates.crt
 jk_cp -j $chroot_path /usr/share/git-core
 
+echo "Fixing Git"
+mkdir -p $chroot_path/usr/lib/git-core
+cp -rf /usr/lib/git-core/* $chroot_path/usr/lib/git-core/
 
 echo "Fixing SSL Issues"
 mkdir -p $chroot_path/usr/lib/ssl/

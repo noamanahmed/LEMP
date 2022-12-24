@@ -71,6 +71,7 @@ database_password=$($wp_binary --allow-root --skip-plugins --skip-themes --path=
 ## First copy the source to
 rm -rf $chroot_home/www_backup
 mv $chroot_home/www $chroot_home/www_backup 
+mkdir -p $chroot_home/conf
 mkdir -p $chroot_home/www
 
 chown -R $username:$username $chroot_home/www

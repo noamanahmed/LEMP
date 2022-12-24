@@ -19,4 +19,11 @@ do
 done
 
 
+if [ -z "$database" ]
+then
+    echo "Please provide a database using -d "
+    exit
+fi
+
+
 mysql -e "DROP DATABASE IF EXISTS $database"

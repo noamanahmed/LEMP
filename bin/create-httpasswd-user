@@ -1,0 +1,59 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;     
+    -a|--app)
+      app="$2"
+      shift
+      ;; 
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if [ -z "$app" ]
+then
+    echo "Please provide a app using -a "
+    exit
+fi
+
+
+if [ ! -f "/etc/nginx/htpasswd.$app" ] 
+then
+    echo "File /etc/nginx/htpasswd.$app doesn't exists"
+    exit
+fi
+
+
+password="$(openssl rand -hex 8)"
+
+echo $(htpasswd -nb $username $password) >> /etc/nginx/htpasswd.$app
+
+echo "Username : $username"
+echo "Password : $password"

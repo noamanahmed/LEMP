@@ -120,6 +120,7 @@ mkdir -p $chroot_home/logs/nginx
 mkdir -p $chroot_home/logs/node
 mkdir -p $chroot_home/cache
 mkdir -p $chroot_home/cache/nginx
+mkdir -p $chroot_home/conf
 mkdir -p $chroot_home/www/
 
 www_path=$chroot_home/www
