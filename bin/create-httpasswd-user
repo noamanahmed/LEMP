@@ -11,11 +11,23 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-while getopts u: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;        
-    esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--username)
+      username="$2"
+      shift
+      ;;     
+    -a|--app)
+      app="$2"
+      shift
+      ;; 
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument. $1 *\n"
+      printf "***************************\n"
+      exit 1
+  esac  
+  shift
 done
 
 if [ -z "$username" ]
@@ -25,8 +37,23 @@ then
 fi
 
 
-if ! id "$username" &>/dev/null
+if [ -z "$app" ]
 then
-    echo "The $username doesn't exist"    
-    exit;
+    echo "Please provide a app using -a "
+    exit
 fi
+
+
+if [ ! -f "/etc/nginx/htpasswd.$app" ] 
+then
+    echo "File /etc/nginx/htpasswd.$app doesn't exists"
+    exit
+fi
+
+
+password="$(openssl rand -hex 8)"
+
+echo $(htpasswd -nb $username $password) >> /etc/nginx/htpasswd.$app
+
+echo "Username : $username"
+echo "Password : $password"
