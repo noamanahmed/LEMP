@@ -18,6 +18,7 @@
 
 complete -o nospace -F -user_name_script enter-site
 complete -o nospace -F -user_name_script vscode-site
+complete -o nospace -F -user_name_script vscode-site-old
 complete -o nospace -F -user_name_script delete-site
 
 complete -o nospace -F -user_name_script enable-site
