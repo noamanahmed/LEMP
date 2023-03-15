@@ -17,6 +17,7 @@
 }
 
 complete -o nospace -F -user_name_script enter-site
+complete -o nospace -F -user_name_script enter-site-sudo
 complete -o nospace -F -user_name_script vscode-site
 complete -o nospace -F -user_name_script vscode-site-old
 complete -o nospace -F -user_name_script delete-site
@@ -60,4 +61,5 @@ complete -o nospace -F -user_name_script toggle-python
 complete -o nospace -F -user_name_script toggle-node
 
 complete -o nospace -F -user_name_script fix-permissions
+complete -o nospace -F -user_name_script fix-user-permissions
 
