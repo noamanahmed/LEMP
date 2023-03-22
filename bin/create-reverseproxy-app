@@ -129,7 +129,7 @@ if [ ! -f "/etc/letsencrypt/live/$domain/fullchain.pem" ]
   if ! certbot certonly --dry-run --quiet --webroot -d $domain --non-interactive --agree-tos -m $email -w $www_path
   then 
   echo "Error in certbot SSL generating. Cleaning up and aborting"
-  delete-site -u $app -y --no_message
+  delete-app -a $app -y --no_message
   exit 1;
   fi
 fi
@@ -147,6 +147,7 @@ nginx -t && systemctl reload nginx
 nginx_vhost_file="/etc/nginx/apps-available/$app.conf"
 nginx_vhost_enabled="/etc/nginx/apps-enabled/$app.conf"
 cp $template_path/reverseproxy/vhost.conf $nginx_vhost_file
+cp /etc/nginx/htpasswd /etc/nginx/htpasswd.{{$app}}
 
 sed -i "s/{{domain}}/$domain/" $nginx_vhost_file
 sed -i "s/{{internal_port}}/$internal_port/" $nginx_vhost_file

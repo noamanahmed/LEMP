@@ -152,6 +152,8 @@ mkdir -p $chroot_home/logs/php
 mkdir -p $chroot_home/logs/mail
 mkdir -p $chroot_home/cache
 mkdir -p $chroot_home/cache/nginx
+mkdir -p $chroot_home/conf
+mkdir -p $chroot_home/conf/php
 mkdir -p $chroot_home/www/
 
 

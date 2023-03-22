@@ -1,0 +1,23 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+disk=sda1
+
+echo 'Reads/sec and Writes/sec'
+iostat -dx $disk | grep $disk | awk '{ print $4"/"$5; }'
+echo 'Overall IOPS'
+iostat -dx $disk | grep $disk | awk '{ print $2; }'
+
+
+fio --randrepeat=1 --ioengine=libaio --direct=1 --gtod_reduce=1 --name=test --filename=test --bs=4k --iodepth=64 --size=512M --readwrite=randread
+fio --randrepeat=1 --ioengine=libaio --direct=1 --gtod_reduce=1 --name=test --filename=test --bs=4k --iodepth=64 --size=512M --readwrite=randwrite

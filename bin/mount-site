@@ -1,0 +1,60 @@
+#!/bin/bash
+
+DIR=$(dirname "${BASH_SOURCE[0]}") 
+DIR=$(realpath "${DIR}") 
+
+template_path="$(cd $DIR/../ && pwd)/templates"
+source $DIR/../includes/helpers.sh
+
+
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+while getopts u: flag
+do
+    case "${flag}" in
+        u) username=${OPTARG};;                
+    esac
+done
+
+if [ -z "$username" ]
+then
+    echo "Please provide a username using -u "
+    exit
+fi
+
+
+if ! id "$username" &>/dev/null
+then
+    echo "The $username doesn't exist"    
+    exit;
+fi
+
+if [ -z "$local" ]
+then  
+  echo "This is not a local installation! Aborting."
+  exit  
+fi
+
+mount_dir="/mnt/vscode-mount-$username"
+ssh_private_key=/var/www/home/$username/.ssh/id_rsa
+
+
+if [ ! -f "$ssh_private_key" ]
+then  
+  echo "Auth File doesn't exist at $ssh_private_key"
+  exit  
+fi
+
+if is_mounted "$mount_dir"
+then
+    /bin/fusermount -u $mount_dir
+    rm -rf $mount_dir    
+fi
+
+mkdir -p $mount_dir
+
+sshfs -o uid=$(id -u $LEMP_LOCAL_LINUX_USER),gid=$(id -g $LEMP_LOCAL_LINUX_USER) -o allow_other,default_permissions -o IdentityFile=$ssh_private_key $username@$HOSTNAME:/home/$username/www $mount_dir -p 6000

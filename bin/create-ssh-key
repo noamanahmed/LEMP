@@ -38,6 +38,8 @@ then
 fi
 
 chroot_home=/var/www/home/$username
+
+mkdir -p $chroot_home/.ssh
 touch $chroot_home/.ssh/authorized_keys
 
 # Generate For SFTP Login
