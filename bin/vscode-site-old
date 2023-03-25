@@ -13,7 +13,13 @@ do
         u) username=${OPTARG};;                
     esac
 done
-``
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
 if [ -z "$username" ]
 then
     echo "Please provide a username using -u "
