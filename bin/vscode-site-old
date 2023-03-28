@@ -60,6 +60,6 @@ then
     echo "Skipping: Already Mounted at $mount_dir"
 else
     
-    sshfs -o allow_other -o IdentityFile=/var/www/home/$username/.ssh/id_rsa -o uid=$(id -u $LEMP_LOCAL_LINUX_USER) -o gid=$(id -g $LEMP_LOCAL_LINUX_USER) "$username@$(cat /etc/hostname):/home/$username/www" $mount_dir -p 6000
+    sshfs -o cache=no -o allow_other -o IdentityFile=/var/www/home/$username/.ssh/id_rsa -o uid=$(id -u $LEMP_LOCAL_LINUX_USER) -o gid=$(id -g $LEMP_LOCAL_LINUX_USER) "$username@$(cat /etc/hostname):/home/$username/www" $mount_dir -p 6000
 fi
 su $LEMP_LOCAL_LINUX_USER -c "code $mount_dir"
