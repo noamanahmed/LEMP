@@ -20,6 +20,12 @@ LEMP_FLAG_DIR=/opt/lemp_installed
 LEMP_CURRENT_VERSION=100
 
 
+RED="\e[31m"
+GREEN="\e[32m"
+ENDCOLOR="\e[0m"
+
+
+
 #Servername
 #cat  /etc/nginx/sites-available/angular1.conf  | grep -m1 -Poe 'server_name \K[^; ]+'
 
