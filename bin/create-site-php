@@ -23,6 +23,9 @@ while [ $# -gt 0 ]; do
       domain="$2"
       shift
       ;;
+    -y|--yes)
+      yes=yes
+      ;;
     --php)
       php="$2"
       shift
@@ -109,6 +112,59 @@ if ! systemctl is-active --quiet mysql
   echo "mysql is not running! Aborting!"
   exit
 fi
+
+
+
+confirm=""
+confirm+="\n"
+confirm+="Site Details\n"
+confirm+="URL  : ${GREEN}http://$domain${ENDCOLOR}\n"
+
+
+if [ -n "$laravel" ]
+then
+  confirm+="Type : ${GREEN}Laravel${ENDCOLOR}"
+  confirm+="\n"
+
+fi
+
+
+if [ -n "$wordpress" ]
+then
+  confirm+="Type : ${GREEN}Wordpress${ENDCOLOR}"
+  confirm+="\n"
+
+fi
+
+confirm+="PHP Version : ${GREEN}$php${ENDCOLOR}"
+confirm+="\n"
+
+if [ -z "$no_monitoring" ]
+then
+  confirm+="Enable Monitoring : ${GREEN}Yes${ENDCOLOR}"
+  confirm+="\n"
+
+else  
+  confirm+="Enable Monitoring : ${RED}No${ENDCOLOR}"
+  confirm+="\n"
+fi
+
+confirm+="\n\n"
+printf "$confirm"
+
+
+if [ -z "$yes" ]
+then
+    while true; do
+        read -p "Are you sure you want to create this site with these details? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no. Press Ctrl+C to exit";;
+        esac
+    done
+fi
+
 
 # If we are not running things locally.
 if [ -z "$local" ]

@@ -57,13 +57,13 @@ then
     chown -R nginx:nginx /var/www/home/$username/cache/nginx  
 fi
 
-# If we are running things locally,we can ease the permissions for same group
-if [ -n "$local" ]
-then
-  chown -R $username:web /var/www/home/$username
-  chmod 770 /var/www/home/$username
-  find $www_path -type d -print0 | xargs -0 chmod 771 
-  find $www_path -type f -print0 | xargs -0 chmod 771   
-fi
+# # If we are running things locally,we can ease the permissions for same group
+# if [ -n "$local" ]
+# then
+#   chown -R $username:web /var/www/home/$username
+#   chmod 770 /var/www/home/$username
+#   find $www_path -type d -print0 | xargs -0 chmod 771 
+#   find $www_path -type f -print0 | xargs -0 chmod 771   
+# fi
 
 echo "Completed Fixing Permissions for User $username "
