@@ -10,20 +10,21 @@ source $DIR/../includes/helpers.sh
 while getopts a: flag
 do
     case "${flag}" in
-        a) username=${OPTARG};;                
+        a) appname=${OPTARG};;                
     esac
 done
 
-if [ -z "$username" ]
+
+if [ -z "$appname" ]
 then
-    echo "Please provide an app using -a "
+    echo "Please provide an appname using -a "
     exit
 fi
 
 
-if ! id "$username" &>/dev/null
+if ! id "$appname" &>/dev/null
 then
-    echo "The $username doesn't exist"    
+    echo "The $appname doesn't exist"    
     exit;
 fi
 
@@ -38,5 +39,25 @@ fi
 #     echo "Error! Please update groups in your terminal session first by running  update-groups command."
 #     exit 0
 # fi
+if [ -z "$local" ]
+then
+    echo "This command can only be used on Local Installs"
+    exit 1;
+fi
 
-code /opt/$username/www/
+echo "This script is under development!"
+exit 1;
+
+mkdir -p /mnt/lemp/
+mkdir -p /mnt/lemp/app_$appname
+mount_dir=/mnt/lemp/app_$appname
+
+
+
+# if mountpoint -q $mount_dir 
+# then
+#     echo "Skipping: Already Mounted at $mount_dir"
+# else
+#     sshfs -o cache=no -o allow_other -o IdentityFile=/var/www/home/$username/.ssh/id_rsa -o uid=$(id -u $LEMP_LOCAL_LINUX_USER) -o gid=$(id -g $LEMP_LOCAL_LINUX_USER) "$username@$(cat /etc/hostname):/home/$username/www" $mount_dir -p 6000
+# fi
+# su $LEMP_LOCAL_LINUX_USER -c "code $mount_dir"

@@ -14,6 +14,12 @@ do
     esac
 done
 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
 if [ -z "$username" ]
 then
     echo "Please provide a username using -u "
@@ -40,3 +46,25 @@ code --folder-uri=vscode-remote://ssh-remote+$username@$domain/www
 #     echo "Error! Please update groups in your terminal session first by running  update-groups command."
 #     exit 0
 # fi
+<<<<<<<< HEAD:bin/vscode-site-ssh
+========
+if [ -z "$local" ]
+then
+    echo "This command can only be used on Local Installs"
+    exit 1;
+fi
+
+
+mkdir -p /mnt/lemp/
+mkdir -p /mnt/lemp/$username
+mount_dir=/mnt/lemp/$username
+
+if mountpoint -q $mount_dir 
+then
+    echo "Skipping: Already Mounted at $mount_dir"
+else
+    
+    sshfs -o cache=no -o allow_other -o IdentityFile=/var/www/home/$username/.ssh/id_rsa -o uid=$(id -u $LEMP_LOCAL_LINUX_USER) -o gid=$(id -g $LEMP_LOCAL_LINUX_USER) "$username@$(cat /etc/hostname):/home/$username/www" $mount_dir -p 6000
+fi
+su $LEMP_LOCAL_LINUX_USER -c "code $mount_dir"
+>>>>>>>> dev:bin/vscode-site

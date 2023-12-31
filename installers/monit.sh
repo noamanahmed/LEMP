@@ -42,7 +42,6 @@ ln -s $template_path/monit/mysql.conf /etc/monit/conf-enabled/mysql
 ln -s $template_path/monit/ssh.conf /etc/monit/conf-enabled/ssh
 ln -s $template_path/monit/cron.conf /etc/monit/conf-enabled/cron
 
-php_versions_array=("8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 for php_version in ${php_versions_array[@]}; do
     if [ -L "/etc/monit/conf-enabled/php-$php_version" ] 
