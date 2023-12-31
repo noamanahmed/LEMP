@@ -11,11 +11,12 @@ This is my first bash script for automation. This is not built for pro level sys
 - Ubuntu 20.04 (Working on 22)
 - A FQDN pointing to the VPS Server IP to be used as hostname
 - Root Level Access
+- IPv4 Connectivity( IPv6 only VPS donot work with this but IPv4+IPv6 should work)
 
 ## Features
-- PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1
+- PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1,8.2
 - Python Versions 2.7,3.5,3.6,3.7,3.8,3.9,3.10
-- Node Versions 4,6,8,10,12,14,16,18
+- Node Versions 4,6,8,10,12,14,16,18,20,21
 - Uptime Monitoring with Uptime Robot
 - Slack Notification (using Webhook)
 - MYSQL Version 8.0
@@ -57,9 +58,6 @@ The installation instructions have been moved to its own wiki page called
 
 
 ## Work in Progress
-- Compile nginx from source to allow brotli,redis and work on page speed
-- Server Hardening
 - Pushing backups to offsite storage as object storage etc 
 - Support for other programming languages like Go,Rust,.Net etc
-- Create restart-site script
 - Create Drupal,OpenCart etc installer
