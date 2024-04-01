@@ -10,7 +10,7 @@ is_mounted() {
 }
 
 
-php_versions_array=("8.2" "8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+php_versions_array=("8.3" "8.2" "8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 LEMP_HOSTNAME_USERNAME='default_site'
 LEMP_LOCAL_LINUX_USER='noaman' ## Modify this to the username which you are using in Ubuntu GUI

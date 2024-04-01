@@ -14,7 +14,7 @@ This is my first bash script for automation. This is not built for pro level sys
 - IPv4 Connectivity( IPv6 only VPS donot work with this but IPv4+IPv6 should work)
 
 ## Features
-- PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1,8.2
+- PHP Version 5.6,7.0,7.1,7.2,7.3,7.4,8.0,8.1,8.2,8.3
 - Python Versions 2.7,3.5,3.6,3.7,3.8,3.9,3.10
 - Node Versions 4,6,8,10,12,14,16,18,20,21
 - Uptime Monitoring with Uptime Robot

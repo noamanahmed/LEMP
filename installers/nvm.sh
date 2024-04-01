@@ -26,4 +26,4 @@ nvm use stable
 npm install --global yarn
 
 
-touch $LEMP_FLAG_DIR/MONGODB_INSTALLED
+touch $LEMP_FLAG_DIR/NVM_INSTALLED
