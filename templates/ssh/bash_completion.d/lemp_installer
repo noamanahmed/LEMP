@@ -9,7 +9,7 @@
 
 -create_site_php_script()
 {
-  php_versions_array="8.2 8.1 8.0 7.4 7.3 7.2 7.1 7.0 5.6"
+  php_versions_array="8.4 8.3 8.2 8.1 8.0 7.4 7.3 7.2 7.1 7.0 5.6"
   
   case $3 in
     --php) COMPREPLY=($(compgen -W "${php_versions_array}" "${COMP_WORDS[$COMP_CWORD]}"));;
