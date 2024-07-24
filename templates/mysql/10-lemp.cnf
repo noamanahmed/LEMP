@@ -25,3 +25,5 @@ innodb_buffer_pool_instances=5
 default-storage-engine=InnoDB
 #skip-name-resolve
 max_allowed_packet=128M
+skip-log-bin
+

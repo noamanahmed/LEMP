@@ -25,7 +25,7 @@ if ! grep -q "^deb .*$the_ppa" /etc/apt/sources.list /etc/apt/sources.list.d/*; 
     apt update -y
 fi
 
-php_versions_array=("8.3" "8.2" "8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
+php_versions_array=("8.4" "8.3" "8.2" "8.1" "8.0" "7.4" "7.3" "7.2" "7.1" "7.0" "5.6" )
 
 for php_version in ${php_versions_array[@]}; do
   apt install php$php_version php$php_version-fpm -qqy
