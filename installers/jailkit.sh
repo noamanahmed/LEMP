@@ -100,7 +100,7 @@ cp -rf /usr/lib/php/ $chroot_path/usr/lib
 cp -rf /etc/php/ $chroot_path/etc
 
 echo "Copying PHP Binaries (This might take a while)"
-php_binaries_array=("php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81"  )
+php_binaries_array=("php56" "php70" "php71" "php72" "php73" "php74" "php80" "php81" "php82" "php83" "php84" )
 
 for binary in ${php_binaries_array[@]}; do    
     extension_dir=$($binary -r 'echo ini_get("extension_dir");' 2>/dev/null)
